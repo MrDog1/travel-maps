@@ -1,0 +1,119 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>新宿御苑 日帰りマップ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats input{margin:0}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#list{overflow-y:auto;flex:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+@media (max-width:760px){main{flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
+</style></head><body>
+<header><h1>新宿御苑 日帰りマップ</h1><p class="sub">調査日2026/10/22。距離は直線、営業は出発前に要確認。</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "新宿御苑 日帰りマップ", "subtitle": "調査日2026/10/22。距離は直線、営業は出発前に要確認。", "home": {"name": "新宿御苑 新宿門", "lat": 35.68566, "lon": 139.71025, "match": "手入力"}, "rings_km": [0.5, 1, 2], "categories": {"route": {"label": "駅・門（導線）", "color": "#2A6FC0"}, "sweet": {"label": "甘いもの・パン（テイクアウト）", "color": "#C8571E"}, "lunch": {"label": "ランチ", "color": "#1E8A5A"}, "cafe": {"label": "カフェ・モーニング", "color": "#8A4FB3"}, "baby": {"label": "授乳室・屋内避難先", "color": "#D08A12"}}, "fields": [["kind", "種類"], ["memo", "メモ"], ["closed", "定休日・時間"]], "points": [{"name": "鷺ノ宮駅", "lat": 35.72235, "lon": 139.63934, "cat": "route", "kind": "駅（行き）", "memo": "西武新宿線 急行で西武新宿まで11〜12分・245円。北口にEV・授乳室", "closed": "", "url": "https://www.seiburailway.jp/railway/station/saginomiya/", "match": "手入力", "km": 7.59}, {"name": "西武新宿駅", "lat": 35.69586, "lon": 139.70013, "cat": "route", "kind": "駅（行き）", "memo": "改札2階。ベビーカーは西武新宿ぺぺのEVで地上へ", "closed": "", "url": "https://www.seiburailway.jp/railway/station/seibu-shinjuku/", "match": "手入力", "km": 1.46}, {"name": "新宿御苑 大木戸門", "lat": 35.6872, "lon": 139.7158, "cat": "route", "kind": "門", "memo": "新宿御苑駐車場（内藤町11）はこの近く。入園者2時間600円＋30分200円", "closed": "", "url": "https://fng.or.jp/shinjuku/access/parking/", "match": "手入力", "km": 0.53}, {"name": "新宿御苑 千駄ヶ谷門", "lat": 35.6811, "lon": 139.71215, "cat": "route", "kind": "門", "memo": "こども広場が近い", "closed": "", "url": "https://fng.or.jp/shinjuku/access/", "match": "手入力", "km": 0.54}, {"name": "新宿三丁目駅 E5出口", "lat": 35.689, "lon": 139.7085, "cat": "route", "kind": "駅（帰り）", "memo": "EVは副都心線 高島屋方面改札へ。石神井公園行で中村橋まで乗換なし25分・416円", "closed": "", "url": "https://www.tokyometro.jp/station/shinjuku-sanchome/accessibility/index.html", "match": "手入力", "km": 0.4}, {"name": "中村橋駅", "lat": 35.73715, "lon": 139.637, "cat": "route", "kind": "駅（帰り）", "memo": "終点", "closed": "", "url": "", "match": "手入力", "km": 8.75}, {"name": "追分だんご本舗 新宿本店", "addr": "東京都新宿区新宿3-1-22", "cat": "sweet", "kind": "団子（老舗）", "memo": "みたらし等。新宿通り沿い", "closed": "10:30〜19:00（定休は情報食い違い）", "url": "https://retty.me/restaurant/100000229222/", "lat": 35.690521, "lon": 139.705368, "match": "手入力", "km": 0.7}, {"name": "３丁目のちいさなパン屋さん", "addr": "東京都新宿区新宿5-15-7", "cat": "sweet", "kind": "パン", "memo": "小さいパン約50種・カレーパン", "closed": "火〜土8:00〜19:00・月日休", "url": "https://tabelog.com/tokyo/A1304/A130401/13179430/", "lat": 35.694118, "lon": 139.707001, "match": "手入力", "km": 0.99}, {"name": "ドラゴーネ 新宿御苑店", "addr": "東京都新宿区新宿2-3-15", "cat": "sweet", "kind": "パン", "memo": "幻の食パン880円", "closed": "11:30〜19:00・不定休（2023情報）", "url": "https://tabelog.com/tokyo/A1304/A130402/13271485/", "lat": 35.689114, "lon": 139.70845, "match": "手入力", "km": 0.42}, {"name": "やきがし ブリッツ", "addr": "東京都渋谷区千駄ヶ谷5-29-7", "cat": "sweet", "kind": "焼き菓子", "memo": "ガトーバスク440円", "closed": "月〜土9:00〜18:00・日休", "url": "https://tabelog.com/tokyo/A1304/A130403/13250625/", "lat": 35.685085, "lon": 139.70401, "match": "手入力", "km": 0.57}, {"name": "THE CITY DONUTS 新宿御苑店", "addr": "東京都新宿区新宿1-24-1", "cat": "sweet", "kind": "ドーナツ", "memo": "メープルベーコン450円・テラス", "closed": "9:00〜20:00", "url": "https://tabelog.com/tokyo/A1304/A130402/13325819/", "lat": 35.689697, "lon": 139.714371, "match": "手入力", "km": 0.58}, {"name": "おかしやうっちー", "addr": "東京都渋谷区千駄ヶ谷3-27-9", "cat": "sweet", "kind": "ケーキ・焼き菓子", "memo": "ベビーカー入店可・10月下旬〜栗", "closed": "12:00〜18:00・不定休（10月は23・24・28休）", "url": "https://www.okashiya-ucchi.com/", "lat": 35.677444, "lon": 139.708038, "match": "手入力", "km": 0.94}, {"name": "新宿中村屋 Manna", "addr": "東京都新宿区新宿3-26-13", "cat": "lunch", "kind": "カレー（名物）", "memo": "純印度式カリー2,200円・子どもイス・お子様ランチ。B2F（EV要確認）・予約不可", "closed": "11:00〜22:00（日祝〜21:00）", "url": "https://www.nakamuraya.co.jp/manna/", "lat": 35.691917, "lon": 139.702271, "match": "手入力", "km": 1.0}, {"name": "ミルリトンカフェ", "addr": "東京都新宿区富久町16-12", "cat": "lunch", "kind": "スパイスカレー（個人店）", "memo": "ベビーカー入店可・予約可", "closed": "11:30〜21:00・無休", "url": "https://tabelog.com/tokyo/A1304/A130402/13203391/", "lat": 35.691521, "lon": 139.712524, "match": "手入力", "km": 0.68}, {"name": "ハンバーグ ウィル", "addr": "東京都新宿区新宿1-3-8", "cat": "lunch", "kind": "ハンバーグ", "memo": "ベビーカー入店可・テラス6席", "closed": "平日11:30〜15:00", "url": "https://tabelog.com/tokyo/A1304/A130402/13041176/", "lat": 35.688198, "lon": 139.712097, "match": "手入力", "km": 0.33}, {"name": "GOOD MUNCHIES 新宿御苑本店", "addr": "東京都新宿区新宿1-4-12", "cat": "lunch", "kind": "バーガー", "memo": "ベビーカー入店可", "closed": "平日11:00〜15:00", "url": "https://tabelog.com/tokyo/A1304/A130402/13285858/", "lat": 35.688332, "lon": 139.711456, "match": "手入力", "km": 0.32}, {"name": "BOWLS cafe", "addr": "東京都新宿区新宿2-5-16", "cat": "lunch", "kind": "丼・カフェ", "memo": "テラス4席（喫煙可）", "closed": "11:30〜17:00・不定休", "url": "https://tabelog.com/tokyo/A1304/A130401/13023320/", "lat": 35.689106, "lon": 139.707245, "match": "手入力", "km": 0.47}, {"name": "レストランゆりのき つぶら乃", "lat": 35.6846, "lon": 139.7117, "cat": "lunch", "kind": "和食（園内）", "memo": "ミルク用お湯をもらえる・裏に授乳室。位置は概略", "closed": "11:00〜15:30", "url": "https://fng.or.jp/shinjuku/place/rest/tsuburano/", "match": "手入力", "km": 0.18}, {"name": "NATIONAL PARKS CAFÉ Under the Tree", "lat": 35.686, "lon": 139.71, "cat": "cafe", "kind": "カフェ（新宿門脇）", "memo": "スパイスカレー1,300円・シルクアイス600円。位置は概略", "closed": "9:00〜16:30", "url": "https://fng.or.jp/shinjuku/place/rest/hananoki/", "match": "手入力", "km": 0.04}, {"name": "スターバックス コーヒー 新宿御苑店", "lat": 35.6852, "lon": 139.7136, "cat": "cafe", "kind": "カフェ（園内）", "memo": "隣に園内最大の授乳室（2部屋・おむつ台3）。位置は概略", "closed": "9:00〜16:00（LO15:30）", "url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/facility/", "match": "手入力", "km": 0.31}, {"name": "中央休憩所 SASAYAIORI＋新宿御苑", "lat": 35.6833, "lon": 139.7115, "cat": "sweet", "kind": "どら焼・ソフト（園内）", "memo": "位置は概略", "closed": "9:00〜16:00", "url": "https://fng.or.jp/shinjuku/place/rest/takeout/", "match": "手入力", "km": 0.29}, {"name": "TSUBASA COFFEE", "addr": "東京都新宿区新宿1-15-12", "cat": "cafe", "kind": "モーニング・プリン", "memo": "乳児可・ベビーカー入店可", "closed": "平日8:30〜17:00・土日祝8:00〜・不定休", "url": "https://tabelog.com/tokyo/A1304/A130402/13259936/", "lat": 35.690155, "lon": 139.710556, "match": "手入力", "km": 0.5}, {"name": "伊勢丹新宿店（本館6Fベビー休憩室）", "addr": "東京都新宿区新宿3-14-1", "cat": "baby", "kind": "授乳室", "memo": "ベビーベッド・電子レンジ・ウォーターサーバー（2019情報）", "closed": "館に準ずる", "url": "https://report.iko-yo.net/articles/1022", "lat": 35.691074, "lon": 139.704651, "match": "手入力", "km": 0.79}, {"name": "新宿高島屋（9F赤ちゃん休憩室）", "addr": "東京都渋谷区千駄ヶ谷5-24-2", "cat": "baby", "kind": "授乳室", "memo": "授乳個室・温水器・電子レンジ（2019情報）", "closed": "館に準ずる", "url": "https://report.iko-yo.net/articles/1022", "lat": 35.684647, "lon": 139.703354, "match": "手入力", "km": 0.63}]}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const show=Object.fromEntries(ORDER.map(c=>[c,true]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- サイドバー ----
+const list=document.getElementById('list'), q=document.getElementById('q');
+PTS.forEach((p,i)=>p._i=i);
+const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||(a.km??0)-(b.km??0));
+let api=null, cur=null;
+function renderList(){list.innerHTML='';const s=q.value.trim();
+  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
+    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
+    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+q.oninput=renderList;renderList();
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  b.extend({lat:HOME.lat,lng:HOME.lon});
+  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
+      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
+    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
+  map.fitBounds(b,40);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
+      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
+    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

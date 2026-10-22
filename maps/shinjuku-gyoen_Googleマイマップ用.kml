@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>新宿御苑 日帰りマップ</name>
+<Style id="s-route"><IconStyle><color>ffC06F2A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-sweet"><IconStyle><color>ff1E57C8</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-lunch"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-cafe"><IconStyle><color>ffB34F8A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-baby"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>駅・門（導線）</name>
+<Placemark><name>鷺ノ宮駅</name><styleUrl>#s-route</styleUrl><description>種類：駅（行き）／メモ：西武新宿線 急行で西武新宿まで11〜12分・245円。北口にEV・授乳室／新宿御苑 新宿門から直線7.59km／https://www.seiburailway.jp/railway/station/saginomiya/</description><Point><coordinates>139.63934,35.72235,0</coordinates></Point></Placemark>
+<Placemark><name>西武新宿駅</name><styleUrl>#s-route</styleUrl><description>種類：駅（行き）／メモ：改札2階。ベビーカーは西武新宿ぺぺのEVで地上へ／新宿御苑 新宿門から直線1.46km／https://www.seiburailway.jp/railway/station/seibu-shinjuku/</description><Point><coordinates>139.70013,35.69586,0</coordinates></Point></Placemark>
+<Placemark><name>新宿御苑 大木戸門</name><styleUrl>#s-route</styleUrl><description>種類：門／メモ：新宿御苑駐車場（内藤町11）はこの近く。入園者2時間600円＋30分200円／新宿御苑 新宿門から直線0.53km／https://fng.or.jp/shinjuku/access/parking/</description><Point><coordinates>139.7158,35.6872,0</coordinates></Point></Placemark>
+<Placemark><name>新宿御苑 千駄ヶ谷門</name><styleUrl>#s-route</styleUrl><description>種類：門／メモ：こども広場が近い／新宿御苑 新宿門から直線0.54km／https://fng.or.jp/shinjuku/access/</description><Point><coordinates>139.71215,35.6811,0</coordinates></Point></Placemark>
+<Placemark><name>新宿三丁目駅 E5出口</name><styleUrl>#s-route</styleUrl><description>種類：駅（帰り）／メモ：EVは副都心線 高島屋方面改札へ。石神井公園行で中村橋まで乗換なし25分・416円／新宿御苑 新宿門から直線0.4km／https://www.tokyometro.jp/station/shinjuku-sanchome/accessibility/index.html</description><Point><coordinates>139.7085,35.689,0</coordinates></Point></Placemark>
+<Placemark><name>中村橋駅</name><styleUrl>#s-route</styleUrl><description>種類：駅（帰り）／メモ：終点／新宿御苑 新宿門から直線8.75km</description><Point><coordinates>139.637,35.73715,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>甘いもの・パン（テイクアウト）</name>
+<Placemark><name>追分だんご本舗 新宿本店</name><styleUrl>#s-sweet</styleUrl><description>種類：団子（老舗）／メモ：みたらし等。新宿通り沿い／定休日・時間：10:30〜19:00（定休は情報食い違い）／東京都新宿区新宿3-1-22／新宿御苑 新宿門から直線0.7km／https://retty.me/restaurant/100000229222/</description><Point><coordinates>139.705368,35.690521,0</coordinates></Point></Placemark>
+<Placemark><name>３丁目のちいさなパン屋さん</name><styleUrl>#s-sweet</styleUrl><description>種類：パン／メモ：小さいパン約50種・カレーパン／定休日・時間：火〜土8:00〜19:00・月日休／東京都新宿区新宿5-15-7／新宿御苑 新宿門から直線0.99km／https://tabelog.com/tokyo/A1304/A130401/13179430/</description><Point><coordinates>139.707001,35.694118,0</coordinates></Point></Placemark>
+<Placemark><name>ドラゴーネ 新宿御苑店</name><styleUrl>#s-sweet</styleUrl><description>種類：パン／メモ：幻の食パン880円／定休日・時間：11:30〜19:00・不定休（2023情報）／東京都新宿区新宿2-3-15／新宿御苑 新宿門から直線0.42km／https://tabelog.com/tokyo/A1304/A130402/13271485/</description><Point><coordinates>139.70845,35.689114,0</coordinates></Point></Placemark>
+<Placemark><name>やきがし ブリッツ</name><styleUrl>#s-sweet</styleUrl><description>種類：焼き菓子／メモ：ガトーバスク440円／定休日・時間：月〜土9:00〜18:00・日休／東京都渋谷区千駄ヶ谷5-29-7／新宿御苑 新宿門から直線0.57km／https://tabelog.com/tokyo/A1304/A130403/13250625/</description><Point><coordinates>139.70401,35.685085,0</coordinates></Point></Placemark>
+<Placemark><name>THE CITY DONUTS 新宿御苑店</name><styleUrl>#s-sweet</styleUrl><description>種類：ドーナツ／メモ：メープルベーコン450円・テラス／定休日・時間：9:00〜20:00／東京都新宿区新宿1-24-1／新宿御苑 新宿門から直線0.58km／https://tabelog.com/tokyo/A1304/A130402/13325819/</description><Point><coordinates>139.714371,35.689697,0</coordinates></Point></Placemark>
+<Placemark><name>おかしやうっちー</name><styleUrl>#s-sweet</styleUrl><description>種類：ケーキ・焼き菓子／メモ：ベビーカー入店可・10月下旬〜栗／定休日・時間：12:00〜18:00・不定休（10月は23・24・28休）／東京都渋谷区千駄ヶ谷3-27-9／新宿御苑 新宿門から直線0.94km／https://www.okashiya-ucchi.com/</description><Point><coordinates>139.708038,35.677444,0</coordinates></Point></Placemark>
+<Placemark><name>中央休憩所 SASAYAIORI＋新宿御苑</name><styleUrl>#s-sweet</styleUrl><description>種類：どら焼・ソフト（園内）／メモ：位置は概略／定休日・時間：9:00〜16:00／新宿御苑 新宿門から直線0.29km／https://fng.or.jp/shinjuku/place/rest/takeout/</description><Point><coordinates>139.7115,35.6833,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>ランチ</name>
+<Placemark><name>新宿中村屋 Manna</name><styleUrl>#s-lunch</styleUrl><description>種類：カレー（名物）／メモ：純印度式カリー2,200円・子どもイス・お子様ランチ。B2F（EV要確認）・予約不可／定休日・時間：11:00〜22:00（日祝〜21:00）／東京都新宿区新宿3-26-13／新宿御苑 新宿門から直線1.0km／https://www.nakamuraya.co.jp/manna/</description><Point><coordinates>139.702271,35.691917,0</coordinates></Point></Placemark>
+<Placemark><name>ミルリトンカフェ</name><styleUrl>#s-lunch</styleUrl><description>種類：スパイスカレー（個人店）／メモ：ベビーカー入店可・予約可／定休日・時間：11:30〜21:00・無休／東京都新宿区富久町16-12／新宿御苑 新宿門から直線0.68km／https://tabelog.com/tokyo/A1304/A130402/13203391/</description><Point><coordinates>139.712524,35.691521,0</coordinates></Point></Placemark>
+<Placemark><name>ハンバーグ ウィル</name><styleUrl>#s-lunch</styleUrl><description>種類：ハンバーグ／メモ：ベビーカー入店可・テラス6席／定休日・時間：平日11:30〜15:00／東京都新宿区新宿1-3-8／新宿御苑 新宿門から直線0.33km／https://tabelog.com/tokyo/A1304/A130402/13041176/</description><Point><coordinates>139.712097,35.688198,0</coordinates></Point></Placemark>
+<Placemark><name>GOOD MUNCHIES 新宿御苑本店</name><styleUrl>#s-lunch</styleUrl><description>種類：バーガー／メモ：ベビーカー入店可／定休日・時間：平日11:00〜15:00／東京都新宿区新宿1-4-12／新宿御苑 新宿門から直線0.32km／https://tabelog.com/tokyo/A1304/A130402/13285858/</description><Point><coordinates>139.711456,35.688332,0</coordinates></Point></Placemark>
+<Placemark><name>BOWLS cafe</name><styleUrl>#s-lunch</styleUrl><description>種類：丼・カフェ／メモ：テラス4席（喫煙可）／定休日・時間：11:30〜17:00・不定休／東京都新宿区新宿2-5-16／新宿御苑 新宿門から直線0.47km／https://tabelog.com/tokyo/A1304/A130401/13023320/</description><Point><coordinates>139.707245,35.689106,0</coordinates></Point></Placemark>
+<Placemark><name>レストランゆりのき つぶら乃</name><styleUrl>#s-lunch</styleUrl><description>種類：和食（園内）／メモ：ミルク用お湯をもらえる・裏に授乳室。位置は概略／定休日・時間：11:00〜15:30／新宿御苑 新宿門から直線0.18km／https://fng.or.jp/shinjuku/place/rest/tsuburano/</description><Point><coordinates>139.7117,35.6846,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>カフェ・モーニング</name>
+<Placemark><name>NATIONAL PARKS CAFÉ Under the Tree</name><styleUrl>#s-cafe</styleUrl><description>種類：カフェ（新宿門脇）／メモ：スパイスカレー1,300円・シルクアイス600円。位置は概略／定休日・時間：9:00〜16:30／新宿御苑 新宿門から直線0.04km／https://fng.or.jp/shinjuku/place/rest/hananoki/</description><Point><coordinates>139.71,35.686,0</coordinates></Point></Placemark>
+<Placemark><name>スターバックス コーヒー 新宿御苑店</name><styleUrl>#s-cafe</styleUrl><description>種類：カフェ（園内）／メモ：隣に園内最大の授乳室（2部屋・おむつ台3）。位置は概略／定休日・時間：9:00〜16:00（LO15:30）／新宿御苑 新宿門から直線0.31km／https://policies.env.go.jp/national-garden/shinjukugyoen/english/facility/</description><Point><coordinates>139.7136,35.6852,0</coordinates></Point></Placemark>
+<Placemark><name>TSUBASA COFFEE</name><styleUrl>#s-cafe</styleUrl><description>種類：モーニング・プリン／メモ：乳児可・ベビーカー入店可／定休日・時間：平日8:30〜17:00・土日祝8:00〜・不定休／東京都新宿区新宿1-15-12／新宿御苑 新宿門から直線0.5km／https://tabelog.com/tokyo/A1304/A130402/13259936/</description><Point><coordinates>139.710556,35.690155,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>授乳室・屋内避難先</name>
+<Placemark><name>伊勢丹新宿店（本館6Fベビー休憩室）</name><styleUrl>#s-baby</styleUrl><description>種類：授乳室／メモ：ベビーベッド・電子レンジ・ウォーターサーバー（2019情報）／定休日・時間：館に準ずる／東京都新宿区新宿3-14-1／新宿御苑 新宿門から直線0.79km／https://report.iko-yo.net/articles/1022</description><Point><coordinates>139.704651,35.691074,0</coordinates></Point></Placemark>
+<Placemark><name>新宿高島屋（9F赤ちゃん休憩室）</name><styleUrl>#s-baby</styleUrl><description>種類：授乳室／メモ：授乳個室・温水器・電子レンジ（2019情報）／定休日・時間：館に準ずる／東京都渋谷区千駄ヶ谷5-24-2／新宿御苑 新宿門から直線0.63km／https://report.iko-yo.net/articles/1022</description><Point><coordinates>139.703354,35.684647,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

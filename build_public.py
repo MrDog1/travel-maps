@@ -9,7 +9,7 @@ src, name = sys.argv[1], sys.argv[2]
 base = sys.argv[3] if len(sys.argv) > 3 else '鷺ノ宮駅'
 here = os.path.dirname(os.path.abspath(__file__))
 spec = json.load(open(src, encoding='utf-8'))
-pts = [p for p in spec['points'] if '自宅' not in p['name']]
+pts = [p for p in spec['points'] if '自宅' not in p['name'] and '中村南' not in p.get('addr', '')]  # 家の近所の店も出さない
 b = next(p for p in pts if p['name'] == base)
 spec['home'] = {'name': base, 'lat': b['lat'], 'lon': b['lon']}
 spec['points'] = [p for p in pts if p['name'] != base]

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>野方 ベビーカー散歩マップ</name>
+<Style id="s-route"><IconStyle><color>ffC06F2A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-lunch"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-sweet"><IconStyle><color>ff1E57C8</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>駅・公園（導線）</name>
+<Placemark><name>平和の森公園</name><styleUrl>#s-route</styleUrl><description>種類：公園（芝生）／メモ：芝生広場でケーキ休憩。一部再整備中の情報あり（いこーよ）。沼袋駅南口から徒歩約3分／東京都中野区新井3-37／野方駅から直線1.0km／https://report.iko-yo.net/articles/14925</description><Point><coordinates>139.662277,35.715572,0</coordinates></Point></Placemark>
+<Placemark><name>沼袋駅</name><styleUrl>#s-route</styleUrl><description>種類：駅（帰り）／メモ：西武新宿線 各停で鷺ノ宮まで3駅・乗換なし／東京都中野区沼袋1-35-1／野方駅から直線1.08km／https://www.seiburailway.jp/railway/station/numabukuro/</description><Point><coordinates>139.664581,35.719387,0</coordinates></Point></Placemark>
+<Placemark><name>哲学堂公園</name><styleUrl>#s-route</styleUrl><description>種類：公園（別案）／メモ：古建築の庭園公園。野方から東へ。帰りは新井薬師前駅（徒歩12分）／東京都中野区松が丘1-34-28／野方駅から直線2.1km／https://www.gotokyo.org/en/spot/1147/index.html</description><Point><coordinates>139.675598,35.72274,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>ランチ</name>
+<Placemark><name>COFFEE CHROME</name><styleUrl>#s-lunch</styleUrl><description>種類：カフェ（第一候補）／メモ：木目の店内。ふわとろオムレツ＋野方のパン屋のバゲット、ラテアート。るるぶで「ベビーおすすめ」タグ／定休日・時間：8〜19時（金土〜20時）・火曜休／東京都中野区野方3-27-6／野方駅から直線0.31km／https://rurubu.jp/andmore/spot/80131655</description><Point><coordinates>139.655716,35.718838,0</coordinates></Point></Placemark>
+<Placemark><name>手打ちうどん つくつくぼうし</name><styleUrl>#s-lunch</styleUrl><description>種類：うどん（別案）／メモ：ベビーカーのまま食事できる（ぐるっとプラス）。野方駅から徒歩2分／定休日・時間：未確認／東京都中野区野方6-8-5／野方駅から直線0.11km／https://grutto-plus.com/area/fukutoshin/438</description><Point><coordinates>139.652359,35.720963,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>甘いもの・パン（テイクアウト）</name>
+<Placemark><name>パティスリー サピュイエ</name><styleUrl>#s-sweet</styleUrl><description>種類：ケーキ（第一候補）／メモ：「野方のリスのケーキ屋さん」。見た目の美しいケーキ、カット500〜600円台／定休日・時間：11〜19時・月火休／東京都中野区野方6-10-8／野方駅から直線0.19km／https://tabelog.com/tokyo/A1321/A132104/13288075／https://www.instagram.com/patisserie_sappuyer/</description><Point><coordinates>139.65358,35.721493,0</coordinates></Point></Placemark>
+<Placemark><name>西洋菓子屋</name><styleUrl>#s-sweet</styleUrl><description>種類：ケーキ（別案）／メモ：野方駅北口徒歩約1分／定休日・時間：未確認／東京都中野区野方6-5-1／野方駅から直線0.04km／https://map.yahoo.co.jp/v3/place/T_xRTSuJw3c</description><Point><coordinates>139.652954,35.720222,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

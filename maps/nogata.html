@@ -1,0 +1,127 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<script>/* LINEのアプリ内ブラウザで開いたら、いつものブラウザ（Safari/Chrome）で開き直す */
+(function(){try{if(/ Line\//i.test(navigator.userAgent)&&location.protocol.indexOf("http")===0&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split("#")[0]+(location.search?"&":"?")+"openExternalBrowser=1"+location.hash);}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>野方 ベビーカー散歩マップ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats input{margin:0}
+.catbtns{display:flex;gap:6px}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#list{overflow-y:auto;flex:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+@media (max-width:760px){html,body{height:auto}main{flex:none;flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line);min-height:auto}#list{flex:none;overflow:visible}}
+</style></head><body>
+<header><h1>野方 ベビーカー散歩マップ</h1><p class="sub">調査日2026/10/23。距離は直線、営業は出発前に要確認。</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "野方 ベビーカー散歩マップ", "subtitle": "調査日2026/10/23。距離は直線、営業は出発前に要確認。", "home": {"name": "野方駅", "lat": 35.719978, "lon": 139.652588, "match": "手入力"}, "rings_km": [0.5, 1, 2], "categories": {"route": {"label": "駅・公園（導線）", "color": "#2A6FC0"}, "lunch": {"label": "ランチ", "color": "#1E8A5A"}, "sweet": {"label": "甘いもの・パン（テイクアウト）", "color": "#C8571E"}}, "fields": [["kind", "種類"], ["memo", "メモ"], ["closed", "定休日・時間"]], "points": [{"name": "平和の森公園", "addr": "東京都中野区新井3-37", "cat": "route", "kind": "公園（芝生）", "memo": "芝生広場でケーキ休憩。一部再整備中の情報あり（いこーよ）。沼袋駅南口から徒歩約3分", "closed": "", "url": "https://report.iko-yo.net/articles/14925", "lat": 35.715572, "lon": 139.662277, "match": "手入力", "km": 1.0}, {"name": "沼袋駅", "addr": "東京都中野区沼袋1-35-1", "cat": "route", "kind": "駅（帰り）", "memo": "西武新宿線 各停で鷺ノ宮まで3駅・乗換なし", "closed": "", "url": "https://www.seiburailway.jp/railway/station/numabukuro/", "lat": 35.719387, "lon": 139.664581, "match": "手入力", "km": 1.08}, {"name": "哲学堂公園", "addr": "東京都中野区松が丘1-34-28", "cat": "route", "kind": "公園（別案）", "memo": "古建築の庭園公園。野方から東へ。帰りは新井薬師前駅（徒歩12分）", "closed": "", "url": "https://www.gotokyo.org/en/spot/1147/index.html", "lat": 35.72274, "lon": 139.675598, "match": "手入力", "km": 2.1}, {"name": "COFFEE CHROME", "addr": "東京都中野区野方3-27-6", "cat": "lunch", "kind": "カフェ（第一候補）", "memo": "木目の店内。ふわとろオムレツ＋野方のパン屋のバゲット、ラテアート。るるぶで「ベビーおすすめ」タグ", "closed": "8〜19時（金土〜20時）・火曜休", "url": "https://rurubu.jp/andmore/spot/80131655", "lat": 35.718838, "lon": 139.655716, "match": "手入力", "km": 0.31}, {"name": "手打ちうどん つくつくぼうし", "addr": "東京都中野区野方6-8-5", "cat": "lunch", "kind": "うどん（別案）", "memo": "ベビーカーのまま食事できる（ぐるっとプラス）。野方駅から徒歩2分", "closed": "未確認", "url": "https://grutto-plus.com/area/fukutoshin/438", "lat": 35.720963, "lon": 139.652359, "match": "手入力", "km": 0.11}, {"name": "パティスリー サピュイエ", "addr": "東京都中野区野方6-10-8", "cat": "sweet", "kind": "ケーキ（第一候補）", "memo": "「野方のリスのケーキ屋さん」。見た目の美しいケーキ、カット500〜600円台", "closed": "11〜19時・月火休", "url": "https://tabelog.com/tokyo/A1321/A132104/13288075", "insta": "@patisserie_sappuyer", "lat": 35.721493, "lon": 139.65358, "match": "手入力", "km": 0.19}, {"name": "西洋菓子屋", "addr": "東京都中野区野方6-5-1", "cat": "sweet", "kind": "ケーキ（別案）", "memo": "野方駅北口徒歩約1分", "closed": "未確認", "url": "https://map.yahoo.co.jp/v3/place/T_xRTSuJw3c", "lat": 35.720222, "lon": 139.652954, "match": "手入力", "km": 0.04}]}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const show={};ORDER.forEach(c=>{show[c]=true;});
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const instaUrl=v=>/^https?:/.test(v)?v:'https://www.instagram.com/'+String(v).replace(/^@/,'')+'/';
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  if(p.insta)h+='<a href="'+esc(instaUrl(p.insta))+'" target="_blank" rel="noopener">Instagram</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- サイドバー ----
+const list=document.getElementById('list'), q=document.getElementById('q');
+PTS.forEach((p,i)=>p._i=i);
+const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+let api=null, cur=null;
+function renderList(){list.innerHTML='';const s=q.value.trim();
+  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
+    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
+    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  api&&api.open(i,fromList);
+  if(fromList&&window.matchMedia('(max-width:760px)').matches)document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+function setAll(v){ORDER.forEach(c=>show[c]=v);cw.querySelectorAll('input').forEach(i=>i.checked=v);renderList();api&&api.filter();}
+document.getElementById('catOff').onclick=()=>setAll(false);document.getElementById('catOn').onclick=()=>setAll(true);
+q.oninput=renderList;renderList();
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  b.extend({lat:HOME.lat,lng:HOME.lon});
+  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
+      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
+    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
+  map.fitBounds(b,40);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
+      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
+    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

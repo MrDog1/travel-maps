@@ -72,7 +72,7 @@ function renderList(){list.innerHTML='';const s=q.value.trim();
     d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
     d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
 function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
-  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!window.matchMedia('(max-width:760px)').matches)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
   api&&api.open(i,fromList);
   if(fromList&&window.matchMedia('(max-width:760px)').matches)document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});}
 const cw=document.getElementById('cats');

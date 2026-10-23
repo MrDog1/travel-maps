@@ -1,0 +1,119 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光が丘マップ（車・赤ちゃん）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats input{margin:0}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#list{overflow-y:auto;flex:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+@media (max-width:760px){main{flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
+</style></head><body>
+<header><h1>光が丘マップ（車・赤ちゃん）</h1><p class="sub">2026/10/23（金）プランA・タイムズカー＋光が丘公園／2026/10/23調べ</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "光が丘マップ（車・赤ちゃん）", "subtitle": "2026/10/23（金）プランA・タイムズカー＋光が丘公園／2026/10/23調べ", "home": {"name": "光が丘駅", "lat": 35.7585, "lon": 139.62889, "match": "手入力"}, "rings_km": [1, 2, 4], "categories": {"car": {"label": "カーシェア", "color": "#1F6FD1"}, "sweet": {"label": "甘いもの", "color": "#D9467A"}, "lunch": {"label": "ランチ", "color": "#D08A12"}, "rest": {"label": "休憩・授乳", "color": "#1E8A5A"}, "spare": {"label": "予備（雨）", "color": "#8A939B"}, "near": {"label": "車で5分（追加）", "color": "#7A4FC9"}}, "fields": [["time", "営業"], ["memo", "メモ"]], "points": [{"name": "Chaton（シャトン）", "addr": "東京都練馬区旭町1-15-18", "cat": "sweet", "url": "https://www.narimasu.tokyo?p=40742", "time": "9:00〜17:00（売り切れ次第終了）・月火水休", "memo": "ケーキ600〜900円・ドーナツ350〜450円。Instagram @chaton.2.22", "lat": 35.765057, "lon": 139.625168, "match": "手入力", "km": 0.8}, {"name": "カフェレストラン われもこう 光が丘公園店", "addr": "東京都練馬区光が丘4-1-4", "cat": "lunch", "url": "https://akanenokai.com/menu/restaurant", "time": "平日11:00〜15:00（L.O.14:00）・第2月曜休", "memo": "光が丘体育館内。光が丘御膳950円・バーグカレー1,300円（2025年3月）", "lat": 35.763763, "lon": 139.628571, "match": "手入力", "km": 0.59}, {"name": "光が丘公園サービスセンター", "addr": "東京都練馬区光が丘4-1-1", "cat": "rest", "url": "https://mamamap.jp/spots/3447", "time": "10:00〜16:00", "memo": "1Fに鍵付き個室の授乳室・おむつ替え台。公園の授乳室はここだけ（公式X）。住所は公園の代表住所なので、ピンの位置は目安", "lat": 35.76881, "lon": 139.630585, "match": "手入力", "km": 1.16}, {"name": "光が丘IMA", "addr": "東京都練馬区光が丘5-1-1", "cat": "spare", "url": "https://kyounoko.jp/station/hikarigaoka", "time": "未確認", "memo": "雨・授乳の予備。飲食店はほぼチェーン", "lat": 35.76001, "lon": 139.628372, "match": "手入力", "km": 0.17}, {"name": "gak", "addr": "東京都練馬区田柄3-17-35", "cat": "near", "url": "https://www.instagram.com/gak_tagara", "time": "11:00〜16:00（L.O.15:00）・不定休", "memo": "種音の中の隠れ家カフェ。サンドイッチ・gakプレート。公園から直線1.0km", "lat": 35.760311, "lon": 139.638992, "match": "手入力", "km": 0.93}, {"name": "ももとぱん", "addr": "東京都練馬区田柄3-17-35", "cat": "near", "url": "https://www.instagram.com/momoto.pan", "time": "8:00〜17:00・日月休", "memo": "gakと同じ種音の中のパン屋", "lat": 35.760311, "lon": 139.638992, "match": "手入力", "km": 0.93}, {"name": "トラットリア ナティーボ", "addr": "東京都練馬区田柄1-3-20", "cat": "near", "url": "https://www.instagram.com/nerima__nativo", "time": "ランチ11:00〜15:00（L.O.14:30）", "memo": "石窯ピザ・子連れOK・全席禁煙。駐車場は要確認。公園から直線1.5km", "lat": 35.759968, "lon": 139.644653, "match": "手入力", "km": 1.43}, {"name": "BAR 万次良", "addr": "東京都板橋区成増2-20-1", "cat": "near", "url": "https://itabashi-times.com/archives/manjiro-narimasu.html", "time": "ランチ11:30〜14:30・日休", "memo": "昼はグルメバーガー。駐車場なし。公園から直線1.6km", "lat": 35.777802, "lon": 139.631165, "match": "手入力", "km": 2.16}, {"name": "パン工房 ブランジェリーケン", "addr": "東京都板橋区赤塚2-2-17", "cat": "near", "url": "https://tabelog.com/tokyo/A1322/A132204/13046260", "time": "金9:00〜19:00・月木休", "memo": "食べログ百名店。売り切れ次第終了。公園から直線1.7km", "lat": 35.771126, "lon": 139.645645, "match": "手入力", "km": 2.06}, {"name": "Café & Gallery Patina", "addr": "東京都板橋区成増3-20-16", "cat": "near", "url": "https://cafepatina.jp", "time": "11:30〜18:00・水木休", "memo": "緑に囲まれたギャラリーカフェ。公園から直線1.9km", "lat": 35.780228, "lon": 139.632477, "match": "手入力", "km": 2.44}]}, KEY="__GOOGLE_MAPS_API_KEY__";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const show=Object.fromEntries(ORDER.map(c=>[c,true]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- サイドバー ----
+const list=document.getElementById('list'), q=document.getElementById('q');
+PTS.forEach((p,i)=>p._i=i);
+const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||(a.km??0)-(b.km??0));
+let api=null, cur=null;
+function renderList(){list.innerHTML='';const s=q.value.trim();
+  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
+    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
+    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+q.oninput=renderList;renderList();
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  b.extend({lat:HOME.lat,lng:HOME.lon});
+  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
+      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
+    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
+  map.fitBounds(b,40);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
+      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
+    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

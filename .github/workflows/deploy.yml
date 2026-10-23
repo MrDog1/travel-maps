@@ -1,0 +1,47 @@
+# main に push したら、地図HTMLのプレースホルダーに Secrets の APIキーを差し込んで Pages へデプロイする。
+# リポジトリのソースにはキーを入れない（maps/*.html には __GOOGLE_MAPS_API_KEY__ だけが入っている）。
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inject Google Maps API key
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "::error::Secret GOOGLE_MAPS_API_KEY is not set"; exit 1
+          fi
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'build_public.py' ./ _site/
+          grep -rl '__GOOGLE_MAPS_API_KEY__' _site --include='*.html' | while read -r f; do
+            sed -i "s|__GOOGLE_MAPS_API_KEY__|${GOOGLE_MAPS_API_KEY}|g" "$f"
+            echo "injected: $f"
+          done
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -38,7 +38,7 @@ aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:
 .iw .row{margin:1px 0}.iw .lab{color:#6b7680}
 .iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
 .iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
-@media (max-width:760px){main{flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:760px){html,body{height:auto}main{flex:none;flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line);min-height:auto}#list{flex:none;overflow:visible}}
 </style></head><body>
 <header><h1>光が丘マップ（車・赤ちゃん）</h1><p class="sub">2026/10/23（金）プランA・タイムズカー＋光が丘公園／2026/10/23調べ</p><div class="engine" id="engine"></div></header>
 <main><div id="map"></div>
@@ -73,7 +73,8 @@ function renderList(){list.innerHTML='';const s=q.value.trim();
     d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
 function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
   const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  api&&api.open(i,fromList);}
+  api&&api.open(i,fromList);
+  if(fromList&&window.matchMedia('(max-width:760px)').matches)document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});}
 const cw=document.getElementById('cats');
 ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
   l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';

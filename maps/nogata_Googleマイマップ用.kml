@@ -5,6 +5,7 @@
 <Style id="s-lunch"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
 <Style id="s-sweet"><IconStyle><color>ff1E57C8</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
 <Style id="s-cafe"><IconStyle><color>ffB34F8A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-done"><IconStyle><color>ff00A8E0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
 <Folder><name>駅・公園（導線）</name>
 <Placemark><name>平和の森公園</name><styleUrl>#s-route</styleUrl><description>種類：公園（芝生）／メモ：芝生広場でケーキ休憩。一部再整備中の情報あり（いこーよ）。沼袋駅南口から徒歩約3分／東京都中野区新井3-37／野方駅から直線1.0km／https://report.iko-yo.net/articles/14925</description><Point><coordinates>139.662277,35.715572,0</coordinates></Point></Placemark>
 <Placemark><name>沼袋駅</name><styleUrl>#s-route</styleUrl><description>種類：駅（帰り）／メモ：西武新宿線 各停で鷺ノ宮まで3駅・乗換なし／東京都中野区沼袋1-35-1／野方駅から直線1.08km／https://www.seiburailway.jp/railway/station/numabukuro/</description><Point><coordinates>139.664581,35.719387,0</coordinates></Point></Placemark>
@@ -24,5 +25,10 @@
 <Placemark><name>DAILY COFFEE STAND</name><styleUrl>#s-cafe</styleUrl><description>種類：コーヒー＋マフィン／メモ：白基調で広いイートイン。マフィン12種、秋限定マロン＆パンプキンのフラッペ・ラテ／定休日・時間：10〜19時・無休／犬：未確認／東京都中野区野方5-31-8／野方駅から直線0.07km／https://grutto-plus.com/area/fukutoshin/438／https://www.instagram.com/dailycoffeestand/</description><Point><coordinates>139.651855,35.719734,0</coordinates></Point></Placemark>
 <Placemark><name>BREDDA COFFEE</name><styleUrl>#s-cafe</styleUrl><description>種類：コーヒースタンド／メモ：ツインビル伊倉102。地元の人が集まるコーヒー屋／定休日・時間：時間は情報が食い違う（Instagram：7〜18時・木休／他：金8〜22時）／犬：未確認／東京都中野区野方5-25-1／野方駅から直線0.17km／https://www.instagram.com/bredda_coffee83／https://www.instagram.com/bredda_coffee83/</description><Point><coordinates>139.653488,35.718597,0</coordinates></Point></Placemark>
 <Placemark><name>JUNOS CAFE</name><styleUrl>#s-cafe</styleUrl><description>種類：カフェ＆ビストロ（遠め）／メモ：野方駅から徒歩15分ほど（高円寺寄り）／定休日・時間：平日10〜22時（フード21時まで）・月休／犬：未確認／東京都中野区大和町1-66-3／野方駅から直線1.18km／https://www.instagram.com/junoscafe_tokyo／https://www.instagram.com/junoscafe_tokyo/</description><Point><coordinates>139.651382,35.709373,0</coordinates></Point></Placemark>
+<Placemark><name>MISTY WEST</name><styleUrl>#s-cafe</styleUrl><description>種類：ジャズ喫茶・洋食・ケーキ（次回の第一候補）／メモ：2025年10月開店。柳屋ビル1F。自家焙煎コーヒー、手作りケーキの種類が多い、JAZZが流れる。洋食（ビーフフリカッセ等）。妻が見つけて「良さそう」。事前調査で見落とした店／定休日・時間：10〜22時（食べログ。定休日の記載なし）／犬：未確認／支払い：カード・電子マネー可／QR決済不可（食べログ）／東京都中野区野方5-30-3／野方駅から直線0.11km／https://tabelog.com/tokyo/A1321/A132104/13314577</description><Point><coordinates>139.652115,35.719021,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>実際に行った（2026/10/23）</name>
+<Placemark><name>餃子の王将 野方店</name><styleUrl>#s-done</styleUrl><description>種類：ランチ（実績）／メモ：2026/10/23 昼に入った。夫の大好物。鷺ノ宮周辺に王将が無い／定休日・時間：11〜22時（L.O.21:30）／東京都中野区野方5-22-6／野方駅から直線0.12km／https://map.ohsho.co.jp/b/ohsho/info/5543</description><Point><coordinates>139.652328,35.718884,0</coordinates></Point></Placemark>
+<Placemark><name>深川 伊勢屋 都立家政店</name><styleUrl>#s-done</styleUrl><description>種類：和菓子テイクアウト（実績・夫用）／メモ：2026/10/23 行きの散歩で、みたらし団子・おはぎを購入。都立家政駅北口すぐ。※住所は資料で食い違う（NAVITIME：鷺宮3-1-16／食べログ：鷺ノ宮3-28-7）／定休日・時間：未確認／支払い：現金のみ（PayPay不可・本人確認）／東京都中野区鷺宮3-1-16／野方駅から直線0.83km／https://tabelog.com/tokyo/A1321/A132104/13145595</description><Point><coordinates>139.644066,35.722739,0</coordinates></Point></Placemark>
 </Folder>
 </Document></kml>

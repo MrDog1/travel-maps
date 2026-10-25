@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>上井草マップ（雨・赤ちゃん）</name>
+<Style id="s-station"><IconStyle><color>ffD16F1F</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-museum"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-sweet"><IconStyle><color>ff7A46D9</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-wagashi"><IconStyle><color>ff2B5A8B</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-lunch"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>駅・見る</name>
+<Placemark><name>鷺ノ宮駅</name><styleUrl>#s-station</styleUrl><description>メモ：西武新宿線 各停で上井草へ（3駅・約6分）／上井草駅（南口・ガンダム像）から直線3.24km／https://www.seiburailway.jp/</description><Point><coordinates>139.63958,35.72313,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>雨の間（屋内）</name>
+<Placemark><name>ちひろ美術館・東京</name><styleUrl>#s-museum</styleUrl><description>営業：10:00〜17:00（10/26〜29休館）／メモ：展示は10/25最終日。授乳室・こどものへや・絵本カフェ。保護者900円×2。傘は持ち込み不可／東京都練馬区下石神井4-7-2／上井草駅（南口・ガンダム像）から直線0.38km／https://chihiro.jp/tokyo/</description><Point><coordinates>139.605164,35.728207,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>洋菓子（妻）</name>
+<Placemark><name>エキュルイユ</name><styleUrl>#s-sweet</styleUrl><description>営業：土日のみ 11:00〜17:00／メモ：テイクアウトのみのケーキ店。カード不可／東京都杉並区上井草3-14-22／上井草駅（南口・ガンダム像）から直線0.5km／https://tabelog.com/tokyo/A1321/A132105/13155224/</description><Point><coordinates>139.601791,35.72076,0</coordinates></Point></Placemark>
+<Placemark><name>SLOPE（スロープ）</name><styleUrl>#s-sweet</styleUrl><description>営業：10:00〜18:00・月休／メモ：自家焙煎コーヒー・スコーン・パフェ・ホットサンド。現金のみ。雨が早いときのランチ予備／東京都杉並区上井草2-35-2／上井草駅（南口・ガンダム像）から直線0.13km／https://tabelog.com/tokyo/A1321/A132105/13146304/</description><Point><coordinates>139.604446,35.724026,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>和菓子（夫）</name>
+<Placemark><name>御菓子司 青柳</name><styleUrl>#s-wagashi</styleUrl><description>営業：8:30〜18:00・火休／メモ：秋だんご180円・草もち120円・豆大福。カード不可／東京都練馬区下石神井4-14-8／上井草駅（南口・ガンダム像）から直線0.32km／https://tabelog.com/tokyo/A1321/A132105/13131144/</description><Point><coordinates>139.603088,35.727844,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>ランチ</name>
+<Placemark><name>Erich CAFE（エリックカフェ）</name><styleUrl>#s-lunch</styleUrl><description>営業：日 9:00〜17:00（ランチ11〜15時）／メモ：2025/9開店。メディカルビレッジA棟2F（エレベーター未確認）。カード可／東京都練馬区上石神井2-1-16／上井草駅（南口・ガンダム像）から直線0.44km／https://tabelog.com/tokyo/A1321/A132105/13317850/</description><Point><coordinates>139.59938,35.726711,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

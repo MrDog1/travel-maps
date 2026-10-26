@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>認可外保育施設マップ（石神井公園・中村橋・鷺ノ宮）</name>
+<Style id="s-station"><IconStyle><color>ffD16F1F</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-ninsho"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-kigyo"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-other"><IconStyle><color>ffC94F7A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-ichiji"><IconStyle><color>ff9A9C3C</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-unknown"><IconStyle><color>ff968F8A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>駅</name>
+<Placemark><name>石神井公園駅</name><styleUrl>#s-station</styleUrl><description>メモ：地点／中村橋駅から直線2.91km／https://www.seiburailway.jp/</description><Point><coordinates>139.606555,35.743645,0</coordinates></Point></Placemark>
+<Placemark><name>鷺ノ宮駅</name><styleUrl>#s-station</styleUrl><description>メモ：地点／中村橋駅から直線1.58km／https://www.seiburailway.jp/</description><Point><coordinates>139.638906,35.722624,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>認証保育所</name>
+<Placemark><name>キッズパオ石神井あおぞら園</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜5歳・7:30-20:30・定員35／電話：03-6913-3050／東京都練馬区石神井町1-22-4／中村橋駅から直線2.81km／https://www.mammys-f.jp/nursery-school/syakujii/</description><Point><coordinates>139.607302,35.742252,0</coordinates></Point></Placemark>
+<Placemark><name>石神井プチ・クレイシュ</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜5歳・7:00-20:00・定員34／電話：03-3904-8255／東京都練馬区石神井町3-16-19／中村橋駅から直線2.98km／http://www.j3.s009v.squarestart.ne.jp/hoikuen/shyakuji.html</description><Point><coordinates>139.605238,35.741806,0</coordinates></Point></Placemark>
+<Placemark><name>tenten石神井公園</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜5歳・7:00-20:00・定員24／電話：03-6913-1614／東京都練馬区石神井町6-9-1／中村橋駅から直線3.14km／https://b-tenten.jp/service/nursery-school/</description><Point><coordinates>139.603515,35.742087,0</coordinates></Point></Placemark>
+<Placemark><name>さつき保育園石神井公園ルーム</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜2歳・7:00-20:00・定員24／電話：03-5923-9850／東京都練馬区石神井町6-2-12／中村橋駅から直線3.17km／https://www.satsuki-shakujiikoen.com/</description><Point><coordinates>139.603057,35.741546,0</coordinates></Point></Placemark>
+<Placemark><name>保育ルームフェリーチェ練馬中村橋園</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜5歳・7:30-21:00・定員40／電話：03-3577-6540／東京都練馬区貫井2-1-19／中村橋駅から直線0.31km／https://felice.sou-kidscare.co.jp/nursery/nerima/</description><Point><coordinates>139.639052,35.739337,0</coordinates></Point></Placemark>
+<Placemark><name>マミーズエンジェル中野白鷺保育園</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：0〜5歳・7:30-22:00・定員30／電話：03-3337-8877／東京都中野区白鷺2-7-1／中村橋駅から直線2.08km／http://www.mammys-angel.co.jp/</description><Point><coordinates>139.636017,35.71812,0</coordinates></Point></Placemark>
+<Placemark><name>龍の子保育室</name><styleUrl>#s-ninsho</styleUrl><description>年齢・時間・定員：認証B・0〜2歳・7:00-20:00・定員19／電話：03-3336-6750／東京都中野区若宮1-37-5／中村橋駅から直線2.2km／https://tatsunoko-hoikusitsu.jimdoweb.com/</description><Point><coordinates>139.648189,35.718969,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>企業主導型</name>
+<Placemark><name>ベビーキッズナーサリー大泉学園</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：7:30-20:30・定員19／電話：03-5935-4193／東京都練馬区東大泉2-6-9／中村橋駅から直線4.32km／http://www.kidsnursery.net/</description><Point><coordinates>139.592959,35.750558,0</coordinates></Point></Placemark>
+<Placemark><name>KNきずな保育園石神井台</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：0〜5歳・7:30-20:30・定員62／電話：03-5903-8230／東京都練馬区石神井台4-7-3／中村橋駅から直線4.93km／http://kidsnursery.net/group/kizuna_shakuziidai/</description><Point><coordinates>139.583368,35.732008,0</coordinates></Point></Placemark>
+<Placemark><name>練馬あけみ保育園</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：6か月〜3歳・7:30-20:30・定員19／電話：03-6914-1134／東京都練馬区中村北1-17-3／中村橋駅から直線0.82km／http://www.akemi-hoikuen.jp/</description><Point><coordinates>139.646469,35.735115,0</coordinates></Point></Placemark>
+<Placemark><name>こもれび保育園白鷺園</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：6か月〜2歳・7:30-20:30・定員31／電話：03-5356-8797／東京都中野区白鷺2-48-10／中村橋駅から直線1.68km／https://komorebi-ns.ed.jp/nursery/saginomiya/</description><Point><coordinates>139.637209,35.721722,0</coordinates></Point></Placemark>
+<Placemark><name>木下の保育園野方</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：年齢要確認／電話：03-5942-7825／東京都中野区野方4-22-2／中村橋駅から直線2.29km／https://www.kinoshita-hoiku.com/facility/nogata</description><Point><coordinates>139.654017,35.721077,0</coordinates></Point></Placemark>
+<Placemark><name>やはた幼稚園 やはた保育ルーム</name><styleUrl>#s-kigyo</styleUrl><description>年齢・時間・定員：年齢要確認／電話：03-3330-6311／東京都中野区大和町2-30-3／中村橋駅から直線2.78km／http://www.yahatayouchien.com/</description><Point><coordinates>139.650736,35.714149,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>その他の認可外</name>
+<Placemark><name>スターインターナショナルプリスクール</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：3歳〜・9:00-20:00・英語・区の補助なし／電話：03-3904-6058／東京都練馬区高野台1-14-8／中村橋駅から直線2.05km／https://star-g.wixsite.com/preschool</description><Point><coordinates>139.616668,35.743859,0</coordinates></Point></Placemark>
+<Placemark><name>みずほスクール</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：1歳〜・8:15-14:30・定員70／電話：03-5372-1525／東京都練馬区石神井台3-2-25／中村橋駅から直線4.02km／https://www.mizuho-edu.co.jp/</description><Point><coordinates>139.593832,35.74343,0</coordinates></Point></Placemark>
+<Placemark><name>キッズナーサリー大泉学園</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：ベビーホテル・7:30-20:30・定員40／電話：03-5935-4193／東京都練馬区東大泉2-6-9／中村橋駅から直線4.32km／http://www.kidsnursery.net/</description><Point><coordinates>139.592959,35.750558,0</coordinates></Point></Placemark>
+<Placemark><name>小さな保育園ともそだち</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：〜3歳児クラス・7:00-20:00・定員25（0歳は要確認）／電話：03-5971-3010／東京都練馬区中村北4-6-12／中村橋駅から直線0.29km／http://www.tomosodachi.jp/</description><Point><coordinates>139.638701,35.734337,0</coordinates></Point></Placemark>
+<Placemark><name>練馬あけみ保育園つぼみ</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：6か月〜3歳児クラス・定員12／電話：03-6914-1134／東京都練馬区中村北2-5-12／中村橋駅から直線0.69km／http://www.akemihoikuen.webnode.jp/</description><Point><coordinates>139.645082,35.735205,0</coordinates></Point></Placemark>
+<Placemark><name>Fairy Tale バイリンガルアート保育ルーム</name><styleUrl>#s-other</styleUrl><description>年齢・時間・定員：6か月〜6歳・英語／電話：03-3228-5250／東京都中野区野方4-44-10／中村橋駅から直線2.25km／https://www.hoiku-fairytale.jp/</description><Point><coordinates>139.655432,35.722659,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>一時預かり</name>
+<Placemark><name>保育サービスぽてと</name><styleUrl>#s-ichiji</styleUrl><description>年齢・時間・定員：一時預かり（NPO）／電話：03-5946-6746／東京都練馬区練馬4-10-14／中村橋駅から直線1.09km／https://potato.or.jp/</description><Point><coordinates>139.64758,35.742375,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>種別不明・要確認</name>
+<Placemark><name>Tomonicco大泉学園</name><styleUrl>#s-unknown</styleUrl><description>年齢・時間・定員：種別不明（キッズナーサリーと同じ建物）／電話：03-3922-2800／メモ：公式サイトなし（地図リンク）／東京都練馬区東大泉2-6-9／中村橋駅から直線4.31km／https://maps.google.com/?cid=2924908604341233842&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</description><Point><coordinates>139.59304,35.750506,0</coordinates></Point></Placemark>
+<Placemark><name>ちびっこハウス</name><styleUrl>#s-unknown</styleUrl><description>年齢・時間・定員：種別不明／電話：03-5984-0841／メモ：公式サイトなし（地図リンク）／東京都練馬区豊玉北5-32-11／中村橋駅から直線1.38km／https://maps.google.com/?cid=4118120294808077962&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</description><Point><coordinates>139.652946,35.736751,0</coordinates></Point></Placemark>
+<Placemark><name>子ごころ園都立家政</name><styleUrl>#s-unknown</styleUrl><description>年齢・時間・定員：種別要確認（小規模認可の可能性）／メモ：公式サイトなし（地図リンク）／東京都中野区若宮3-3-11／中村橋駅から直線2.04km／https://maps.google.com/?cid=13794468619727412874&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</description><Point><coordinates>139.645807,35.719728,0</coordinates></Point></Placemark>
+<Placemark><name>サニーサイドキッズルーム</name><styleUrl>#s-unknown</styleUrl><description>年齢・時間・定員：種別不明（杉並区）／電話：03-3338-5505／東京都杉並区阿佐谷北3-26-8／中村橋駅から直線2.94km／http://www.sunnyside-kidsroom.com/</description><Point><coordinates>139.633007,35.710637,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

@@ -1,0 +1,119 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>認可外保育施設マップ（石神井公園・中村橋・鷺ノ宮）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats input{margin:0}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#list{overflow-y:auto;flex:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+@media (max-width:760px){main{flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
+</style></head><body>
+<header><h1>認可外保育施設マップ（石神井公園・中村橋・鷺ノ宮）</h1><p class="sub">空き・年齢は各施設に要確認</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "認可外保育施設マップ（石神井公園・中村橋・鷺ノ宮）", "subtitle": "空き・年齢は各施設に要確認", "home": {"name": "中村橋駅", "lat": 35.736795, "lon": 139.637667, "match": "手入力"}, "rings_km": [1, 2, 3], "categories": {"station": {"label": "駅", "color": "#1F6FD1"}, "ninsho": {"label": "認証保育所", "color": "#1E8A5A"}, "kigyo": {"label": "企業主導型", "color": "#D08A12"}, "other": {"label": "その他の認可外", "color": "#7A4FC9"}, "ichiji": {"label": "一時預かり", "color": "#3C9C9A"}, "unknown": {"label": "種別不明・要確認", "color": "#8A8F96"}}, "fields": [["time", "年齢・時間・定員"], ["tel", "電話"], ["memo", "メモ"]], "points": [{"name": "石神井公園駅", "lat": 35.743645, "lon": 139.606555, "cat": "station", "url": "https://www.seiburailway.jp/", "time": "", "tel": "", "memo": "地点", "match": "手入力", "km": 2.91}, {"name": "鷺ノ宮駅", "lat": 35.722624, "lon": 139.638906, "cat": "station", "url": "https://www.seiburailway.jp/", "time": "", "tel": "", "memo": "地点", "match": "手入力", "km": 1.58}, {"name": "キッズパオ石神井あおぞら園", "addr": "東京都練馬区石神井町1-22-4", "lat": 35.742252, "lon": 139.607302, "cat": "ninsho", "url": "https://www.mammys-f.jp/nursery-school/syakujii/", "time": "0〜5歳・7:30-20:30・定員35", "tel": "03-6913-3050", "memo": "", "match": "手入力", "km": 2.81}, {"name": "石神井プチ・クレイシュ", "addr": "東京都練馬区石神井町3-16-19", "lat": 35.741806, "lon": 139.605238, "cat": "ninsho", "url": "http://www.j3.s009v.squarestart.ne.jp/hoikuen/shyakuji.html", "time": "0〜5歳・7:00-20:00・定員34", "tel": "03-3904-8255", "memo": "", "match": "手入力", "km": 2.98}, {"name": "tenten石神井公園", "addr": "東京都練馬区石神井町6-9-1", "lat": 35.742087, "lon": 139.603515, "cat": "ninsho", "url": "https://b-tenten.jp/service/nursery-school/", "time": "0〜5歳・7:00-20:00・定員24", "tel": "03-6913-1614", "memo": "", "match": "手入力", "km": 3.14}, {"name": "さつき保育園石神井公園ルーム", "addr": "東京都練馬区石神井町6-2-12", "lat": 35.741546, "lon": 139.603057, "cat": "ninsho", "url": "https://www.satsuki-shakujiikoen.com/", "time": "0〜2歳・7:00-20:00・定員24", "tel": "03-5923-9850", "memo": "", "match": "手入力", "km": 3.17}, {"name": "スターインターナショナルプリスクール", "addr": "東京都練馬区高野台1-14-8", "lat": 35.743859, "lon": 139.616668, "cat": "other", "url": "https://star-g.wixsite.com/preschool", "time": "3歳〜・9:00-20:00・英語・区の補助なし", "tel": "03-3904-6058", "memo": "", "match": "手入力", "km": 2.05}, {"name": "みずほスクール", "addr": "東京都練馬区石神井台3-2-25", "lat": 35.74343, "lon": 139.593832, "cat": "other", "url": "https://www.mizuho-edu.co.jp/", "time": "1歳〜・8:15-14:30・定員70", "tel": "03-5372-1525", "memo": "", "match": "手入力", "km": 4.02}, {"name": "キッズナーサリー大泉学園", "addr": "東京都練馬区東大泉2-6-9", "lat": 35.750558, "lon": 139.592959, "cat": "other", "url": "http://www.kidsnursery.net/", "time": "ベビーホテル・7:30-20:30・定員40", "tel": "03-5935-4193", "memo": "", "match": "手入力", "km": 4.32}, {"name": "ベビーキッズナーサリー大泉学園", "addr": "東京都練馬区東大泉2-6-9", "lat": 35.750558, "lon": 139.592959, "cat": "kigyo", "url": "http://www.kidsnursery.net/", "time": "7:30-20:30・定員19", "tel": "03-5935-4193", "memo": "", "match": "手入力", "km": 4.32}, {"name": "Tomonicco大泉学園", "addr": "東京都練馬区東大泉2-6-9", "lat": 35.750506, "lon": 139.59304, "cat": "unknown", "url": "https://maps.google.com/?cid=2924908604341233842&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA", "time": "種別不明（キッズナーサリーと同じ建物）", "tel": "03-3922-2800", "memo": "公式サイトなし（地図リンク）", "match": "手入力", "km": 4.31}, {"name": "KNきずな保育園石神井台", "addr": "東京都練馬区石神井台4-7-3", "lat": 35.732008, "lon": 139.583368, "cat": "kigyo", "url": "http://kidsnursery.net/group/kizuna_shakuziidai/", "time": "0〜5歳・7:30-20:30・定員62", "tel": "03-5903-8230", "memo": "", "match": "手入力", "km": 4.93}, {"name": "保育ルームフェリーチェ練馬中村橋園", "addr": "東京都練馬区貫井2-1-19", "lat": 35.739337, "lon": 139.639052, "cat": "ninsho", "url": "https://felice.sou-kidscare.co.jp/nursery/nerima/", "time": "0〜5歳・7:30-21:00・定員40", "tel": "03-3577-6540", "memo": "", "match": "手入力", "km": 0.31}, {"name": "小さな保育園ともそだち", "addr": "東京都練馬区中村北4-6-12", "lat": 35.734337, "lon": 139.638701, "cat": "other", "url": "http://www.tomosodachi.jp/", "time": "〜3歳児クラス・7:00-20:00・定員25（0歳は要確認）", "tel": "03-5971-3010", "memo": "", "match": "手入力", "km": 0.29}, {"name": "練馬あけみ保育園つぼみ", "addr": "東京都練馬区中村北2-5-12", "lat": 35.735205, "lon": 139.645082, "cat": "other", "url": "http://www.akemihoikuen.webnode.jp/", "time": "6か月〜3歳児クラス・定員12", "tel": "03-6914-1134", "memo": "", "match": "手入力", "km": 0.69}, {"name": "練馬あけみ保育園", "addr": "東京都練馬区中村北1-17-3", "lat": 35.735115, "lon": 139.646469, "cat": "kigyo", "url": "http://www.akemi-hoikuen.jp/", "time": "6か月〜3歳・7:30-20:30・定員19", "tel": "03-6914-1134", "memo": "", "match": "手入力", "km": 0.82}, {"name": "ちびっこハウス", "addr": "東京都練馬区豊玉北5-32-11", "lat": 35.736751, "lon": 139.652946, "cat": "unknown", "url": "https://maps.google.com/?cid=4118120294808077962&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA", "time": "種別不明", "tel": "03-5984-0841", "memo": "公式サイトなし（地図リンク）", "match": "手入力", "km": 1.38}, {"name": "保育サービスぽてと", "addr": "東京都練馬区練馬4-10-14", "lat": 35.742375, "lon": 139.64758, "cat": "ichiji", "url": "https://potato.or.jp/", "time": "一時預かり（NPO）", "tel": "03-5946-6746", "memo": "", "match": "手入力", "km": 1.09}, {"name": "こもれび保育園白鷺園", "addr": "東京都中野区白鷺2-48-10", "lat": 35.721722, "lon": 139.637209, "cat": "kigyo", "url": "https://komorebi-ns.ed.jp/nursery/saginomiya/", "time": "6か月〜2歳・7:30-20:30・定員31", "tel": "03-5356-8797", "memo": "", "match": "手入力", "km": 1.68}, {"name": "マミーズエンジェル中野白鷺保育園", "addr": "東京都中野区白鷺2-7-1", "lat": 35.71812, "lon": 139.636017, "cat": "ninsho", "url": "http://www.mammys-angel.co.jp/", "time": "0〜5歳・7:30-22:00・定員30", "tel": "03-3337-8877", "memo": "", "match": "手入力", "km": 2.08}, {"name": "子ごころ園都立家政", "addr": "東京都中野区若宮3-3-11", "lat": 35.719728, "lon": 139.645807, "cat": "unknown", "url": "https://maps.google.com/?cid=13794468619727412874&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA", "time": "種別要確認（小規模認可の可能性）", "tel": "", "memo": "公式サイトなし（地図リンク）", "match": "手入力", "km": 2.04}, {"name": "龍の子保育室", "addr": "東京都中野区若宮1-37-5", "lat": 35.718969, "lon": 139.648189, "cat": "ninsho", "url": "https://tatsunoko-hoikusitsu.jimdoweb.com/", "time": "認証B・0〜2歳・7:00-20:00・定員19", "tel": "03-3336-6750", "memo": "", "match": "手入力", "km": 2.2}, {"name": "木下の保育園野方", "addr": "東京都中野区野方4-22-2", "lat": 35.721077, "lon": 139.654017, "cat": "kigyo", "url": "https://www.kinoshita-hoiku.com/facility/nogata", "time": "年齢要確認", "tel": "03-5942-7825", "memo": "", "match": "手入力", "km": 2.29}, {"name": "やはた幼稚園 やはた保育ルーム", "addr": "東京都中野区大和町2-30-3", "lat": 35.714149, "lon": 139.650736, "cat": "kigyo", "url": "http://www.yahatayouchien.com/", "time": "年齢要確認", "tel": "03-3330-6311", "memo": "", "match": "手入力", "km": 2.78}, {"name": "サニーサイドキッズルーム", "addr": "東京都杉並区阿佐谷北3-26-8", "lat": 35.710637, "lon": 139.633007, "cat": "unknown", "url": "http://www.sunnyside-kidsroom.com/", "time": "種別不明（杉並区）", "tel": "03-3338-5505", "memo": "", "match": "手入力", "km": 2.94}, {"name": "Fairy Tale バイリンガルアート保育ルーム", "addr": "東京都中野区野方4-44-10", "lat": 35.722659, "lon": 139.655432, "cat": "other", "url": "https://www.hoiku-fairytale.jp/", "time": "6か月〜6歳・英語", "tel": "03-3228-5250", "memo": "", "match": "手入力", "km": 2.25}]}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const show=Object.fromEntries(ORDER.map(c=>[c,true]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- サイドバー ----
+const list=document.getElementById('list'), q=document.getElementById('q');
+PTS.forEach((p,i)=>p._i=i);
+const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||(a.km??0)-(b.km??0));
+let api=null, cur=null;
+function renderList(){list.innerHTML='';const s=q.value.trim();
+  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
+    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
+    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+q.oninput=renderList;renderList();
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  b.extend({lat:HOME.lat,lng:HOME.lon});
+  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
+      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
+    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
+  map.fitBounds(b,40);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
+      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
+    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

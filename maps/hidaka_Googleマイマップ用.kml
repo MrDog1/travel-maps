@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>日高マップ（車・犬・赤ちゃん）</name>
+<Style id="s-park"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-lunch"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-ng"><IconStyle><color>ff9B938A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>公園（犬を遊ばせる）</name>
+<Placemark><name>日高総合公園</name><styleUrl>#s-park</styleUrl><description>営業：9:00-17:00（第1駐車場 8:00-17:15）／休：第1・3月曜／メモ：あそびの森（複合遊具・インクルーシブブランコ・砂場）。せせらぎ水路は夏季のみ。犬：野球場・陸上トラック・サッカー場はNG、それ以外は記載なし（現地の看板で確認）。駐車無料かは未確認／埼玉県日高市高萩1500／武蔵高萩駅から直線1.0km／https://www.city.hidaka.lg.jp/soshiki/toshiseibi/toshikeikaku/jutakuseisakukoen/supotsu/1100.html</description><Point><coordinates>139.38205,35.900669,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>ホワイト餃子</name>
+<Placemark><name>餃子のはながさ 日高店（ホワイト餃子グループ）</name><styleUrl>#s-lunch</styleUrl><description>営業：公式 11:00-22:00（LO21:30）無休／食べログは15-17時中休み／メモ：約30〜40席・個室なし。平日ランチ〜14時。駐車場あり。カード・PayPay・交通系IC可。やき餃子8個 約600円。TEL 042-985-1150。犬：車で待機／埼玉県日高市高萩2306-9／武蔵高萩駅から直線0.73km／https://hanagasa.biz/about</description><Point><coordinates>139.373917,35.907722,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>今日は休み・予備</name>
+<Placemark><name>サイボク</name><styleUrl>#s-ng</styleUrl><description>営業：9:00-18:30／毎週水曜定休（今日は休み）／メモ：屋外の共有スペースは犬OK（店内・レストラン・温泉・サイボクの森はNG）。水曜以外の候補／埼玉県日高市下大谷沢546／武蔵高萩駅から直線2.42km／https://faq.saiboku.co.jp/</description><Point><coordinates>139.394882,35.891605,0</coordinates></Point></Placemark>
+<Placemark><name>巾着田曼珠沙華公園</name><styleUrl>#s-ng</styleUrl><description>営業：7:00-17:00（最終入庫16:30）／メモ：予備。リードを短く持てば犬OK。2026/9/19から入場料500円（中学生以下無料）・駐車500円（日高市民は無料）。有料が通年か曼珠沙華の時期だけかは未確認。よく行くので普段は候補から外しているエリア／埼玉県日高市高麗本郷125-2／武蔵高萩駅から直線5.75km／https://kinchakuda.com/</description><Point><coordinates>139.310928,35.884254,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

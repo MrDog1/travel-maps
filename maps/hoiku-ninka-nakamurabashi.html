@@ -1,0 +1,119 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>練馬区 認可保育園マップ（中村橋〜鷺ノ宮エリア 16園＋地域型4園）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats input{margin:0}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#list{overflow-y:auto;flex:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+@media (max-width:760px){main{flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
+</style></head><body>
+<header><h1>練馬区 認可保育園マップ（中村橋〜鷺ノ宮エリア 16園＋地域型4園）</h1><p class="sub">2026/10/30調査｜『別冊 保育園等一覧 令和8年度（＆令和9年度）』ページ番号・定員・保育時間（基準は中村橋駅）</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "練馬区 認可保育園マップ（中村橋〜鷺ノ宮エリア 16園＋地域型4園）", "subtitle": "2026/10/30調査｜『別冊 保育園等一覧 令和8年度（＆令和9年度）』ページ番号・定員・保育時間（基準は中村橋駅）", "home": {"name": "中村橋駅", "lat": 35.736795, "lon": 139.637667, "match": "手入力"}, "rings_km": [0.5, 1.0, 1.5], "categories": {"p_ninka_0": {"label": "私立認可（0歳産休明〜5歳）", "color": "#1E8A5A"}, "p_ninka_0_2": {"label": "私立認可（0歳産休明〜2・3歳）", "color": "#2B908F"}, "p_ward": {"label": "区立認可（委託）", "color": "#D08A12"}, "p_ninka_8m": {"label": "私立認可（生後8か月〜5歳）", "color": "#7A4FC9"}, "p_regional": {"label": "地域型（小規模A・保育ママ）", "color": "#E05A47"}, "station": {"label": "駅", "color": "#1F6FD1"}}, "fields": [["rank_dist", "駅からの徒歩距離"], ["spec_info", "対象年齢・定員・保育時間"], ["booklet", "施設コード・冊子ページ"], ["tel", "電話"]], "points": [{"name": "鷺ノ宮駅", "addr": "東京都中野区鷺宮3-15-1", "lat": 35.722624, "lon": 139.638906, "cat": "station", "url": "https://www.seiburailway.jp/railway/station/saginomiya/", "rank_dist": "西武新宿線", "spec_info": "最寄駅（南側）", "booklet": "", "tel": "", "match": "手入力", "km": 1.58}, {"name": "富士見台駅", "addr": "東京都練馬区貫井3-7-5", "lat": 35.735785, "lon": 139.629712, "cat": "station", "url": "https://www.seiburailway.jp/railway/station/fujimidai/", "rank_dist": "西武池袋線", "spec_info": "隣駅（西側）", "booklet": "マップ C-3", "tel": "", "match": "手入力", "km": 0.73}, {"name": "1. 平和保育園", "addr": "東京都練馬区中村南2-24-3", "lat": 35.730064299999995, "lon": 139.6429387, "cat": "p_ninka_8m", "rank_dist": "中村橋駅まで徒歩1096m（約16.0分）", "spec_info": "8か月〜5歳（0歳定員0・1歳5）｜7:30〜18:30（延長18:30〜19:30 ※1歳〜）", "booklet": "コード 11-0202｜R8冊子 P.69（上段）／一覧 P.24-25／R9 P.70", "tel": "03-3990-6358", "match": "手入力", "km": 0.89}, {"name": "2. みらいく中村2丁目園", "addr": "東京都練馬区中村2-23-10", "lat": 35.7311086, "lon": 139.6427127, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩954m（約14.0分）", "spec_info": "産休明け〜5歳（0歳6・1歳9）｜7:15〜18:15（延長18:16〜20:15）", "booklet": "コード 11-0389｜R8冊子 P.73（上段）／一覧 P.24-25／R9 P.74", "tel": "03-5848-5310", "match": "手入力", "km": 0.78}, {"name": "3. にじいろ保育園中村一丁目", "addr": "東京都練馬区中村1-15-29", "lat": 35.731797799999995, "lon": 139.6465955, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩1196m（約17.4分）", "spec_info": "産休明け〜5歳（0歳6・1歳14）｜7:30〜18:30（延長7:00〜7:29, 18:31〜20:30）", "booklet": "コード 11-0361｜R8冊子 P.64（下段）／一覧 P.24-25／R9 P.65", "tel": "03-5848-5681", "match": "手入力", "km": 0.98}, {"name": "4. にじいろ保育園練馬中村", "addr": "東京都練馬区中村1-19-9", "lat": 35.7336762, "lon": 139.6455916, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩1020m（約14.9分）", "spec_info": "産休明け〜5歳（0歳6・1歳10）｜7:30〜18:30（延長7:00〜7:29, 18:31〜20:30）", "booklet": "コード 11-0320｜R8冊子 P.65（上段）／一覧 P.24-25／R9 P.66", "tel": "03-5848-7281", "match": "手入力", "km": 0.79}, {"name": "5. ベネッセ中村橋保育園", "addr": "東京都練馬区中村3-3-9", "lat": 35.733805499999995, "lon": 139.6410316, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩572m（約8.4分）", "spec_info": "産休明け〜5歳（0歳6・1歳15）｜7:00〜18:00（延長18:00〜20:00 ※0歳は19:00迄）", "booklet": "コード 11-0337｜R8冊子 P.69（下段）／一覧 P.24-25／R9 P.70", "tel": "03-3577-9235", "match": "手入力", "km": 0.45}, {"name": "6. みらいく中村橋園", "addr": "東京都練馬区中村北3-17-10", "lat": 35.735354799999996, "lon": 139.6398032, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩332m（約4.9分）", "spec_info": "産休明け〜5歳（0歳6・1歳10）｜7:15〜18:15（延長18:16〜20:15）", "booklet": "コード 11-0390｜R8冊子 P.73（下段）／一覧 P.24-25／R9 P.74", "tel": "03-5848-7107", "match": "手入力", "km": 0.25}, {"name": "7. アートチャイルドケア中村橋", "addr": "東京都練馬区中村北4-4-13 2階", "lat": 35.7355119, "lon": 139.6384688, "cat": "p_ninka_0_2", "rank_dist": "中村橋駅まで徒歩199m（約3.1分）", "spec_info": "産休明け〜2歳（0歳6・1歳12・2歳12）｜8:00〜19:00（延長7:00〜8:00, 19:00〜20:00）", "booklet": "コード 11-0365｜R8冊子 P.53（下段）／一覧 P.22-23／R9 P.54", "tel": "03-3825-6667", "match": "手入力", "km": 0.16}, {"name": "8. ソラスト中村橋保育園", "addr": "東京都練馬区向山1-13-2", "lat": 35.737262699999995, "lon": 139.64038639999998, "cat": "p_ninka_0_2", "rank_dist": "中村橋駅まで徒歩252m（約3.9分）", "spec_info": "産休明け〜3歳（0歳9・1歳11）｜7:30〜18:30（延長7:00〜7:30, 18:30〜21:00）", "booklet": "コード 11-0397｜R8冊子 P.60（上段）／一覧 P.22-23／R9 P.61", "tel": "03-3577-8571", "match": "手入力", "km": 0.25}, {"name": "9. 区立向山保育園", "addr": "東京都練馬区向山1-5-7", "lat": 35.7378109, "lon": 139.6422006, "cat": "p_ward", "rank_dist": "中村橋駅まで徒歩440m（約6.4分）", "spec_info": "8か月〜5歳（0歳9・1歳19）｜7:30〜18:30（延長7:00〜7:30, 18:30〜20:30 ※1歳〜）", "booklet": "コード 10-0011｜R8冊子 P.36（1段目（最上段））／一覧 P.22-23／R9 P.50", "tel": "03-3970-6088", "match": "手入力", "km": 0.42}, {"name": "10. さくらさくみらい 中村北", "addr": "東京都練馬区中村北1-11-20", "lat": 35.736861, "lon": 139.6484595, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩1045m（約14.8分）", "spec_info": "産休明け〜5歳（0歳6・1歳12）｜7:00〜18:00（延長18:00〜20:00 ※1歳誕生月翌月〜）", "booklet": "コード 11-0393｜R8冊子 P.58（下段）／一覧 P.22-23／R9 P.59", "tel": "03-5848-5939", "match": "手入力", "km": 0.97}, {"name": "11. 風の子保育園", "addr": "東京都練馬区貫井1-5-7", "lat": 35.737364, "lon": 139.63708699999998, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩111m（約1.6分）", "spec_info": "産休明け〜5歳（0歳6・1歳13）｜7:30〜18:30（延長7:00〜7:29, 18:31〜20:30）", "booklet": "コード 11-0329｜R8冊子 P.56（下段）／一覧 P.22-23／R9 P.57", "tel": "03-3990-3920", "match": "手入力", "km": 0.08}, {"name": "12. Nicot富士見台", "addr": "東京都練馬区貫井1-30-5", "lat": 35.7362268, "lon": 139.6326939, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩476m（約6.5分）", "spec_info": "産休明け〜5歳（0歳6・1歳10）｜7:30〜18:30（延長7:00〜7:30, 18:30〜20:30）", "booklet": "コード 11-0321｜R8冊子 P.53（上段）／一覧 P.22-23／R9 P.54", "tel": "03-5987-2185", "match": "手入力", "km": 0.45}, {"name": "13. 保育所まぁむ中村橋駅前園", "addr": "東京都練馬区貫井1-17-4", "lat": 35.7383895, "lon": 139.6343975, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩400m（約5.8分）", "spec_info": "産休明け〜5歳（0歳6・1歳10）｜7:00〜18:00（延長18:00〜20:00）", "booklet": "コード 11-0364｜R8冊子 P.71（上段）／一覧 P.24-25／R9 P.72", "tel": "03-5933-9243", "match": "手入力", "km": 0.34}, {"name": "14. AIAI NURSERY 富士見台", "addr": "東京都練馬区貫井1-26-1", "lat": 35.7373555, "lon": 139.6312601, "cat": "p_ninka_0", "rank_dist": "中村橋駅まで徒歩662m（約9.2分）", "spec_info": "産休明け〜5歳（0歳6・1歳11）｜7:30〜18:30（延長18:30〜19:30）", "booklet": "コード 11-0434｜R8冊子 P.52（上段）／一覧 P.22-23／R9 P.53", "tel": "03-5848-9580", "match": "手入力", "km": 0.58}, {"name": "15. 区立貫井第二保育園", "addr": "東京都練馬区貫井4-13-4", "lat": 35.7409963, "lon": 139.631467, "cat": "p_ward", "rank_dist": "中村橋駅まで徒歩849m（約11.8分）", "spec_info": "100日〜5歳（0歳12・1歳21）｜7:30〜18:30（延長7:00〜7:30, 18:30〜20:30 ※1歳〜）", "booklet": "コード 10-0008｜R8冊子 P.38（2段目（中段））／一覧 P.22-23／R9 P.52", "tel": "03-3990-8291", "match": "手入力", "km": 0.73}, {"name": "16. 区立貫井保育園", "addr": "東京都練馬区貫井4-24-9", "lat": 35.7419893, "lon": 139.627353, "cat": "p_ward", "rank_dist": "中村橋駅まで徒歩1330m（約18.5分）", "spec_info": "1〜5歳（0歳なし・1歳10）｜7:30〜18:30（延長7:00〜7:30, 18:30〜20:30）", "booklet": "コード 10-0007｜R8冊子 P.38（1段目（最上段））／一覧 P.22-23／R9 P.52", "tel": "03-3990-3320", "match": "手入力", "km": 1.1}, {"name": "R1. 福尾尚子（ラパン保育室）", "addr": "東京都練馬区中村3-19-4-101", "lat": 35.731332, "lon": 139.63954390000004, "cat": "p_regional", "rank_dist": "中村橋駅まで徒歩662m（約9.7分）", "spec_info": "0〜2歳（定員3）｜8:30〜17:00（延長なし）", "booklet": "コード 44-0006｜R8冊子 P.139（3段目）／一覧 P.128／R9 P.76", "tel": "03-3990-1560", "match": "手入力", "km": 0.63}, {"name": "R2. 保育所まぁむ中村橋向山園", "addr": "東京都練馬区向山1-14-5", "lat": 35.737170000000006, "lon": 139.639503, "cat": "p_regional", "rank_dist": "中村橋駅まで徒歩169m（約2.7分）", "spec_info": "産休明け〜2歳（0歳2・1歳8・2歳12）｜7:30〜18:30（延長18:30〜19:30 ※1歳〜）", "booklet": "コード 64-0013｜R8冊子 P.153（下段）／一覧 P.132-133／R9 P.85", "tel": "03-5848-9300", "match": "手入力", "km": 0.17}, {"name": "R3. さつき保育園中村橋", "addr": "東京都練馬区貫井2-1-26 1階", "lat": 35.7387331, "lon": 139.63874099999998, "cat": "p_regional", "rank_dist": "中村橋駅まで徒歩287m（約4.4分）", "spec_info": "産休明け〜2歳（0歳3・1歳9・2歳9）｜7:30〜18:30（0歳は8:30〜16:30限度・延長なし）", "booklet": "コード 64-0060｜R8冊子 P.147（下段）／一覧 P.130-131／R9 P.79", "tel": "03-5848-3678", "match": "手入力", "km": 0.24}, {"name": "R4. 関口順子（関口保育室）", "addr": "東京都練馬区貫井2-21-3", "lat": 35.740478599999996, "lon": 139.6324635, "cat": "p_regional", "rank_dist": "中村橋駅まで徒歩742m（約10.4分）", "spec_info": "0〜2歳（定員5）｜8:30〜17:00（夕延長17:00〜17:30）", "booklet": "コード 44-0013｜R8冊子 P.139（2段目）／一覧 P.128／R9 P.76", "tel": "03-6763-8020", "match": "手入力", "km": 0.62}]}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const show=Object.fromEntries(ORDER.map(c=>[c,true]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- サイドバー ----
+const list=document.getElementById('list'), q=document.getElementById('q');
+PTS.forEach((p,i)=>p._i=i);
+const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||(a.km??0)-(b.km??0));
+let api=null, cur=null;
+function renderList(){list.innerHTML='';const s=q.value.trim();
+  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
+    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
+    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+q.oninput=renderList;renderList();
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  b.extend({lat:HOME.lat,lng:HOME.lon});
+  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
+      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
+    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
+  map.fitBounds(b,40);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
+      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
+    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

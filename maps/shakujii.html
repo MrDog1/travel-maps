@@ -1,13 +1,13 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8">
 <script>/* LINEのアプリ内ブラウザで開いたら、いつものブラウザ（Safari/Chrome）で開き直す */
 (function(){try{if(/ Line\//i.test(navigator.userAgent)&&location.protocol.indexOf("http")===0&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split("#")[0]+(location.search?"&":"?")+"openExternalBrowser=1"+location.hash);}}catch(e){}})();</script>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>石神井マップ（免許更新＆赤ちゃん散歩・カフェ）</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
-:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
-:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA;--flag:#C2410C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
@@ -18,41 +18,96 @@ h1{font-size:19px;margin:0;line-height:1.35}
 main{flex:1;display:flex;min-height:0}
 #map{flex:1;min-height:300px}
 aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.handle{display:none}
 .tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
-.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.tools input[type=search]{font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .cats{display:flex;flex-wrap:wrap;gap:6px}
-.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none;white-space:nowrap}
 .cats input{margin:0}
-.catbtns{display:flex;gap:6px}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
-.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+.catbtns{display:flex;gap:6px;flex-wrap:wrap}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+button.course{font:inherit;font-size:13px;font-weight:700;padding:3px 12px;border:1.5px solid var(--flag);color:var(--flag);background:transparent;border-radius:999px;cursor:pointer;white-space:nowrap}
+button.course.on{background:var(--flag);color:#fff}
+.sw{display:inline-flex;vertical-align:middle}
+.sw svg{display:block}
 #list{overflow-y:auto;flex:1}
+.grp{padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1}
 .item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
 .item:hover{background:var(--bg)}
 .item.on{background:var(--hi)}
+.item.fl{border-left:4px solid var(--flag);padding-left:8px}
 .item b{font-size:14px}
 .item .meta{color:var(--ink2)}
 .item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
 .iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
 .iw b{font-size:15px}
-.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 4px 4px 0}
 .iw .row{margin:1px 0}.iw .lab{color:#6b7680}
 .iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
 .iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
-@media (max-width:760px){html,body{height:auto}main{flex:none;flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line);min-height:auto}#list{flex:none;overflow:visible}}
+/* スマホ：地図を画面いっぱいに、一覧は下から引き出すシート */
+@media (max-width:760px){
+  html,body{height:100%;overflow:hidden}
+  body{height:100dvh}
+  header{padding:6px 12px 5px;cursor:pointer}
+  h1{font-size:15px}
+  .sub{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header.open .sub{white-space:normal}
+  .engine{display:none}header.open .engine{display:block}
+  main{position:relative;flex:1}
+  #map{position:absolute;left:0;right:0;top:0;bottom:58px;min-height:0}
+  aside{position:absolute;left:0;right:0;bottom:0;width:auto;max-width:none;height:calc(58px + env(safe-area-inset-bottom));border-left:0;border-radius:14px 14px 0 0;box-shadow:0 -3px 14px rgba(0,0,0,.18);z-index:1000;transition:height .22s ease}
+  aside.half{height:52%}aside.full{height:90%}
+  .handle{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;cursor:pointer;flex:none;position:relative;user-select:none}
+  .handle .bar{position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--line)}
+  .handle .cnt{flex:1;font-size:13.5px;font-weight:700;text-align:right}
+  .handle .arr{font-size:13px;color:var(--ink2);width:16px;text-align:center}
+  aside:not(.half):not(.full) .tools,aside:not(.half):not(.full) #list{display:none}
+  .tools{padding:4px 12px 8px;gap:6px}
+  .tools .course{display:none}
+  .cats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .cats label{flex:none}
+}
 </style></head><body>
-<header><h1>石神井マップ（免許更新＆赤ちゃん散歩・カフェ）</h1><p class="sub">2026/10/30（金）14:00 石神井警察署で免許更新／事前散歩＆更新中の妻・赤ちゃんカフェ・授乳スポット（2026/10/29調べ・直線距離）</p><div class="engine" id="engine"></div></header>
+<header id="hd"><h1>石神井マップ（免許更新＆赤ちゃん散歩・カフェ）</h1><p class="sub">2026/10/30（金）14:00 石神井警察署で免許更新／事前散歩＆更新中の妻・赤ちゃんカフェ・授乳スポット（2026/10/29調べ・直線距離）</p><div class="engine" id="engine"></div></header>
 <main><div id="map"></div>
-<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
+<aside id="side"><div class="handle" id="handle"><span class="bar"></span><span id="courseM"></span><span class="cnt" id="cnt"></span><span class="arr" id="arr">▲</span></div>
+<div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><span id="courseD"></span><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
 <script>
 const CFG={"title": "石神井マップ（免許更新＆赤ちゃん散歩・カフェ）", "subtitle": "2026/10/30（金）14:00 石神井警察署で免許更新／事前散歩＆更新中の妻・赤ちゃんカフェ・授乳スポット（2026/10/29調べ・直線距離）", "home": {"name": "石神井公園駅", "lat": 35.743301, "lon": 139.605988, "match": "手入力"}, "rings_km": [1, 2, 3, 4], "categories": {"police": {"label": "目的地・駅", "color": "#1F6FD1"}, "cafe": {"label": "更新中カフェ（妻＋赤ちゃん）", "color": "#7A4FC9"}, "baby": {"label": "授乳室・屋内休憩", "color": "#1E8A5A"}, "lunch": {"label": "ランチ", "color": "#D08A12"}, "sweet": {"label": "洋菓子・パン（妻）", "color": "#D9467A"}, "wagashi": {"label": "和菓子（夫）", "color": "#8B5A2B"}, "park": {"label": "公園・カルチャー", "color": "#3C9C9A"}}, "fields": [["time", "営業（金曜）"], ["memo", "メモ"]], "points": [{"name": "警視庁 石神井警察署（別館・運転免許更新事務所）", "addr": "東京都練馬区石神井町6-17-26", "cat": "police", "url": "https://www.keishicho.metro.tokyo.lg.jp/about_mpd/shokai/ichiran/kanku/shakujii/index.html", "time": "平日 8:30-11:30 / 13:00-16:30", "memo": "★14:00予約。脇の小道50m先の別館。優良・高齢者のみ。手数料は完全キャッシュレス（現金不可）。所要約45〜60分", "lat": 35.742447, "lon": 139.598907, "match": "手入力", "km": 0.65}, {"name": "上石神井駅", "lat": 35.725964, "lon": 139.59169, "cat": "police", "url": "https://www.seiburailway.jp/", "time": "", "memo": "鷺ノ宮から西武新宿線 急行1駅（約3分・IC207円）。プランAの散歩出発駅", "match": "手入力", "km": 2.32}, {"name": "上井草駅（南口・ガンダム像）", "addr": "東京都杉並区上井草3-32-1", "cat": "police", "url": "https://news.allabout.co.jp/articles/o/84951/", "time": "", "memo": "鷺ノ宮から西武新宿線 各停3駅（約5分・IC169円）。プランBの出発駅", "lat": 35.725014, "lon": 139.603745, "match": "手入力", "km": 2.04}, {"name": "練馬高野台駅", "addr": "東京都練馬区高野台1-7-27", "cat": "police", "url": "https://www.seiburailway.jp/", "time": "", "memo": "石神井公園駅の隣駅。駅前に「餃子の王将」とエミオ「あわ家惣兵衛」あり", "lat": 35.740818, "lon": 139.616714, "match": "手入力", "km": 1.01}, {"name": "中村橋駅", "lat": 35.736687, "lon": 139.638107, "cat": "police", "url": "https://www.seiburailway.jp/", "time": "", "memo": "各停のみ停車。歩いて帰る（約1km）", "match": "手入力", "km": 2.99}, {"name": "鷺ノ宮駅", "lat": 35.72313, "lon": 139.63958, "cat": "police", "url": "https://www.seiburailway.jp/", "time": "", "memo": "西武新宿線で上石神井（急行1駅）または上井草（各停3駅）へ", "match": "手入力", "km": 3.77}, {"name": "WELDERS DINER（ウェルダース ダイナー）", "addr": "東京都練馬区石神井町6-16-11", "cat": "cafe", "url": "https://tabelog.com/tokyo/A1321/A132103/13213443/", "time": "11:30-15:00 / 17:00-23:00（火水休）", "memo": "★警察署のすぐ隣（徒歩1分）！アメリカ郊外ダイナー×鉄作家造作×音楽。ホットサンド・バーガー・スパイス料理。1F広々でベビーカー余裕。カード・PayPay可。犬：未確認", "lat": 35.743134, "lon": 139.601135, "match": "手入力", "km": 0.44}, {"name": "元町珈琲 石神井公園の離れ", "addr": "東京都練馬区石神井町7-1-2", "cat": "cafe", "url": "https://motomachi-coffee.jp/map/shakujii", "time": "7:00-21:00・無休", "memo": "★更新中カフェ第一候補！警察署から約410m。都内唯一の元町珈琲。和モダン1F路面、お座敷10席（赤ちゃんゴロン可）・ソファ52席・テラス9席。ベビーカー◎。カード可。犬：未確認", "lat": 35.744122, "lon": 139.603973, "match": "手入力", "km": 0.2}, {"name": "みんなのカフェ すまいる・VIVIFY（＆Sweets & Honey Factory）", "addr": "東京都練馬区石神井町3-2-8", "cat": "cafe", "url": "https://smile-vivify.com/", "time": "平日 11:00-17:00（LO16:30）", "memo": "石神井池すぐ北側（警察署から約420m）。子連れ歓迎・ベビーカー入店可・25席・個室あり。隣の姉妹店のはちみつスイーツ持込可。ランチ〜1,000円。カード・QR可。犬：未確認", "lat": 35.740135, "lon": 139.606415, "match": "手入力", "km": 0.35}, {"name": "RAHMS COFFEE（ラームズ コーヒー）", "addr": "東京都練馬区石神井町3-3-33", "cat": "cafe", "url": "https://www.instagram.com/rahmscoffee", "time": "火〜金 10:00-17:00（日月祝・10月は火も休）", "memo": "2025/1開店の北欧風スペシャルティコーヒー＆焼き菓子（お芋クリームマフィン450円・クッキー300円）。ベビーカー入店可（※テイクアウトのみの日があるためインスタ確認）。犬：未確認", "lat": 35.740887, "lon": 139.607956, "match": "手入力", "km": 0.32}, {"name": "oimo&coco.（オイモココ）石神井公園店", "addr": "東京都練馬区石神井町7-1-14", "cat": "cafe", "url": "https://oimo-coco.jp/pages/oimococo-shakuji", "time": "金曜 13:00-19:00（月火休）", "memo": "元町珈琲のすぐ隣（警察署から約370m）。熟成焼き芋専門店・焼き芋ブリュレやおいもスイーツ。イートインあり。QR可。犬：未確認", "lat": 35.744488, "lon": 139.60228, "match": "手入力", "km": 0.36}, {"name": "Sammy331（サミーサミー）", "addr": "東京都練馬区石神井町6-9-3", "cat": "cafe", "url": "https://www.instagram.com/sammy331_coffee", "time": "7:00-21:00（火水木土日営業・金曜はインスタ要確認）", "memo": "2026/5開店のスペシャルティコーヒー＆アイスクリームプリン（650円）。キッズミルク300円・1Fベビーカー可。犬：テラス席OK（看板犬サミーちゃん）", "lat": 35.741852, "lon": 139.603424, "match": "手入力", "km": 0.28}, {"name": "スターバックス コーヒー エミオ石神井公園店", "addr": "東京都練馬区石神井町3-23-5", "cat": "cafe", "url": "https://store.starbucks.co.jp/detail-4489/", "time": "平日 7:00-22:00・無休", "memo": "駅前1F。広めの店内でベビーカー横付け可能な席・子ども椅子あり。確実な休憩拠点。犬：NG", "lat": 35.743351, "lon": 139.606842, "match": "手入力", "km": 0.08}, {"name": "タリーズコーヒー 石神井公園店", "addr": "東京都練馬区石神井町2-14-31", "cat": "cafe", "url": "https://shop.tullys.co.jp/detail/1000891", "time": "平日 7:30-22:00・無休", "memo": "北口ピアレス隣1F路面。ベビーカー入店可・キッズメニュー・デカフェあり。すぐ隣のピアレスに授乳室。犬：NG", "lat": 35.743645, "lon": 139.607697, "match": "手入力", "km": 0.16}, {"name": "上島珈琲店 エミオ石神井公園店", "addr": "東京都練馬区石神井町3-23-10", "cat": "cafe", "url": "https://shop.ufs.co.jp/ufs/spot/detail?code=3702", "time": "平日 7:00-21:00・無休", "memo": "駅改札近く。63席（禁煙53席・加熱式10席）。落ち着いた空間", "lat": 35.743301, "lon": 139.605988, "match": "手入力", "km": 0.0}, {"name": "ミスタードーナツ 石神井公園駅前ショップ", "addr": "東京都練馬区石神井町3-23-8", "cat": "cafe", "url": "https://md.mapion.co.jp/b/misterdonut/info/2086/", "time": "7:00-23:00・無休", "memo": "南口すぐ。ベビーカー入店可・ベンチ席・子ども椅子・キッズドリンクあり", "lat": 35.743435, "lon": 139.606354, "match": "手入力", "km": 0.04}, {"name": "フラワーショップ＆カフェ ふわたん", "addr": "東京都練馬区石神井町3-27-7", "cat": "cafe", "url": "https://fuwatan.jp/about", "time": "10:00-18:00・不定休（平日は短縮/休業あり要確認）", "memo": "ドライフラワーとエディブルフラワーの「花だんご」・お花畑ワッフル・パフェ。クレカ可", "lat": 35.74231, "lon": 139.603714, "match": "手入力", "km": 0.23}, {"name": "YIPLE（イプル）", "addr": "東京都練馬区石神井町7-13-5", "cat": "cafe", "url": "https://www.instagram.com/yiple_tokyo", "time": "12:00-21:00・月休", "memo": "2026/6開店。アサイーボウル＆グリークヨーグルト専門店。警察署の西側", "lat": 35.742077, "lon": 139.597351, "match": "手入力", "km": 0.79}, {"name": "BROWN Coffee Roastery", "addr": "東京都練馬区上石神井4-4-22", "cat": "cafe", "url": "https://www.instagram.com/brown_coffee_roastery/", "time": "8:00-15:00・水休", "memo": "2026/8開店（上石神井駅北口5分）。駒場東大前の人気店2号店。自家焙煎コーヒー・バナナケーキ・キッズドリンクあり", "lat": 35.728519, "lon": 139.591339, "match": "手入力", "km": 2.11}, {"name": "Parlor No.3", "addr": "東京都練馬区上石神井1-13-7", "cat": "cafe", "url": "https://tabelog.com/tokyo/A1321/A132105/13266986/", "time": "月木金日 11:00-18:30（水土休）", "memo": "上石神井。白と赤の可愛い店内、壁にカップとグラス。ベビーカー入店可・10席。カード・交通系可", "lat": 35.72543, "lon": 139.590668, "match": "手入力", "km": 2.42}, {"name": "練馬区立 石神井保健相談所（赤ちゃん・ふらっと）", "addr": "東京都練馬区石神井町7-3-28", "cat": "baby", "url": "https://kosodateswitch.metro.tokyo.lg.jp/facility/flat?city_code=13120", "time": "平日 8:30-17:15（土日祝休）", "memo": "★警察署のすぐ斜め向かい（徒歩1分）！東京都認定「赤ちゃん・ふらっと」。授乳スペース・おむつ替えシート・調乳用お湯あり", "lat": 35.74477, "lon": 139.601196, "match": "手入力", "km": 0.46}, {"name": "練馬区役所 石神井庁舎（B1F 赤ちゃんスポット）", "addr": "東京都練馬区石神井町3-30-26", "cat": "baby", "url": "https://www.city.nerima.tokyo.jp/kosodatekyoiku/kodomo/asobi/akachan.html", "time": "平日 8:30-19:00（土日祝休）", "memo": "★警察署から駅方面へ徒歩3分（約250m）。地下1階守衛室横に鍵付き個室授乳室（長椅子）・ベビーベッド・調乳用お湯あり", "lat": 35.743645, "lon": 139.602905, "match": "手入力", "km": 0.28}, {"name": "石神井公園ふるさと文化館", "addr": "東京都練馬区石神井町5-12-16", "cat": "baby", "url": "https://www.neribun.or.jp/furusato.html", "time": "9:00-18:00・月休", "memo": "警察署から南へ約530m（石神井池すぐ南）。常設無料。1Fに鍵付き個室授乳室（受付に声かけ・お湯提供可）・多目的トイレにおむつ交換台・無料休憩コーナー", "lat": 35.737671, "lon": 139.59938, "match": "手入力", "km": 0.86}, {"name": "石神井公園区民交流センター（ピアレスA棟2・3F）", "addr": "東京都練馬区石神井町2-14-1", "cat": "baby", "url": "https://www.city.nerima.tokyo.jp/shisetsu/kumin/koryu/shakujii.html", "time": "9:00-22:00・無休", "memo": "駅北口1分。授乳室・おむつ替え台・ロビー休憩あり。同ビルB1F「クイーンズ伊勢丹」にもエレベーター＆イートインスペース（9:30〜16:00ジューススタンド）", "lat": 35.743786, "lon": 139.606537, "match": "手入力", "km": 0.07}, {"name": "練馬区立 石神井図書館", "addr": "東京都練馬区石神井台1-16-31", "cat": "baby", "url": "https://www.city.nerima.tokyo.jp/shisetsu/bunka/lib/shakujii.html", "time": "平日 9:00-20:00・月休", "memo": "三宝寺池の南。授乳スペース（ベビーベッド・ベビーチェア）・絵本コーナー", "lat": 35.736507, "lon": 139.599564, "match": "手入力", "km": 0.95}, {"name": "ちひろ美術館・東京", "addr": "東京都練馬区下石神井4-7-2", "cat": "baby", "url": "https://chihiro.jp/tokyo/", "time": "10:00-17:00・月休（10/30金から新展示開幕！）", "memo": "10/26〜29休館明け、明日10/30(金)から「ちひろ 旅のたのしみ」「茂田井武とパリの画家たち」開幕！授乳室・こどものへや・絵本カフェ。保護者900円×2", "lat": 35.728207, "lon": 139.605164, "match": "手入力", "km": 1.68}, {"name": "むさしの エン座（ふるさと文化館1F）", "addr": "東京都練馬区石神井町5-12-16", "cat": "lunch", "url": "https://www.udon-enza.com/access.html", "time": "11:00-15:30（麺切れ終了）・月火休", "memo": "★公園散歩×ランチ本命！石神井公園ふるさと文化館1Fの本格手打ち武蔵野うどん名店（850〜1,200円）。フラットでベビーカー◎・同館1Fに授乳室＆おむつ台！現金・PayPay可。犬：屋外テラス可", "lat": 35.737671, "lon": 139.59938, "match": "手入力", "km": 0.86}, {"name": "豊島屋（三宝寺池畔の茶屋）", "addr": "東京都練馬区石神井台1-27-19", "cat": "lunch", "url": "https://tabelog.com/tokyo/A1321/A132103/13093252/", "time": "12:00頃-17:00頃・不定休（木休多め・雨天休）", "memo": "創業100余年、『孤独のグルメ』登場のレトロ茶屋。おでん・ラーメン・カレー丼（600〜1,000円）。屋外テーブル・小上がり座敷にベビーカー横付け可。現金のみ。犬：屋外席OK", "lat": 35.738132, "lon": 139.597504, "match": "手入力", "km": 0.96}, {"name": "ピッツェリア ジターリア ダ フィリッポ", "addr": "東京都練馬区石神井町2-13-5", "cat": "lunch", "url": "https://filippo.jp", "time": "11:30-14:30（LO14:00）・水木休", "memo": "世界大会入賞のナポリピッツァ超有名店。【1,500円超】平日ランチ1,870円〜。1F路面・ベビーカー入店可・店内におむつ替えスペースあり（人気のため予約/早め推奨）。カード・PayPay可。犬：軒先ベンチのみ要確認", "lat": 35.744408, "lon": 139.609207, "match": "手入力", "km": 0.32}, {"name": "おぼんdeごはん / うどん茶房 KAKAYA エミオ石神井公園店", "addr": "東京都練馬区石神井町3-23-9", "cat": "lunch", "url": "https://byo.co.jp/brand/detail.html?pdid=1032", "time": "11:00-23:00・無休", "memo": "エミオ1F。ベビーカーのまま入店OK・片側ソファ席・キッズチェアあり。定食・うどん1,200〜1,600円（一部1,500円超）。カード・IC・QR全部可。犬：NG", "lat": 35.743435, "lon": 139.606186, "match": "手入力", "km": 0.02}, {"name": "Italian Kitchen VANSAN 石神井公園店", "addr": "東京都練馬区石神井町3-20-19", "cat": "lunch", "url": "https://vansan-ltd.jp/vansan/vansan-shakujiikouen", "time": "11:00-23:00・無休", "memo": "南口1分。店内にキッズスペース・おむつ交換台・ベビーチェア完備、ベビーカー入店OK。1,300〜1,800円（セットは1,500円超）。カード・QR可。犬：テラス席可", "lat": 35.743031, "lon": 139.606781, "match": "手入力", "km": 0.08}, {"name": "丸亀製麺 石神井公園駅前店", "addr": "東京都練馬区石神井町3-20-17", "cat": "lunch", "url": "https://stores.marugame.com/111339", "time": "11:00-22:00・無休", "memo": "南口1分・1F路面。提供最速（数分）・〜1,000円。ベビーカー可・テーブル席・子ども椅子あり。カード・IC・QR可。犬：NG", "lat": 35.743095, "lon": 139.606461, "match": "手入力", "km": 0.05}, {"name": "日高屋 石神井公園店", "addr": "東京都練馬区石神井町3-19-14", "cat": "lunch", "url": "https://hidakaya.hiday.co.jp/hits/ja/shop/1/detail/160.html", "time": "10:30-翌1:30・無休", "memo": "南口1分・1F路面。餃子・中華定番（〜1,000円）。提供早い。カード・IC・QR可", "lat": 35.743137, "lon": 139.605621, "match": "手入力", "km": 0.04}, {"name": "餃子の王将 ジョイ・ナーホ練馬高野台駅前店", "addr": "東京都練馬区高野台1-5-2", "cat": "lunch", "url": "https://map.ohsho.co.jp/", "time": "10:30-22:15（LO22:00）・無休", "memo": "★夫の大好物！石神井公園駅の隣・練馬高野台駅前（石神井公園駅から約1.1km）。ここで食べてから石神井公園→警察署へ歩くプランも可", "lat": 35.740665, "lon": 139.617554, "match": "手入力", "km": 1.08}, {"name": "辰巳軒", "addr": "東京都練馬区石神井町3-17-20", "cat": "lunch", "url": "https://tabelog.com/tokyo/A1321/A132103/13082505/", "time": "11:30-14:30 / 17:30-21:00・水木休", "memo": "創業1939年の老舗洋食・町中華食堂。カツカレー・オムライス800円〜。1F路面だが通路狭め（ベビーカーは畳むか抱っこ推奨）。現金のみ", "lat": 35.74247, "lon": 139.604889, "match": "手入力", "km": 0.14}, {"name": "カフェ コメコ", "addr": "東京都練馬区上石神井4-1-13", "cat": "lunch", "url": "https://tabelog.com/tokyo/A1321/A132105/13171946/", "time": "11:00-20:00（月は〜16:00）", "memo": "上石神井（だんごのつくし屋の隣）。古民家調80席、小上がり座敷・おむつ替えベッドあり。ロコモコ風オムライス〜2,000円。カード・IC・PayPay可", "lat": 35.726868, "lon": 139.59137, "match": "手入力", "km": 2.25}, {"name": "Erich CAFE（エリックカフェ）", "addr": "東京都練馬区上石神井2-1-16", "cat": "lunch", "url": "https://erichcafe.jimdofree.com/", "time": "9:00-18:00（ランチ11-15）・無休", "memo": "2025/9開店。メディカルビレッジA棟2F（エレベーター有・おむつ交換台有・席間広い）。カード・QR可", "lat": 35.726711, "lon": 139.59938, "match": "手入力", "km": 1.94}, {"name": "パティスリー カシュカシュ（Cache-Cache）", "addr": "東京都練馬区石神井町3-2-8", "cat": "sweet", "url": "https://www.cachecache2011.com", "time": "10:00-19:00（または20:00）・無休", "memo": "石神井池のすぐ北側（すまいる・VIVIFYと同じ建物）。可愛いプティガトー・焼き菓子。カード可", "lat": 35.740135, "lon": 139.606415, "match": "手入力", "km": 0.35}, {"name": "パティスリー アブルーム（Abloom）", "addr": "東京都練馬区石神井町4-2-6", "cat": "sweet", "url": "https://patisserie-abloom.com/access.html", "time": "月火木金 11:30-20:00（水・第3火木休）", "memo": "石神井公園駅北口徒歩1分の人気パティスリー。繊細なケーキと焼き菓子", "lat": 35.74424, "lon": 139.605194, "match": "手入力", "km": 0.13}, {"name": "soufflé par le vent（スフレパルヴァン）", "addr": "東京都練馬区石神井町4-1-12", "cat": "sweet", "url": "https://souffle-par-le-vent.com", "time": "平日 11:00-19:30・月休", "memo": "2023年開店、駅北口徒歩1分。シチリア伝統菓子カンノーリ（450円・ピスタチオ/チョコ）や焼き菓子・ケーキ。ベビーカーに親切。カード・iD・PayPay可", "lat": 35.744633, "lon": 139.606369, "match": "手入力", "km": 0.15}, {"name": "ブーランジェリー パルク シャクジイ", "addr": "東京都練馬区石神井町4-7-27", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132103/13246753/", "time": "10:00-19:00・水日休", "memo": "駅西口徒歩3分（警察署へ行く途中）。フランス仕込みの本格パン（クロワッサン・くま/ねこ食パン）。対面オーダー式でベビーカーでも買いやすい", "lat": 35.745457, "lon": 139.605865, "match": "手入力", "km": 0.24}, {"name": "菓子工房 ともゆき", "addr": "東京都練馬区石神井町2-9-15", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132103/13240103", "time": "11:00-19:00・火水休", "memo": "駅徒歩6分。子育て世帯に人気の可愛いケーキ・焼き菓子店", "lat": 35.744549, "lon": 139.610352, "match": "手入力", "km": 0.42}, {"name": "ベルナールハラ", "addr": "東京都練馬区石神井町2-1-9", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132103/13110925/", "time": "12:30-19:30・日休", "memo": "17穀天然酵母パン（170円〜）と名物シュークリーム（150円・午後に並ぶ）の昭和レトロなパン屋", "lat": 35.743412, "lon": 139.611481, "match": "手入力", "km": 0.5}, {"name": "BLONDIR（ブロンディール）", "addr": "東京都練馬区石神井町4-28-12", "cat": "sweet", "url": "https://www.blondir.com/", "time": "10:00-12:00 / 13:00-18:00・日月休", "memo": "食べログ百名店の伝統フランス菓子名店（デリスピスターシュ710円・ミルフィーユ690円）。店内4席＋テラス4席。駅から北西へ徒歩14分", "lat": 35.750324, "lon": 139.601242, "match": "手入力", "km": 0.89}, {"name": "石焼アンテンドゥ 石神井公園店", "addr": "東京都練馬区石神井町3-23-15", "cat": "sweet", "url": "https://www.seibu-shop.jp/emio/floorguide?emio=emio05", "time": "平日 7:00-21:00・無休", "memo": "駅改札すぐ（エミオ1F）。焼きたてパン＋イートイン・屋外テラス席あり、ベビーカー利用可", "lat": 35.743813, "lon": 139.605331, "match": "手入力", "km": 0.08}, {"name": "アンテナ ロントラ", "addr": "東京都練馬区下石神井3-1-5", "cat": "sweet", "url": "https://www.instagram.com/antena_lontra", "time": "水〜日 10:00-16:00（売切終了）・月火休", "memo": "2024/11開店。カンパーニュ・フランスパン・惣菜パンの個人店（上石神井〜石神井公園の東寄り）", "lat": 35.733418, "lon": 139.609879, "match": "手入力", "km": 1.15}, {"name": "おかしの家 ノア", "addr": "東京都練馬区下石神井6-40-3", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132103/13009007", "time": "9:30-18:00（喫茶〜16:30）・火水休", "memo": "上井草〜石神井公園の中間。ケーキ＋喫茶25席（食べログランキング1位）。カード可", "lat": 35.732433, "lon": 139.599884, "match": "手入力", "km": 1.33}, {"name": "藤ノ木", "addr": "東京都練馬区上石神井1-17-18", "cat": "sweet", "url": "https://fujinoki.jp/", "time": "8:30-19:00・木休", "memo": "上石神井駅南口3分。2025/10リニューアルの人気パン屋（塩バターパン173円・タルティーヌ）。ベビーカー可・QR可", "lat": 35.725594, "lon": 139.590515, "match": "手入力", "km": 2.41}, {"name": "POMME de REINETTE（ポムドレネット）", "addr": "東京都練馬区上石神井1-17-14", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132105/13301810/", "time": "11:00-19:00・火水休", "memo": "上石神井（藤ノ木の隣）。ケーキ・ショコラティーヌ・ねりまはちみつフィナンシェ。カード・電子マネー・QR可", "lat": 35.725887, "lon": 139.590164, "match": "手入力", "km": 2.41}, {"name": "菓子屋 カランドリエ", "addr": "東京都杉並区上井草2-36-10", "cat": "sweet", "url": "https://tabelog.com/tokyo/A1321/A132105/13198204/", "time": "11:00-19:00・水休", "memo": "上井草駅すぐ。バスクチーズケーキ・くまの焼き菓子。QR決済のみ", "lat": 35.724884, "lon": 139.604797, "match": "手入力", "km": 2.05}, {"name": "和菓子処 新盛堂", "addr": "東京都練馬区石神井町3-25-3", "cat": "wagashi", "url": "https://www.wagashi-shinseidou.com", "time": "9:00-18:30・水休", "memo": "★石神井公園駅南口すぐ（2024/2移転の仮店舗）。創業1923年、2種の上新粉の醤油焼き団子・栗大福・江戸栗もんぶ蘭・ハロウィン和菓子。現金用意", "lat": 35.743084, "lon": 139.605072, "match": "手入力", "km": 0.09}, {"name": "寛永堂 石神井公園店", "addr": "東京都練馬区石神井町3-23-15", "cat": "wagashi", "url": "https://www.kaneido.com/access_syakujiikouen.html", "time": "10:00-20:00・無休", "memo": "エミオ石神井公園1F。京都の老舗和菓子店（どら焼き・大納言清澄・羊羹）。カード・IC可", "lat": 35.743813, "lon": 139.605331, "match": "手入力", "km": 0.08}, {"name": "だんごのつくし屋", "addr": "東京都練馬区上石神井4-2-21", "cat": "wagashi", "url": "https://tabelog.com/tokyo/A1321/A132105/13121698/", "time": "6:30-20:00・日休", "memo": "★上石神井駅北口2分（石神井公園へ向かう道沿い）！みたらし団子105円・醤油だんご65円・塩豆大福・山菜おこわ。カード・電子マネー・QR可", "lat": 35.727264, "lon": 139.591354, "match": "手入力", "km": 2.22}, {"name": "御菓子司 青柳", "addr": "東京都練馬区下石神井4-14-8", "cat": "wagashi", "url": "https://tabelog.com/tokyo/A1321/A132105/13131144/", "time": "8:30-18:00・火休", "memo": "上井草〜ちひろ美術館の手前。秋だんご180円・草もち120円・栗どら焼き。現金のみ", "lat": 35.727844, "lon": 139.603088, "match": "手入力", "km": 1.74}, {"name": "あわ家惣兵衛 エミオ練馬高野台店", "addr": "東京都練馬区高野台1-7-27", "cat": "wagashi", "url": "https://www.seibu-shop.jp/emio/floorguide/detail?scd=000682", "time": "10:00-21:00・無休", "memo": "練馬高野台駅直結。1950年創業の練馬名物和菓子（団子・惣兵衛最中・どら焼き・秋のかぼちゃ/栗和菓子）。カード・IC可", "lat": 35.740818, "lon": 139.616714, "match": "手入力", "km": 1.01}, {"name": "都立 石神井公園（サービスセンター）", "lat": 35.738823, "lon": 139.596802, "addr": "東京都練馬区石神井台1-26-1", "cat": "park", "url": "https://www.tokyo-park.or.jp/park/shakujii/", "time": "常時開園・無料", "memo": "警察署から南へ約445m。東側の「石神井池（ボート池）」は平坦でベビーカー散歩に最適！西側の「三宝寺池」は木道・坂や階段あり。犬OK（リード）", "match": "手入力", "km": 0.97}, {"name": "石神井松の風文化公園", "lat": 35.740829, "lon": 139.594101, "addr": "東京都練馬区石神井台1-33-44", "cat": "park", "url": "https://www.city.nerima.tokyo.jp/shisetsu/koen/undo/matunokaze.html", "time": "6:00-19:00（11月〜は8:00-）・無料", "memo": "警察署から南西へ約470m（三宝寺池の北すぐ）。アカマツ林と広い天然芝広場、管理棟にふるさと文化館分室（無料）", "match": "手入力", "km": 1.11}, {"name": "上石神井こもれび公園", "lat": 35.731548, "lon": 139.597839, "addr": "東京都練馬区上石神井3-2-26", "cat": "park", "url": "https://iko-yo.net/facilities/158909", "time": "常時・無料", "memo": "上石神井〜石神井公園の途中にある2020年開園の芝生広場公園。テイクアウトしたパン・団子を食べるのに最適", "match": "手入力", "km": 1.5}, {"name": "インドレストラン シルザナ（SIRZANA）", "addr": "東京都練馬区石神井町3-27-6", "cat": "park", "url": "https://tabelog.com/tokyo/A1321/A132103/13059097/", "time": "11:00-15:00 / 17:00-22:30・無休", "memo": "富士街道沿い（駅から警察署へ向かう動線上）。本格インド・ネパールカレー、ランチ〜1,000円", "lat": 35.742439, "lon": 139.603806, "match": "手入力", "km": 0.22}, {"name": "BUTCHER'S TABLE（ブッチャーズテーブル）石神井公園店", "addr": "東京都練馬区東大泉2-9-18", "cat": "park", "url": "https://tabelog.com/tokyo/A1321/A132103/13270180/", "time": "11:00-15:00 / 18:00-22:00・無休", "memo": "アメリカン・グルメバーガー＆メキシカンダイナー。【1,500円超】ベビーカー可・ランチ禁煙（警察署の北西側）", "lat": 35.751793, "lon": 139.593781, "match": "手入力", "km": 1.45}]}, KEY="";
 const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const FLAGLABEL=CFG.flag_label||'コース';
 const show={};ORDER.forEach(c=>{show[c]=true;});
+let courseOnly=false;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const instaUrl=v=>/^https?:/.test(v)?v:'https://www.instagram.com/'+String(v).replace(/^@/,'')+'/';
 const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
 const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+const isMobile=()=>window.matchMedia('(max-width:760px)').matches;
+const hasFlag=p=>p.flag!=null&&p.flag!=='';
+// ---- ピンの形：区分の shape / icon / size、地点ごとの上書き、コースは番号付きのピン ----
+const SH={circle:'<circle cx="16" cy="16" r="13"/>',square:'<rect x="3.5" y="3.5" width="25" height="25" rx="5"/>',
+  diamond:'<path d="M16 1.8 30.2 16 16 30.2 1.8 16z"/>',triangle:'<path d="M16 2.5 30.5 28.5H1.5z"/>',
+  hex:'<path d="M16 1.8 28.6 9v14L16 30.2 3.4 23V9z"/>',
+  star:'<path d="m16 1.6 4.3 9 9.9 1.3-7.3 6.9 1.9 9.8L16 23.8l-8.8 4.8 1.9-9.8-7.3-6.9 9.9-1.3z"/>'};
+// 名前から自動で付けるアイコン（地点にも区分にも指定が無いとき）
+const AUTO=[[/駅(（.*）)?$|駅前$/,'square','🚉',26],[/公園|緑地|庭園|植物園/,'circle','🌳',24],[/神社|八幡|稲荷|神明宮|大社/,'diamond','⛩',24],
+  [/寺(（.*）)?$|大仏/,'diamond','卍',22],[/授乳|ベビー休憩|赤ちゃん休憩/,'square','🍼',22],[/駐車場|パーキング|タイムズ/,'square','P',24]];
+function sty(p){const c=CATS[p.cat]||{};let a=null;
+  if(p.icon==null&&p.shape==null&&!c.icon&&!c.shape&&p.name)a=AUTO.find(r=>r[0].test(p.name));
+  return{shape:p.shape||c.shape||(a?a[1]:'circle'),icon:p.icon!=null?p.icon:(c.icon||(a?a[2]:'')),
+  size:+(p.size||c.size||(a?a[3]:22)),color:p.color||c.color||'#888'};}
+function svgOf(p,small){const s=sty(p);
+  if(hasFlag(p)&&!small){const n=esc(p.flag),w=32,h=42,fs=String(p.flag).length>1?11.5:14;
+    return{w,h,anchor:[w/2,h],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 32 42">'+
+      '<path d="M16 41C14.5 36 2 27 2 16a14 14 0 0 1 28 0c0 11-12.5 20-14 25z" fill="'+s.color+'" stroke="#7C2D12" stroke-width="2"/>'+
+      '<circle cx="16" cy="16" r="10.5" fill="#fff"/><text x="16" y="'+(16+fs*0.36)+'" font-size="'+fs+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#7C2D12">'+n+'</text></svg>'};}
+  const z=small?15:s.size,ic=small?'':s.icon,ty=s.shape==='triangle'?24:21.5;
+  const txt=ic?'<text x="16" y="'+ty+'" font-size="'+(ic.length>1&&/^[\x00-\x7F]+$/.test(ic)?11:15)+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#fff">'+esc(ic)+'</text>':'';
+  return{w:z,h:z,anchor:[z/2,z/2],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+z+'" height="'+z+'" viewBox="0 0 32 32"><g fill="'+s.color+'" stroke="#fff" stroke-width="2.5">'+(SH[s.shape]||SH.circle)+'</g>'+txt+'</svg>'};}
+const catSw=c=>svgOf({cat:c},true).svg;
 function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
-  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  let h='<div class="iw"><b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  if(hasFlag(p))h+='<span class="tag" style="background:#C2410C">'+esc(FLAGLABEL)+'</span>';
   F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
   if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
   h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
@@ -61,44 +116,66 @@ function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
   h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
   h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
   return h+'</div></div>';}
-// ---- サイドバー ----
-const list=document.getElementById('list'), q=document.getElementById('q');
+// ---- 一覧（スマホは下のシート） ----
+const list=document.getElementById('list'), q=document.getElementById('q'), side=document.getElementById('side');
 PTS.forEach((p,i)=>p._i=i);
-const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const FL=PTS.filter(hasFlag).sort((a,b)=>(parseFloat(a.flag)||0)-(parseFloat(b.flag)||0));
+const sorted=PTS.filter(p=>!hasFlag(p)).sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const visible=p=>show[p.cat]&&(!courseOnly||hasFlag(p));
 let api=null, cur=null;
-function renderList(){list.innerHTML='';const s=q.value.trim();
-  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
-    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
-    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
-    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function sheet(st){side.classList.remove('half','full');if(st)side.classList.add(st);
+  document.getElementById('arr').textContent=st==='full'?'▼':'▲';}
+document.getElementById('handle').onclick=e=>{if(e.target.closest('button'))return;
+  sheet(side.classList.contains('full')?'':side.classList.contains('half')?'full':'half');};
+document.getElementById('hd').onclick=()=>{if(isMobile())document.getElementById('hd').classList.toggle('open');};
+function itemEl(p){const d=document.createElement('div');d.className='item'+(hasFlag(p)?' fl':'')+(cur===p._i?' on':'');d.id='it'+p._i;
+  d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw">'+svgOf(p,true).svg+'</span> <b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+  d.onclick=()=>select(p._i,true);return d;}
+function renderList(){list.innerHTML='';const s=q.value.trim();let n=0;
+  const ok=p=>{if(!visible(p))return false;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');return !s||txt.includes(s);};
+  const a=FL.filter(ok),b=sorted.filter(ok);
+  if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='🚩 '+FLAGLABEL+'（'+a.length+'）';list.appendChild(g);a.forEach(p=>list.appendChild(itemEl(p)));}
+  if(b.length){if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='ほかの地点（'+b.length+'）';list.appendChild(g);}b.forEach(p=>list.appendChild(itemEl(p)));}
+  document.getElementById('cnt').textContent='一覧 '+(a.length+b.length)+'件';}
 function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
-  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!window.matchMedia('(max-width:760px)').matches)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  api&&api.open(i,fromList);
-  if(fromList&&window.matchMedia('(max-width:760px)').matches)document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});}
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!isMobile())it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(fromList&&isMobile())sheet('');
+  api&&api.open(i,fromList);}
 const cw=document.getElementById('cats');
 ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
-  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.innerHTML='<input type="checkbox" checked><span class="sw">'+catSw(c)+'</span>'+esc(CATS[c].label)+'（'+n+'）';
   l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
 function setAll(v){ORDER.forEach(c=>show[c]=v);cw.querySelectorAll('input').forEach(i=>i.checked=v);renderList();api&&api.filter();}
 document.getElementById('catOff').onclick=()=>setAll(false);document.getElementById('catOn').onclick=()=>setAll(true);
+// 「🚩コースだけ」ボタン（コースの地点があるときだけ）
+const cbs=[];
+if(FL.length)['courseD','courseM'].forEach(id=>{const b=document.createElement('button');b.type='button';b.className='course';
+  b.textContent='🚩 '+FLAGLABEL+'だけ（'+FL.length+'）';b.onclick=e=>{e.stopPropagation();courseOnly=!courseOnly;
+    cbs.forEach(x=>{x.classList.toggle('on',courseOnly);x.textContent=(courseOnly?'すべて表示に戻す':'🚩 '+FLAGLABEL+'だけ（'+FL.length+'）');});
+    renderList();if(api){api.filter();api.fit(courseOnly?FL.filter(p=>show[p.cat]):null);}};
+  document.getElementById(id).appendChild(b);cbs.push(b);});
 q.oninput=renderList;renderList();
+const LINE=FL.filter(p=>p.line!==false);
 // ---- Google Maps ----
 function initGoogle(){const g=google.maps;
   const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
-    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
-  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:!isMobile(),gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), sv=map.getStreetView(), svs=new g.StreetViewService();
   new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
     icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
   (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
-  b.extend({lat:HOME.lat,lng:HOME.lon});
-  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
-      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
-    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
-  map.fitBounds(b,40);
+  if(LINE.length>1)new g.Polyline({map,path:LINE.map(p=>({lat:p.lat,lng:p.lon})),strokeOpacity:0,clickable:false,
+    icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:.85,strokeColor:'#C2410C',scale:3},offset:'0',repeat:'12px'}]});
+  const mk=PTS.map(p=>{const s=svgOf(p);const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,zIndex:hasFlag(p)?600:(sty(p).size>22?300:100),
+      icon:{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s.svg),scaledSize:new g.Size(s.w,s.h),anchor:new g.Point(s.anchor[0],s.anchor[1])}});
+    m.addListener('click',()=>select(p._i,false));return m;});
+  function fit(arr){const b=new g.LatLngBounds();if(!arr)b.extend({lat:HOME.lat,lng:HOME.lon});(arr||PTS).forEach(p=>b.extend({lat:p.lat,lng:p.lon}));
+    map.fitBounds(b,isMobile()?{top:30,left:20,right:20,bottom:30}:40);}
+  fit(null);
   g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
     svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
   api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
-       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+       filter(){mk.forEach((m,i)=>m.setVisible(visible(PTS[i])));},fit};
   document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
 function alert_(m){document.getElementById('engine').textContent=m;}
 // ---- Leaflet + 国土地理院タイル（フォールバック） ----
@@ -112,11 +189,14 @@ function initLeaflet(reason){document.getElementById('map').innerHTML='';
     L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
     L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
     (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
-    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
-      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
-    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    if(LINE.length>1)L.polyline(LINE.map(p=>[p.lat,p.lon]),{color:'#C2410C',weight:3,opacity:.85,dashArray:'6 7',interactive:false}).addTo(map);
+    const mk=PTS.map(p=>{const s=svgOf(p);return L.marker([p.lat,p.lon],{title:p.name,zIndexOffset:hasFlag(p)?1000:(sty(p).size>22?300:0),
+        icon:L.divIcon({html:s.svg,className:'',iconSize:[s.w,s.h],iconAnchor:s.anchor,popupAnchor:[0,hasFlag(p)?-s.h+4:-s.h/2]})})
+      .bindPopup(card(p,false),{maxWidth:320,autoPanPaddingBottomRight:[10,70]}).on('click',()=>select(p._i,false)).addTo(map);});
+    function fit(arr){const pts=(arr||PTS).map(p=>[p.lat,p.lon]);if(!arr)pts.push([HOME.lat,HOME.lon]);map.fitBounds(L.latLngBounds(pts),{padding:[30,30]});}
+    fit(null);
     api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
-         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+         filter(){mk.forEach((m,i)=>visible(PTS[i])?m.addTo(map):m.remove());},fit};
     document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
   document.head.appendChild(s);}
 window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');

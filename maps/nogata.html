@@ -1,13 +1,13 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8">
 <script>/* LINEのアプリ内ブラウザで開いたら、いつものブラウザ（Safari/Chrome）で開き直す */
 (function(){try{if(/ Line\//i.test(navigator.userAgent)&&location.protocol.indexOf("http")===0&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split("#")[0]+(location.search?"&":"?")+"openExternalBrowser=1"+location.hash);}}catch(e){}})();</script>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>野方 ベビーカー散歩マップ</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
-:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}}
-:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C}
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA;--flag:#C2410C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
@@ -18,41 +18,96 @@ h1{font-size:19px;margin:0;line-height:1.35}
 main{flex:1;display:flex;min-height:0}
 #map{flex:1;min-height:300px}
 aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.handle{display:none}
 .tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
-.tools input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.tools input[type=search]{font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .cats{display:flex;flex-wrap:wrap;gap:6px}
-.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none;white-space:nowrap}
 .cats input{margin:0}
-.catbtns{display:flex;gap:6px}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
-.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+.catbtns{display:flex;gap:6px;flex-wrap:wrap}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+button.course{font:inherit;font-size:13px;font-weight:700;padding:3px 12px;border:1.5px solid var(--flag);color:var(--flag);background:transparent;border-radius:999px;cursor:pointer;white-space:nowrap}
+button.course.on{background:var(--flag);color:#fff}
+.sw{display:inline-flex;vertical-align:middle}
+.sw svg{display:block}
 #list{overflow-y:auto;flex:1}
+.grp{padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1}
 .item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
 .item:hover{background:var(--bg)}
 .item.on{background:var(--hi)}
+.item.fl{border-left:4px solid var(--flag);padding-left:8px}
 .item b{font-size:14px}
 .item .meta{color:var(--ink2)}
 .item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
 .iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
 .iw b{font-size:15px}
-.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 0 4px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 4px 4px 0}
 .iw .row{margin:1px 0}.iw .lab{color:#6b7680}
 .iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
 .iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
-@media (max-width:760px){html,body{height:auto}main{flex:none;flex-direction:column}#map{flex:none;height:58vh}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line);min-height:auto}#list{flex:none;overflow:visible}}
+/* スマホ：地図を画面いっぱいに、一覧は下から引き出すシート */
+@media (max-width:760px){
+  html,body{height:100%;overflow:hidden}
+  body{height:100dvh}
+  header{padding:6px 12px 5px;cursor:pointer}
+  h1{font-size:15px}
+  .sub{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header.open .sub{white-space:normal}
+  .engine{display:none}header.open .engine{display:block}
+  main{position:relative;flex:1}
+  #map{position:absolute;left:0;right:0;top:0;bottom:58px;min-height:0}
+  aside{position:absolute;left:0;right:0;bottom:0;width:auto;max-width:none;height:calc(58px + env(safe-area-inset-bottom));border-left:0;border-radius:14px 14px 0 0;box-shadow:0 -3px 14px rgba(0,0,0,.18);z-index:1000;transition:height .22s ease}
+  aside.half{height:52%}aside.full{height:90%}
+  .handle{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;cursor:pointer;flex:none;position:relative;user-select:none}
+  .handle .bar{position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--line)}
+  .handle .cnt{flex:1;font-size:13.5px;font-weight:700;text-align:right}
+  .handle .arr{font-size:13px;color:var(--ink2);width:16px;text-align:center}
+  aside:not(.half):not(.full) .tools,aside:not(.half):not(.full) #list{display:none}
+  .tools{padding:4px 12px 8px;gap:6px}
+  .tools .course{display:none}
+  .cats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .cats label{flex:none}
+}
 </style></head><body>
-<header><h1>野方 ベビーカー散歩マップ</h1><p class="sub">調査日2026/10/23、実績追記2026/10/24。距離は直線、営業は出発前に要確認。</p><div class="engine" id="engine"></div></header>
+<header id="hd"><h1>野方 ベビーカー散歩マップ</h1><p class="sub">調査日2026/10/23、実績追記2026/10/24。距離は直線、営業は出発前に要確認。</p><div class="engine" id="engine"></div></header>
 <main><div id="map"></div>
-<aside><div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
+<aside id="side"><div class="handle" id="handle"><span class="bar"></span><span id="courseM"></span><span class="cnt" id="cnt"></span><span class="arr" id="arr">▲</span></div>
+<div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><span id="courseD"></span><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
 <script>
 const CFG={"title": "野方 ベビーカー散歩マップ", "subtitle": "調査日2026/10/23、実績追記2026/10/24。距離は直線、営業は出発前に要確認。", "home": {"name": "野方駅", "lat": 35.719978, "lon": 139.652588, "match": "手入力"}, "rings_km": [0.5, 1, 2], "categories": {"route": {"label": "駅・公園（導線）", "color": "#2A6FC0"}, "lunch": {"label": "ランチ", "color": "#1E8A5A"}, "sweet": {"label": "甘いもの・パン（テイクアウト）", "color": "#C8571E"}, "cafe": {"label": "カフェ（個人店）", "color": "#8A4FB3"}, "done": {"label": "実際に行った（2026/10/23）", "color": "#E0A800"}}, "fields": [["kind", "種類"], ["memo", "メモ"], ["closed", "定休日・時間"], ["dog", "犬"], ["pay", "支払い"]], "points": [{"name": "平和の森公園", "addr": "東京都中野区新井3-37", "cat": "route", "kind": "公園（芝生）", "memo": "芝生広場でケーキ休憩。一部再整備中の情報あり（いこーよ）。沼袋駅南口から徒歩約3分", "closed": "", "url": "https://report.iko-yo.net/articles/14925", "dog": "", "pay": "", "lat": 35.715572, "lon": 139.662277, "match": "手入力", "km": 1.0}, {"name": "沼袋駅", "addr": "東京都中野区沼袋1-35-1", "cat": "route", "kind": "駅（帰り）", "memo": "西武新宿線 各停で鷺ノ宮まで3駅・乗換なし", "closed": "", "url": "https://www.seiburailway.jp/railway/station/numabukuro/", "dog": "", "pay": "", "lat": 35.719387, "lon": 139.664581, "match": "手入力", "km": 1.08}, {"name": "哲学堂公園", "addr": "東京都中野区松が丘1-34-28", "cat": "route", "kind": "公園（別案）", "memo": "古建築の庭園公園。野方から東へ。帰りは新井薬師前駅（徒歩12分）", "closed": "", "url": "https://www.gotokyo.org/en/spot/1147/index.html", "dog": "", "pay": "", "lat": 35.72274, "lon": 139.675598, "match": "手入力", "km": 2.1}, {"name": "COFFEE CHROME", "addr": "東京都中野区野方3-27-6", "cat": "lunch", "kind": "カフェ（候補）", "memo": "木目の店内。ふわとろオムレツ＋野方のパン屋のバゲット、ラテアート。※本人メモ（2026/10/23）：ワンオペ・ワンプレート1700円。赤ちゃん連れだと待たされそう／少し高め", "closed": "8〜19時（金土〜20時）・火曜休", "url": "https://rurubu.jp/andmore/spot/80131655", "dog": "未確認", "pay": "", "lat": 35.718838, "lon": 139.655716, "match": "手入力", "km": 0.31}, {"name": "手打ちうどん つくつくぼうし", "addr": "東京都中野区野方6-8-5", "cat": "lunch", "kind": "うどん（別案）", "memo": "ベビーカーのまま食事できる（ぐるっとプラス）。野方駅から徒歩2分", "closed": "未確認", "url": "https://grutto-plus.com/area/fukutoshin/438", "dog": "未確認", "pay": "", "lat": 35.720963, "lon": 139.652359, "match": "手入力", "km": 0.11}, {"name": "パティスリー サピュイエ", "addr": "東京都中野区野方6-10-8", "cat": "sweet", "kind": "ケーキ（第一候補）", "memo": "「野方のリスのケーキ屋さん」。見た目の美しいケーキ、カット500〜600円台", "closed": "11〜19時・月火休", "url": "https://tabelog.com/tokyo/A1321/A132104/13288075", "insta": "@patisserie_sappuyer", "dog": "未確認", "pay": "", "lat": 35.721493, "lon": 139.65358, "match": "手入力", "km": 0.19}, {"name": "西洋菓子屋", "addr": "東京都中野区野方6-5-1", "cat": "sweet", "kind": "ケーキ（別案）", "memo": "野方駅北口徒歩約1分", "closed": "未確認", "url": "https://map.yahoo.co.jp/v3/place/T_xRTSuJw3c", "dog": "未確認", "pay": "", "lat": 35.720222, "lon": 139.652954, "match": "手入力", "km": 0.04}, {"name": "TAMAETENT", "addr": "東京都中野区野方6-5-2", "cat": "cafe", "kind": "燻製カフェ（ランチ）", "memo": "燻製料理のカフェ。野方駅北口徒歩1分", "closed": "ランチ 月〜木12〜15時・金12〜14時半／日祝休（Retty）", "url": "https://retty.me/area/PRE13/ARE12/SUB1208/100000790766", "dog": "未確認", "pay": "", "lat": 35.72023, "lon": 139.652832, "match": "手入力", "km": 0.04}, {"name": "DAILY COFFEE STAND", "addr": "東京都中野区野方5-31-8", "cat": "cafe", "kind": "コーヒー＋マフィン", "memo": "白基調で広いイートイン。マフィン12種、秋限定マロン＆パンプキンのフラッペ・ラテ", "closed": "10〜19時・無休", "url": "https://grutto-plus.com/area/fukutoshin/438", "insta": "@dailycoffeestand", "dog": "未確認", "pay": "", "lat": 35.719734, "lon": 139.651855, "match": "手入力", "km": 0.07}, {"name": "DAILY BAKES", "addr": "東京都中野区野方6-4-1", "cat": "sweet", "kind": "焼き菓子（テイクアウト）", "memo": "DAILY COFFEE STANDの系列。並んだ焼き菓子から選ぶ店", "closed": "11〜19時（金〜21時）・無休・売切れ次第終了", "url": "https://grutto-plus.com/area/fukutoshin/651", "dog": "未確認", "pay": "", "lat": 35.720238, "lon": 139.652649, "match": "手入力", "km": 0.03}, {"name": "BREDDA COFFEE", "addr": "東京都中野区野方5-25-1", "cat": "cafe", "kind": "コーヒースタンド", "memo": "ツインビル伊倉102。地元の人が集まるコーヒー屋", "closed": "時間は情報が食い違う（Instagram：7〜18時・木休／他：金8〜22時）", "url": "https://www.instagram.com/bredda_coffee83", "insta": "@bredda_coffee83", "dog": "未確認", "pay": "", "lat": 35.718597, "lon": 139.653488, "match": "手入力", "km": 0.17}, {"name": "JUNOS CAFE", "addr": "東京都中野区大和町1-66-3", "cat": "cafe", "kind": "カフェ＆ビストロ（遠め）", "memo": "野方駅から徒歩15分ほど（高円寺寄り）", "closed": "平日10〜22時（フード21時まで）・月休", "url": "https://www.instagram.com/junoscafe_tokyo", "insta": "@junoscafe_tokyo", "dog": "未確認", "pay": "", "lat": 35.709373, "lon": 139.651382, "match": "手入力", "km": 1.18}, {"name": "MISTY WEST", "addr": "東京都中野区野方5-30-3", "cat": "cafe", "kind": "ジャズ喫茶・洋食・ケーキ（次回の第一候補）", "memo": "2025年10月開店。柳屋ビル1F。自家焙煎コーヒー、手作りケーキの種類が多い、JAZZが流れる。洋食（ビーフフリカッセ等）。妻が見つけて「良さそう」。事前調査で見落とした店", "closed": "10〜22時（食べログ。定休日の記載なし）", "pay": "カード・電子マネー可／QR決済不可（食べログ）", "dog": "未確認", "url": "https://tabelog.com/tokyo/A1321/A132104/13314577", "lat": 35.719021, "lon": 139.652115, "match": "手入力", "km": 0.11}, {"name": "餃子の王将 野方店", "addr": "東京都中野区野方5-22-6", "cat": "done", "kind": "ランチ（実績）", "memo": "2026/10/23 昼に入った。夫の大好物。鷺ノ宮周辺に王将が無い", "closed": "11〜22時（L.O.21:30）", "pay": "", "dog": "", "url": "https://map.ohsho.co.jp/b/ohsho/info/5543", "lat": 35.718884, "lon": 139.652328, "match": "手入力", "km": 0.12}, {"name": "深川 伊勢屋 都立家政店", "lat": 35.722739, "lon": 139.644066, "addr": "東京都中野区鷺宮3-1-16", "cat": "done", "kind": "和菓子テイクアウト（実績・夫用）", "memo": "2026/10/23 行きの散歩で、みたらし団子・おはぎを購入。都立家政駅北口すぐ。※住所は資料で食い違う（NAVITIME：鷺宮3-1-16／食べログ：鷺ノ宮3-28-7）", "closed": "未確認", "pay": "現金のみ（PayPay不可・本人確認）", "dog": "", "url": "https://tabelog.com/tokyo/A1321/A132104/13145595", "match": "手入力", "km": 0.83}]}, KEY="";
 const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const FLAGLABEL=CFG.flag_label||'コース';
 const show={};ORDER.forEach(c=>{show[c]=true;});
+let courseOnly=false;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const instaUrl=v=>/^https?:/.test(v)?v:'https://www.instagram.com/'+String(v).replace(/^@/,'')+'/';
 const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
 const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+const isMobile=()=>window.matchMedia('(max-width:760px)').matches;
+const hasFlag=p=>p.flag!=null&&p.flag!=='';
+// ---- ピンの形：区分の shape / icon / size、地点ごとの上書き、コースは番号付きのピン ----
+const SH={circle:'<circle cx="16" cy="16" r="13"/>',square:'<rect x="3.5" y="3.5" width="25" height="25" rx="5"/>',
+  diamond:'<path d="M16 1.8 30.2 16 16 30.2 1.8 16z"/>',triangle:'<path d="M16 2.5 30.5 28.5H1.5z"/>',
+  hex:'<path d="M16 1.8 28.6 9v14L16 30.2 3.4 23V9z"/>',
+  star:'<path d="m16 1.6 4.3 9 9.9 1.3-7.3 6.9 1.9 9.8L16 23.8l-8.8 4.8 1.9-9.8-7.3-6.9 9.9-1.3z"/>'};
+// 名前から自動で付けるアイコン（地点にも区分にも指定が無いとき）
+const AUTO=[[/駅(（.*）)?$|駅前$/,'square','🚉',26],[/公園|緑地|庭園|植物園/,'circle','🌳',24],[/神社|八幡|稲荷|神明宮|大社/,'diamond','⛩',24],
+  [/寺(（.*）)?$|大仏/,'diamond','卍',22],[/授乳|ベビー休憩|赤ちゃん休憩/,'square','🍼',22],[/駐車場|パーキング|タイムズ/,'square','P',24]];
+function sty(p){const c=CATS[p.cat]||{};let a=null;
+  if(p.icon==null&&p.shape==null&&!c.icon&&!c.shape&&p.name)a=AUTO.find(r=>r[0].test(p.name));
+  return{shape:p.shape||c.shape||(a?a[1]:'circle'),icon:p.icon!=null?p.icon:(c.icon||(a?a[2]:'')),
+  size:+(p.size||c.size||(a?a[3]:22)),color:p.color||c.color||'#888'};}
+function svgOf(p,small){const s=sty(p);
+  if(hasFlag(p)&&!small){const n=esc(p.flag),w=32,h=42,fs=String(p.flag).length>1?11.5:14;
+    return{w,h,anchor:[w/2,h],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 32 42">'+
+      '<path d="M16 41C14.5 36 2 27 2 16a14 14 0 0 1 28 0c0 11-12.5 20-14 25z" fill="'+s.color+'" stroke="#7C2D12" stroke-width="2"/>'+
+      '<circle cx="16" cy="16" r="10.5" fill="#fff"/><text x="16" y="'+(16+fs*0.36)+'" font-size="'+fs+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#7C2D12">'+n+'</text></svg>'};}
+  const z=small?15:s.size,ic=small?'':s.icon,ty=s.shape==='triangle'?24:21.5;
+  const txt=ic?'<text x="16" y="'+ty+'" font-size="'+(ic.length>1&&/^[\x00-\x7F]+$/.test(ic)?11:15)+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#fff">'+esc(ic)+'</text>':'';
+  return{w:z,h:z,anchor:[z/2,z/2],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+z+'" height="'+z+'" viewBox="0 0 32 32"><g fill="'+s.color+'" stroke="#fff" stroke-width="2.5">'+(SH[s.shape]||SH.circle)+'</g>'+txt+'</svg>'};}
+const catSw=c=>svgOf({cat:c},true).svg;
 function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
-  let h='<div class="iw"><b>'+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  let h='<div class="iw"><b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  if(hasFlag(p))h+='<span class="tag" style="background:#C2410C">'+esc(FLAGLABEL)+'</span>';
   F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
   if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
   h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
@@ -61,44 +116,66 @@ function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
   h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
   h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
   return h+'</div></div>';}
-// ---- サイドバー ----
-const list=document.getElementById('list'), q=document.getElementById('q');
+// ---- 一覧（スマホは下のシート） ----
+const list=document.getElementById('list'), q=document.getElementById('q'), side=document.getElementById('side');
 PTS.forEach((p,i)=>p._i=i);
-const sorted=PTS.slice().sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const FL=PTS.filter(hasFlag).sort((a,b)=>(parseFloat(a.flag)||0)-(parseFloat(b.flag)||0));
+const sorted=PTS.filter(p=>!hasFlag(p)).sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const visible=p=>show[p.cat]&&(!courseOnly||hasFlag(p));
 let api=null, cur=null;
-function renderList(){list.innerHTML='';const s=q.value.trim();
-  sorted.forEach(p=>{if(!show[p.cat])return;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');if(s&&!txt.includes(s))return;
-    const d=document.createElement('div');d.className='item'+(cur===p._i?' on':'');d.id='it'+p._i;
-    d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw" style="background:'+(CATS[p.cat]||{}).color+'"></span> <b>'+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
-    d.onclick=()=>{select(p._i,true);};list.appendChild(d);});}
+function sheet(st){side.classList.remove('half','full');if(st)side.classList.add(st);
+  document.getElementById('arr').textContent=st==='full'?'▼':'▲';}
+document.getElementById('handle').onclick=e=>{if(e.target.closest('button'))return;
+  sheet(side.classList.contains('full')?'':side.classList.contains('half')?'full':'half');};
+document.getElementById('hd').onclick=()=>{if(isMobile())document.getElementById('hd').classList.toggle('open');};
+function itemEl(p){const d=document.createElement('div');d.className='item'+(hasFlag(p)?' fl':'')+(cur===p._i?' on':'');d.id='it'+p._i;
+  d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw">'+svgOf(p,true).svg+'</span> <b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+  d.onclick=()=>select(p._i,true);return d;}
+function renderList(){list.innerHTML='';const s=q.value.trim();let n=0;
+  const ok=p=>{if(!visible(p))return false;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');return !s||txt.includes(s);};
+  const a=FL.filter(ok),b=sorted.filter(ok);
+  if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='🚩 '+FLAGLABEL+'（'+a.length+'）';list.appendChild(g);a.forEach(p=>list.appendChild(itemEl(p)));}
+  if(b.length){if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='ほかの地点（'+b.length+'）';list.appendChild(g);}b.forEach(p=>list.appendChild(itemEl(p)));}
+  document.getElementById('cnt').textContent='一覧 '+(a.length+b.length)+'件';}
 function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
-  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!window.matchMedia('(max-width:760px)').matches)it.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  api&&api.open(i,fromList);
-  if(fromList&&window.matchMedia('(max-width:760px)').matches)document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});}
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!isMobile())it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(fromList&&isMobile())sheet('');
+  api&&api.open(i,fromList);}
 const cw=document.getElementById('cats');
 ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
-  l.innerHTML='<input type="checkbox" checked><span class="sw" style="background:'+CATS[c].color+'"></span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.innerHTML='<input type="checkbox" checked><span class="sw">'+catSw(c)+'</span>'+esc(CATS[c].label)+'（'+n+'）';
   l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
 function setAll(v){ORDER.forEach(c=>show[c]=v);cw.querySelectorAll('input').forEach(i=>i.checked=v);renderList();api&&api.filter();}
 document.getElementById('catOff').onclick=()=>setAll(false);document.getElementById('catOn').onclick=()=>setAll(true);
+// 「🚩コースだけ」ボタン（コースの地点があるときだけ）
+const cbs=[];
+if(FL.length)['courseD','courseM'].forEach(id=>{const b=document.createElement('button');b.type='button';b.className='course';
+  b.textContent='🚩 '+FLAGLABEL+'だけ（'+FL.length+'）';b.onclick=e=>{e.stopPropagation();courseOnly=!courseOnly;
+    cbs.forEach(x=>{x.classList.toggle('on',courseOnly);x.textContent=(courseOnly?'すべて表示に戻す':'🚩 '+FLAGLABEL+'だけ（'+FL.length+'）');});
+    renderList();if(api){api.filter();api.fit(courseOnly?FL.filter(p=>show[p.cat]):null);}};
+  document.getElementById(id).appendChild(b);cbs.push(b);});
 q.oninput=renderList;renderList();
+const LINE=FL.filter(p=>p.line!==false);
 // ---- Google Maps ----
 function initGoogle(){const g=google.maps;
   const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
-    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:true,gestureHandling:'greedy'});
-  const iw=new g.InfoWindow(), b=new g.LatLngBounds(), sv=map.getStreetView(), svs=new g.StreetViewService();
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:!isMobile(),gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), sv=map.getStreetView(), svs=new g.StreetViewService();
   new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
     icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
   (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
-  b.extend({lat:HOME.lat,lng:HOME.lon});
-  const mk=PTS.map(p=>{const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,
-      icon:{path:g.SymbolPath.CIRCLE,scale:8,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}});
-    m.addListener('click',()=>select(p._i,false));b.extend(m.getPosition());return m;});
-  map.fitBounds(b,40);
+  if(LINE.length>1)new g.Polyline({map,path:LINE.map(p=>({lat:p.lat,lng:p.lon})),strokeOpacity:0,clickable:false,
+    icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:.85,strokeColor:'#C2410C',scale:3},offset:'0',repeat:'12px'}]});
+  const mk=PTS.map(p=>{const s=svgOf(p);const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,zIndex:hasFlag(p)?600:(sty(p).size>22?300:100),
+      icon:{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s.svg),scaledSize:new g.Size(s.w,s.h),anchor:new g.Point(s.anchor[0],s.anchor[1])}});
+    m.addListener('click',()=>select(p._i,false));return m;});
+  function fit(arr){const b=new g.LatLngBounds();if(!arr)b.extend({lat:HOME.lat,lng:HOME.lon});(arr||PTS).forEach(p=>b.extend({lat:p.lat,lng:p.lon}));
+    map.fitBounds(b,isMobile()?{top:30,left:20,right:20,bottom:30}:40);}
+  fit(null);
   g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
     svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
   api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
-       filter(){mk.forEach((m,i)=>m.setVisible(!!show[PTS[i].cat]));}};
+       filter(){mk.forEach((m,i)=>m.setVisible(visible(PTS[i])));},fit};
   document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
 function alert_(m){document.getElementById('engine').textContent=m;}
 // ---- Leaflet + 国土地理院タイル（フォールバック） ----
@@ -112,11 +189,14 @@ function initLeaflet(reason){document.getElementById('map').innerHTML='';
     L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
     L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
     (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
-    const mk=PTS.map(p=>L.circleMarker([p.lat,p.lon],{radius:8,color:'#fff',weight:2,fillColor:(CATS[p.cat]||{}).color||'#888',fillOpacity:1})
-      .bindPopup(card(p,false),{maxWidth:320}).on('click',()=>select(p._i,false)).addTo(map));
-    map.fitBounds(L.latLngBounds([[HOME.lat,HOME.lon],...PTS.map(p=>[p.lat,p.lon])]),{padding:[30,30]});
+    if(LINE.length>1)L.polyline(LINE.map(p=>[p.lat,p.lon]),{color:'#C2410C',weight:3,opacity:.85,dashArray:'6 7',interactive:false}).addTo(map);
+    const mk=PTS.map(p=>{const s=svgOf(p);return L.marker([p.lat,p.lon],{title:p.name,zIndexOffset:hasFlag(p)?1000:(sty(p).size>22?300:0),
+        icon:L.divIcon({html:s.svg,className:'',iconSize:[s.w,s.h],iconAnchor:s.anchor,popupAnchor:[0,hasFlag(p)?-s.h+4:-s.h/2]})})
+      .bindPopup(card(p,false),{maxWidth:320,autoPanPaddingBottomRight:[10,70]}).on('click',()=>select(p._i,false)).addTo(map);});
+    function fit(arr){const pts=(arr||PTS).map(p=>[p.lat,p.lon]);if(!arr)pts.push([HOME.lat,HOME.lon]);map.fitBounds(L.latLngBounds(pts),{padding:[30,30]});}
+    fit(null);
     api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
-         filter(){mk.forEach((m,i)=>show[PTS[i].cat]?m.addTo(map):m.remove());}};
+         filter(){mk.forEach((m,i)=>visible(PTS[i])?m.addTo(map):m.remove());},fit};
     document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
   document.head.appendChild(s);}
 window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');

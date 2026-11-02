@@ -1,0 +1,215 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<script>/* LINEのアプリ内ブラウザで開いたら、いつものブラウザ（Safari/Chrome）で開き直す */
+(function(){try{if(/ Line\//i.test(navigator.userAgent)&&location.protocol.indexOf("http")===0&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split("#")[0]+(location.search?"&":"?")+"openExternalBrowser=1"+location.hash);}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>グアム 乳児連れマップ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA;--flag:#C2410C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.handle{display:none}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none;white-space:nowrap}
+.cats input{margin:0}
+.catbtns{display:flex;gap:6px;flex-wrap:wrap}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+button.course{font:inherit;font-size:13px;font-weight:700;padding:3px 12px;border:1.5px solid var(--flag);color:var(--flag);background:transparent;border-radius:999px;cursor:pointer;white-space:nowrap}
+button.course.on{background:var(--flag);color:#fff}
+.sw{display:inline-flex;vertical-align:middle}
+.sw svg{display:block}
+#list{overflow-y:auto;flex:1}
+.grp{padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item.fl{border-left:4px solid var(--flag);padding-left:8px}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 4px 4px 0}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+/* スマホ：地図を画面いっぱいに、一覧は下から引き出すシート */
+@media (max-width:760px){
+  html,body{height:100%;overflow:hidden}
+  body{height:100dvh}
+  header{padding:6px 12px 5px;cursor:pointer}
+  h1{font-size:15px}
+  .sub{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header.open .sub{white-space:normal}
+  .engine{display:none}header.open .engine{display:block}
+  main{position:relative;flex:1}
+  #map{position:absolute;left:0;right:0;top:0;bottom:58px;min-height:0}
+  aside{position:absolute;left:0;right:0;bottom:0;width:auto;max-width:none;height:calc(58px + env(safe-area-inset-bottom));border-left:0;border-radius:14px 14px 0 0;box-shadow:0 -3px 14px rgba(0,0,0,.18);z-index:1000;transition:height .22s ease}
+  aside.half{height:52%}aside.full{height:90%}
+  .handle{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;cursor:pointer;flex:none;position:relative;user-select:none}
+  .handle .bar{position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--line)}
+  .handle .cnt{flex:1;font-size:13.5px;font-weight:700;text-align:right}
+  .handle .arr{font-size:13px;color:var(--ink2);width:16px;text-align:center}
+  aside:not(.half):not(.full) .tools,aside:not(.half):not(.full) #list{display:none}
+  .tools{padding:4px 12px 8px;gap:6px}
+  .tools .course{display:none}
+  .cats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .cats label{flex:none}
+}
+</style></head><body>
+<header id="hd"><h1>グアム 乳児連れマップ</h1><p class="sub">生後3か月半の赤ちゃんと行ける散歩・屋内・体験・食事・必需品＋ホテル候補（2026/11/3調査・基準はホテル・ニッコー・グアム）</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside id="side"><div class="handle" id="handle"><span class="bar"></span><span id="courseM"></span><span class="cnt" id="cnt"></span><span class="arr" id="arr">▲</span></div>
+<div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><span id="courseD"></span><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "グアム 乳児連れマップ", "subtitle": "生後3か月半の赤ちゃんと行ける散歩・屋内・体験・食事・必需品＋ホテル候補（2026/11/3調査・基準はホテル・ニッコー・グアム）", "home": {"name": "ホテル・ニッコー・グアム", "lat": 13.521954, "lon": 144.804885, "match": "手入力"}, "rings_km": [1, 3, 10], "categories": {"walk": {"label": "散歩・景色", "color": "#1E8A5A"}, "indoor": {"label": "屋内・授乳・休憩", "color": "#4B5563"}, "exp": {"label": "体験・市場・イベント", "color": "#C2410C"}, "food": {"label": "食事・カフェ", "color": "#D08A12"}, "need": {"label": "スーパー・薬局・病院", "color": "#7A4FC9"}, "hotel": {"label": "ホテル候補", "color": "#D9467A"}, "ng": {"label": "休業中", "color": "#8A939B"}}, "fields": [["time", "曜日・時間"], ["memo", "メモ"]], "points": [{"name": "デュシット・ビーチ・リゾート・グアム", "cat": "hotel", "lat": 13.515233, "lon": 144.80573, "url": "https://maps.google.com/?cid=17068417705524537723", "time": "毎日", "memo": "タモン中心。デュシット・プレイス（モール）に直結", "match": "手入力", "km": 0.75}, {"name": "デュシタニ グアム リゾート", "cat": "hotel", "lat": 13.51368, "lon": 144.805257, "url": "https://maps.google.com/?cid=111273195075957929", "time": "毎日", "memo": "タモン中心。目の前がタモンビーチ、隣にデュシット・プレイス", "match": "手入力", "km": 0.92}, {"name": "ザ・ツバキ・タワー", "cat": "hotel", "lat": 13.521617, "lon": 144.805833, "url": "https://maps.google.com/?cid=49519758619666194", "time": "毎日", "memo": "タモン北側。ニッコーの近く", "match": "手入力", "km": 0.11}, {"name": "リーガロイヤル・ラグーナ・グアム・リゾート", "cat": "hotel", "lat": 13.496598, "lon": 144.771277, "url": "https://maps.google.com/?cid=8438030312657840885", "time": "毎日", "memo": "タムニン（アルパット岬）。タモン中心から車で約10分", "match": "手入力", "km": 4.6}, {"name": "パシフィック・アイランド・クラブ・グアム", "cat": "hotel", "lat": 13.503836, "lon": 144.793385, "url": "https://maps.google.com/?cid=12026068053504465796", "time": "毎日", "memo": "タモン南端。イパオビーチパークの隣", "match": "手入力", "km": 2.37}, {"name": "ハイアット リージェンシー グアム", "cat": "hotel", "lat": 13.5126, "lon": 144.804668, "url": "https://maps.google.com/?cid=5356671376080926584", "time": "毎日", "memo": "タモン中心。日曜のタモン・ナイトマーケット会場（タモン・サンズ・プラザ前）のすぐそば", "match": "手入力", "km": 1.04}, {"name": "ウェスティンリゾート・グアム", "cat": "hotel", "lat": 13.517883, "lon": 144.806663, "url": "https://maps.google.com/?cid=3927839217196950511", "time": "毎日", "memo": "タモン中心の北寄り", "match": "手入力", "km": 0.49}, {"name": "タモンビーチ", "cat": "walk", "lat": 13.515417, "lon": 144.804869, "url": "https://maps.google.com/?cid=417884184141687006", "time": "毎日", "memo": "ホテル街の前の浜。遠浅で波が穏やか。砂浜なのでベビーカーは不向き→抱っこ紐で。避難先はホテル・デュシット・プレイス", "match": "手入力", "km": 0.73}, {"name": "イパオビーチパーク", "cat": "walk", "lat": 13.50284, "lon": 144.790563, "url": "https://maps.google.com/?cid=6145990144336252374", "time": "毎日 7:00〜18:00", "memo": "芝生と舗装路、トイレ・東屋あり。ベビーカー散歩向き。PIC・Kマートが近く避難先にしやすい", "match": "手入力", "km": 2.63}, {"name": "ガバナー・ジョセフ・フローレス・メモリアル・パーク", "cat": "walk", "lat": 13.503335, "lon": 144.788365, "url": "https://maps.google.com/?cid=12278930988202286837", "time": "毎日", "memo": "イパオビーチパークの正式な公園名（Googleでは別の点）。芝生・木陰・東屋", "match": "手入力", "km": 2.73}, {"name": "マタパン・ビーチ・パーク", "cat": "walk", "lat": 13.507114, "lon": 144.79944, "url": "https://maps.google.com/?cid=10470100661397275898", "time": "毎日", "memo": "タモン湾の中ほどの小さな公園。芝生とトイレ。夕日スポット", "match": "手入力", "km": 1.75}, {"name": "ガン・ビーチ", "cat": "walk", "lat": 13.524305, "lon": 144.803358, "url": "https://maps.google.com/?cid=8561817399579451509", "time": "毎日", "memo": "ニッコーの北隣。浜は砂と岩でベビーカー不可→抱っこ紐。夕方の散歩向き", "match": "手入力", "km": 0.31}, {"name": "恋人岬", "cat": "walk", "lat": 13.534971, "lon": 144.802495, "url": "https://tlpguam.com/pages/visit", "time": "毎日 9:00〜19:00", "memo": "展望台まで舗装路でベビーカー可。入場$3（公式）。日陰少なめ→朝か夕方。タモンから車10分", "match": "手入力", "km": 1.47}, {"name": "スペイン広場", "cat": "walk", "lat": 13.473889, "lon": 144.751667, "url": "https://maps.google.com/?cid=14432055520698961398", "time": "毎日", "memo": "ハガニアの芝生の広場。木陰あり。すぐ前のグアム博物館（冷房）を避難先に", "match": "手入力", "km": 7.85}, {"name": "ラッテストーン公園", "cat": "walk", "lat": 13.472325, "lon": 144.751849, "url": "https://maps.google.com/?cid=5669063431995148885", "time": "毎日", "memo": "スペイン広場の南すぐ。芝生と石柱。小さいので短時間", "match": "手入力", "km": 7.96}, {"name": "スキナー・プラザ・パーク", "cat": "walk", "lat": 13.476389, "lon": 144.75173, "url": "https://maps.google.com/?cid=742476068011231895", "time": "毎日", "memo": "ハガニア中心の芝生公園。博物館・カフェのあるアスピナル通りに近い", "match": "手入力", "km": 7.66}, {"name": "パセオ・デ・スサナ公園", "cat": "walk", "lat": 13.479228, "lon": 144.753192, "url": "https://www.guampdn.com/news/public-works-parks-and-rec-complete-initial-assessments-post-champi/article_6ffa412e-182b-416c-ad9a-55b66fa39bf9.html", "time": "毎日", "memo": "海沿いの芝生公園。Champiで防波堤とスタジアム屋根が損傷（10/21報道）→一部立入不可の可能性", "match": "手入力", "km": 7.34}, {"name": "アプガン砦", "cat": "walk", "lat": 13.473353, "lon": 144.747856, "url": "https://maps.google.com/?cid=13533596066187405082", "time": "毎日", "memo": "ハガニアの高台の史跡。駐車場からすぐ海の眺め。車で寄るだけで可", "match": "手入力", "km": 8.2}, {"name": "アサン湾展望台", "cat": "walk", "lat": 13.460196, "lon": 144.715468, "url": "https://maps.google.com/?cid=2735500620441454953", "time": "毎日", "memo": "戦争記念の展望台。駐車場から段差なしで眺望。屋根少ない→短時間", "match": "手入力", "km": 11.86}, {"name": "セッティ湾展望台", "cat": "walk", "lat": 13.325553, "lon": 144.666347, "url": "https://maps.google.com/?cid=1962925737388964372", "time": "毎日", "memo": "南部ドライブの絶景。車を降りてすぐ。トイレなし", "match": "手入力", "km": 26.48}, {"name": "ソレダッド砦", "cat": "walk", "lat": 13.295089, "lon": 144.660019, "url": "https://maps.google.com/?cid=5285161814542990072", "time": "毎日", "memo": "南部ウマタックの砦跡。駐車場から短い坂。南部はChampiの被害が大きかった地域", "match": "手入力", "km": 29.7}, {"name": "イナラハン天然プール", "cat": "walk", "lat": 13.271714, "lon": 144.747786, "url": "https://maps.google.com/?cid=16585202522175147831", "time": "毎日", "memo": "南部の天然プール。眺めるだけなら可。南部はChampiの被害が大きく状況未確認", "match": "手入力", "km": 28.5}, {"name": "リティディアン岬", "cat": "walk", "lat": 13.652646, "lon": 144.857903, "url": "https://maps.google.com/?cid=16950650890511032271", "time": "水〜日 7:30〜16:00", "memo": "北端の野生生物保護区。悪路あり・乳児には遠い。台風後は閉鎖されやすい", "match": "手入力", "km": 15.62}, {"name": "マイクロネシアモール", "cat": "indoor", "lat": 13.520439, "lon": 144.817787, "url": "https://maps.google.com/?cid=14458873827386550960", "time": "毎日 10:00〜21:00（日〜20:00）", "memo": "島最大のモール。冷房・フードコート。おむつ台あり（口コミ）。授乳室は2019年の口コミで「無い」、公式で未確認→授乳ケープ持参", "match": "手入力", "km": 1.41}, {"name": "グアム・プレミア・アウトレット", "cat": "indoor", "lat": 13.489977, "lon": 144.78186, "url": "https://maps.google.com/?cid=8107909422660008965", "time": "毎日 10:00〜21:00", "memo": "タムニンのアウトレット。ロス・フードコートあり。授乳室は未確認", "match": "手入力", "km": 4.34}, {"name": "デュシット・プレイス", "cat": "indoor", "lat": 13.514917, "lon": 144.805835, "url": "https://maps.google.com/?cid=14347598735004086848", "time": "毎日 10:00〜21:00", "memo": "タモン中心のモール（旧ザ・プラザ）。デュシット2館と直結。浜散歩の避難先", "match": "手入力", "km": 0.79}, {"name": "JPスーパーストア", "cat": "indoor", "lat": 13.515511, "lon": 144.807387, "url": "https://maps.google.com/?cid=2280141065134816642", "time": "毎日 11:00〜20:00（金土〜21:00）", "memo": "タモン中心の雑貨・服・食品。Honolulu Coffee併設。輸入雑貨好き向け", "match": "手入力", "km": 0.77}, {"name": "タモン・サンズ・プラザ", "cat": "indoor", "lat": 13.509922, "lon": 144.805526, "url": "https://maps.google.com/?cid=14451607547494582731", "time": "毎日 11:00〜20:00", "memo": "タモン中心のモール。日曜夜はこの前でタモン・ナイトマーケット", "match": "手入力", "km": 1.34}, {"name": "アガナ・ショッピングセンター", "cat": "indoor", "lat": 13.470911, "lon": 144.755971, "url": "https://maps.google.com/?cid=1565239999683429000", "time": "毎日 10:00〜20:00", "memo": "ハガニアのローカル向けモール。ハガニア散歩の避難先", "match": "手入力", "km": 7.76}, {"name": "Kマート", "cat": "indoor", "lat": 13.500153, "lon": 144.800094, "url": "https://maps.google.com/?cid=12979997179460097280", "time": "24時間", "memo": "24時間の大型店。乳児用品（おむつ・ミルク・ベビーフード）が揃う。イパオビーチパークの向かい", "match": "手入力", "km": 2.48}, {"name": "ドン・ドン・ドンキ グアム", "cat": "indoor", "lat": 13.492278, "lon": 144.793421, "url": "https://maps.google.com/?cid=10169232842015731859", "time": "毎日 7:00〜翌1:00", "memo": "タムニンのドンキ。日本の食品・ベビー用品もあり", "match": "手入力", "km": 3.52}, {"name": "ロス・ドレス・フォー・レス", "cat": "indoor", "lat": 13.519554, "lon": 144.818742, "url": "https://maps.google.com/?cid=7984946795460836618", "time": "毎日 7:00〜24:00", "memo": "アメリカのオフプライス店（マイクロネシアモール横）。ベビー服が安い", "match": "手入力", "km": 1.52}, {"name": "The Village Thrift", "cat": "indoor", "lat": 13.520213, "lon": 144.814202, "url": "https://maps.google.com/?cid=17447296949802682007", "time": "火〜金 11:00〜18:00／土〜16:00", "memo": "アッパータモンの古着屋（Pika's Cafeの近く）", "match": "手入力", "km": 1.03}, {"name": "it takes a village", "cat": "indoor", "lat": 13.477506, "lon": 144.753106, "url": "https://maps.google.com/?cid=2484022486839377059", "time": "火〜土 13:00ごろ〜17:00", "memo": "ハガニアの古着・リサイクル店", "match": "手入力", "km": 7.47}, {"name": "Good Lookin Out", "cat": "indoor", "lat": 13.475826, "lon": 144.750743, "url": "https://maps.google.com/?cid=13173252420586030266", "time": "毎日 10:00〜18:00", "memo": "ハガニアのストリート系衣料・雑貨（アスピナル通り）", "match": "手入力", "km": 7.78}, {"name": "Tギャラリア グアム by DFS", "cat": "ng", "lat": 13.513456, "lon": 144.806285, "url": "https://www.kuam.com/story/224291573/after-55-years-the-doors-of-t-galleria-by-dfs-guam-officially-closes", "time": "閉店", "memo": "【休業中】2026/3/31で閉店（55年の営業を終了）", "match": "手入力", "km": 0.96}, {"name": "アクアリウム・オブ・グアム（旧アンダーウォーター・ワールド）", "cat": "ng", "lat": 13.51431, "lon": 144.805362, "url": "https://aquariumofguam.com", "time": "休館中", "memo": "【休業中】改装のため休館。公式は「2027年春に再開」", "match": "手入力", "km": 0.85}, {"name": "チャモロ・ビレッジ", "cat": "exp", "lat": 13.477693, "lon": 144.752197, "url": "https://www.visitguam.com/things-to-do/shopping/chamorro-village", "time": "水曜夜 17:30〜21:30", "memo": "水曜ナイトマーケット（屋台・BBQ・ダンス）。混む・暗い→ベビーカーは端を短時間で。Champi後の再開は未確認→当日Instagram @thechamorrovillage で確認", "match": "手入力", "km": 7.53}, {"name": "マンギラオ・サーズデー・ナイトマーケット", "cat": "exp", "lat": 13.448426, "lon": 144.802863, "url": "https://www.visitguam.com/listing/mangilao-thursday-night-market/6067", "time": "木曜 17:00〜20:00", "memo": "木曜夜の地元向け市場（BBQ・野菜・雑貨）。観光客少なめでローカル感。タモンから車20分", "match": "手入力", "km": 8.18}, {"name": "タモン・ナイトマーケット", "cat": "exp", "lat": 13.509629, "lon": 144.805171, "url": "https://www.visitguam.com/tnm", "time": "日曜 17:00〜21:00", "memo": "日曜夜の屋台市（タモン・サンズ・プラザ前）。ホテルから歩ける。3案とも日曜は滞在外", "match": "手入力", "km": 1.37}, {"name": "デデド・フリーマーケット", "cat": "exp", "lat": 13.520777, "lon": 144.828705, "url": "https://www.visitguam.com/things-to-do/shopping/flea-markets", "time": "土日 5:00〜10:00ごろ", "memo": "土日早朝の朝市（地元の食べ物・野菜・植物・古着）。涼しい時間。11/21(土)朝なら行ける（帰りの便の前）", "match": "手入力", "km": 2.58}, {"name": "グアム博物館", "cat": "exp", "lat": 13.47503, "lon": 144.751674, "url": "https://maps.google.com/?cid=8650148850262310051", "time": "火〜金 9:00〜16:00／土 10:00〜14:00／日月休", "memo": "スペイン広場前の冷房のきいた博物館。チャモロ文化。ハガニア散歩の避難先", "match": "手入力", "km": 7.77}, {"name": "フィッシュアイ・マリンパーク", "cat": "exp", "lat": 13.469304, "lon": 144.705203, "url": "https://fisheyeguamtours.com/article/observatory?lng=en-US", "time": "毎日 9:00〜17:00", "memo": "海中展望塔。桟橋（約300m）はベビーカー可、塔内はらせん階段→抱っこで。入場$16（公式）", "match": "手入力", "km": 12.27}, {"name": "スキューバカンパニー（イルカウォッチング）", "cat": "exp", "lat": 13.497379, "lon": 144.777904, "url": "https://www.scubaco.com/en/dolphin-watching", "time": "月火木金土 8:45〜（水・日なし）", "memo": "イルカウォッチング＋オーシャンパーク。年齢制限なし・3歳以下無料、大人$58（11/4〜20）。8:45ピックアップ、約3.5時間。日陰は未確認。乳児には長め", "match": "手入力", "km": 4.0}, {"name": "バレー・オブ・ザ・ラッテ・アドベンチャー・パーク", "cat": "exp", "lat": 13.339306, "lon": 144.761877, "url": "https://maps.google.com/?cid=5824941139918152828", "time": "毎日 8:30〜13:30", "memo": "南部タロフォフォの川下りと文化体験。南部の台風被害後の状況未確認", "match": "手入力", "km": 20.84}, {"name": "C-41 Film & Coffee", "cat": "food", "lat": 13.518543, "lon": 144.812504, "url": "https://maps.google.com/?cid=2995256675130033553", "time": "毎日 7:00〜19:00", "memo": "タムニンのフィルム写真店兼カフェ。個人店で映える。評価4.9", "match": "手入力", "km": 0.91}, {"name": "Coffee Club Guam", "cat": "food", "lat": 13.507968, "lon": 144.810382, "url": "https://maps.google.com/?cid=10340562185895794508", "time": "火〜金 6:00〜16:00／土 7:00〜", "memo": "アッパータモンの個人カフェ。評価4.9。子連れ向きの表示あり", "match": "手入力", "km": 1.66}, {"name": "JG Cafe Guam", "cat": "food", "lat": 13.506519, "lon": 144.801876, "url": "https://maps.google.com/?cid=6649948773191292671", "time": "火〜金 8:00〜17:00／土 9:00〜", "memo": "タモン中心の個人カフェ。子連れ向きの表示あり", "match": "手入力", "km": 1.75}, {"name": "Mighty Purple Cafe", "cat": "food", "lat": 13.47504, "lon": 144.750366, "url": "https://maps.google.com/?cid=5892530378079653634", "time": "毎日 9:00〜19:00（火〜18:00）", "memo": "ハガニアのウベ（紫芋）スイーツのカフェ。映える洋菓子系", "match": "手入力", "km": 7.87}, {"name": "Hava Java 671 Café", "cat": "food", "lat": 13.475783, "lon": 144.750722, "url": "https://maps.google.com/?cid=5024687452689454678", "time": "火〜金 6:30〜16:30／土 7:00〜15:00", "memo": "ハガニア・アスピナル通りのカフェ。博物館散歩の休憩に", "match": "手入力", "km": 7.79}, {"name": "The Boka Box", "cat": "food", "lat": 13.476931, "lon": 144.748226, "url": "https://maps.google.com/?cid=4649910056161539147", "time": "火〜金 7:00〜15:00（土休）", "memo": "ハガニアの個人カフェ（チャモロ・ビレッジ隣）", "match": "手入力", "km": 7.91}, {"name": "Frances Bakehouse", "cat": "food", "lat": 13.518438, "lon": 144.807419, "url": "https://maps.google.com/?cid=3083962139192047517", "time": "水〜土 7:00〜14:00（火休）", "memo": "ガンビーチ通りのベーカリー（ニッコーから近い）。評価4.8。洋菓子・パン", "match": "手入力", "km": 0.48}, {"name": "Patisserie PariSco", "cat": "food", "lat": 13.498703, "lon": 144.776615, "url": "https://maps.google.com/?cid=10727301959653552912", "time": "毎日 6:30〜18:30", "memo": "タムニンのフランス菓子・パン", "match": "手入力", "km": 4.0}, {"name": "Pika's Cafe", "cat": "food", "lat": 13.507596, "lon": 144.810302, "url": "https://maps.google.com/?cid=10052122276890510831", "time": "毎日 7:30〜15:00", "memo": "アッパータモンの人気ブランチ店（ローカル×アメリカン）。子連れ向きの表示あり", "match": "手入力", "km": 1.7}, {"name": "The Crack'd Egg", "cat": "food", "lat": 13.50981, "lon": 144.804957, "url": "https://maps.google.com/?cid=13325502327911780097", "time": "火〜金 7:00〜14:00／土 6:00〜", "memo": "タモンの朝食レストラン", "match": "手入力", "km": 1.35}, {"name": "King's Restaurant", "cat": "food", "lat": 13.488942, "lon": 144.783372, "url": "https://maps.google.com/?cid=138871745400619646", "time": "24時間", "memo": "24時間のアメリカンダイナー（GPO隣）。ハイチェアは未確認", "match": "手入力", "km": 4.35}, {"name": "Shirley's Restaurant", "cat": "food", "lat": 13.492053, "lon": 144.776093, "url": "https://maps.google.com/?cid=7175247176327270818", "time": "毎日 7:30〜21:00", "memo": "ローカル定番のファミレス（フライドライス等）", "match": "手入力", "km": 4.55}, {"name": "Tacos Sinaloa", "cat": "food", "lat": 13.507991, "lon": 144.804186, "url": "https://maps.google.com/?cid=4054647925494324499", "time": "毎日 12:00〜21:00", "memo": "タモンのメキシカン・タコス。子連れ向きの表示あり", "match": "手入力", "km": 1.55}, {"name": "Gringo's Taqueria", "cat": "food", "lat": 13.510084, "lon": 144.819992, "url": "https://maps.google.com/?cid=12487264031602880504", "time": "昼11:30〜15:00・夜17:00〜21:00", "memo": "デデドのタコス店", "match": "手入力", "km": 2.1}, {"name": "Mi Sazon", "cat": "food", "lat": 13.507224, "lon": 144.803347, "url": "https://maps.google.com/?cid=3492984419100003121", "time": "毎日 11:00〜22:00（金土〜翌3:00）", "memo": "タモンのメキシカン。週末は深夜まで", "match": "手入力", "km": 1.65}, {"name": "Manang Pika Tamuning", "cat": "food", "lat": 13.486308, "lon": 144.783052, "url": "https://maps.google.com/?cid=8028831390448627324", "time": "毎日 11:00〜21:00", "memo": "フィリピン×アメリカのフュージョン。評価4.8。タモン店もあり", "match": "手入力", "km": 4.61}, {"name": "Meskla Chamoru Fusion Bistro", "cat": "food", "lat": 13.476525, "lon": 144.755328, "url": "https://maps.google.com/?cid=10706344871214999767", "time": "昼11:00〜14:00・夜17:30〜21:00", "memo": "ハガニアのチャモロ料理店", "match": "手入力", "km": 7.36}, {"name": "Chamorro Island BBQ", "cat": "food", "lat": 13.477538, "lon": 144.75265, "url": "https://maps.google.com/?cid=16743747478290956272", "time": "火木金土 10:00〜15:00／水 〜21:00", "memo": "ハガニアのチャモロBBQ", "match": "手入力", "km": 7.5}, {"name": "Proa", "cat": "ng", "lat": 13.501417, "lon": 144.789401, "url": "https://maps.google.com/?cid=12817453097418268801", "time": "臨時休業", "memo": "【休業中】チャモロ料理の有名店。Googleマップ上で臨時休業", "match": "手入力", "km": 2.83}, {"name": "Mosa's Joint", "cat": "food", "lat": 13.476924, "lon": 144.747996, "url": "https://maps.google.com/?cid=7413193141015579438", "time": "毎日 11:00〜21:00", "memo": "ハガニアのクラフトバーガー。評価4.6。子連れ向きの表示あり", "match": "手入力", "km": 7.93}, {"name": "Ha Bros", "cat": "food", "lat": 13.509871, "lon": 144.806273, "url": "https://maps.google.com/?cid=3098950027079486208", "time": "水〜土 11:00〜（火休）", "memo": "タモンのハンバーガー店", "match": "手入力", "km": 1.35}, {"name": "Jamaican Grill", "cat": "food", "lat": 13.502372, "lon": 144.79431, "url": "https://maps.google.com/?cid=939775062653932849", "time": "毎日 10:00〜21:00", "memo": "タモンのジャマイカ料理（ジャークチキン）", "match": "手入力", "km": 2.46}, {"name": "Crust Pizzeria & Osteria", "cat": "food", "lat": 13.477247, "lon": 144.761765, "url": "https://maps.google.com/?cid=9387178256341011158", "time": "毎日 16:30/17:00〜22:00", "memo": "タモンの窯焼きピザ。夕食向け", "match": "手入力", "km": 6.82}, {"name": "Majesty Chinese Cuisine", "cat": "food", "lat": 13.502292, "lon": 144.794897, "url": "https://maps.google.com/?cid=17675050470014610760", "time": "昼10:30〜14:00・夜17:30〜21:30", "memo": "タモン（ロイヤルオーキッド内）の中華。餃子・点心。木曜は夜のみ", "match": "手入力", "km": 2.44}, {"name": "Chapter One", "cat": "food", "lat": 13.519927, "lon": 144.817818, "url": "https://maps.google.com/?cid=358785632407176962", "time": "毎日 10:00〜20:00（金土〜21:00）", "memo": "デデドの中華（餃子）", "match": "手入力", "km": 1.42}, {"name": "ABCストア（タモン・サンズ・プラザ）", "cat": "need", "lat": 13.509618, "lon": 144.805677, "url": "https://maps.google.com/?cid=12982910524816666085", "time": "毎日 7:30〜23:00", "memo": "おむつ・水・軽食。タモンに多数", "match": "手入力", "km": 1.37}, {"name": "ABCストア（タモン北・ニッコー寄り）", "cat": "need", "lat": 13.517661, "lon": 144.807999, "url": "https://maps.google.com/?cid=42119428675594025", "time": "毎日 8:00〜22:00", "memo": "ニッコーから最寄りのABC", "match": "手入力", "km": 0.58}, {"name": "ペイレス・スーパーマーケット（マイクロネシアモール前）", "cat": "need", "lat": 13.519336, "lon": 144.817237, "url": "https://maps.google.com/?cid=10863357101493705256", "time": "24時間", "memo": "24時間スーパー。おむつ・粉ミルク・ベビーフード", "match": "手入力", "km": 1.37}, {"name": "ペイレス・スーパーマーケット（タムニン・オカ）", "cat": "need", "lat": 13.49818, "lon": 144.776303, "url": "https://maps.google.com/?cid=2598715029910988881", "time": "24時間", "memo": "24時間スーパー。薬局・小児科が近い", "match": "手入力", "km": 4.07}, {"name": "Cost-U-Less", "cat": "need", "lat": 13.510497, "lon": 144.822296, "url": "https://maps.google.com/?cid=17406523006986442797", "time": "毎日 7:00〜22:00", "memo": "大容量の倉庫型スーパー", "match": "手入力", "km": 2.27}, {"name": "Guam Rexall Drugs", "cat": "need", "lat": 13.486016, "lon": 144.781675, "url": "https://maps.google.com/?cid=16013192464987895940", "time": "月〜土 9:00〜18:00（日休）", "memo": "タムニンの薬局", "match": "手入力", "km": 4.72}, {"name": "グアム旅行者クリニック", "cat": "need", "lat": 13.509388, "lon": 144.804804, "url": "https://maps.google.com/?cid=2275204056835583971", "time": "月〜金 9:00〜12:00・13:00〜17:00（土日休）", "memo": "タモンの日本語対応クリニック。保険のキャッシュレス対応は要確認", "match": "手入力", "km": 1.4}, {"name": "MedFirst Pediatrics", "cat": "need", "lat": 13.496578, "lon": 144.782151, "url": "https://maps.google.com/?cid=9463621794315107802", "time": "月〜金 9:00〜18:00（昼休み）／土〜17:00／日〜13:00", "memo": "タムニンの小児科", "match": "手入力", "km": 3.74}, {"name": "One Love Pediatrics", "cat": "need", "lat": 13.50387, "lon": 144.808273, "url": "https://maps.google.com/?cid=8325071524284777049", "time": "月〜金 9:00〜17:00（昼休み）／土午前", "memo": "ハーモンの小児科", "match": "手入力", "km": 2.04}, {"name": "グアム・リージョナル・メディカル・シティ", "cat": "need", "lat": 13.525204, "lon": 144.822945, "url": "https://maps.google.com/?cid=8438381653393727445", "time": "24時間", "memo": "24時間救急（ER）。タモンから車10分", "match": "手入力", "km": 1.99}, {"name": "グアム・メモリアル病院", "cat": "need", "lat": 13.504614, "lon": 144.775022, "url": "https://maps.google.com/?cid=5063634552045367004", "time": "24時間", "memo": "公立病院・24時間救急", "match": "手入力", "km": 3.76}], "tiles": "osm"}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const FLAGLABEL=CFG.flag_label||'コース';
+const show={};ORDER.forEach(c=>{show[c]=true;});
+let courseOnly=false;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const instaUrl=v=>/^https?:/.test(v)?v:'https://www.instagram.com/'+String(v).replace(/^@/,'')+'/';
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+const isMobile=()=>window.matchMedia('(max-width:760px)').matches;
+const hasFlag=p=>p.flag!=null&&p.flag!=='';
+// ---- ピンの形：区分の shape / icon / size、地点ごとの上書き、コースは番号付きのピン ----
+const SH={circle:'<circle cx="16" cy="16" r="13"/>',square:'<rect x="3.5" y="3.5" width="25" height="25" rx="5"/>',
+  diamond:'<path d="M16 1.8 30.2 16 16 30.2 1.8 16z"/>',triangle:'<path d="M16 2.5 30.5 28.5H1.5z"/>',
+  hex:'<path d="M16 1.8 28.6 9v14L16 30.2 3.4 23V9z"/>',
+  star:'<path d="m16 1.6 4.3 9 9.9 1.3-7.3 6.9 1.9 9.8L16 23.8l-8.8 4.8 1.9-9.8-7.3-6.9 9.9-1.3z"/>'};
+// 名前から自動で付けるアイコン（地点にも区分にも指定が無いとき）
+const AUTO=[[/駅(（.*）)?$|駅前$/,'square','🚉',26],[/公園|緑地|庭園|植物園/,'circle','🌳',24],[/神社|八幡|稲荷|神明宮|大社/,'diamond','⛩',24],
+  [/寺(（.*）)?$|大仏/,'diamond','卍',22],[/授乳|ベビー休憩|赤ちゃん休憩/,'square','🍼',22],[/駐車場|パーキング|タイムズ/,'square','P',24]];
+function sty(p){const c=CATS[p.cat]||{};let a=null;
+  if(p.icon==null&&p.shape==null&&!c.icon&&!c.shape&&p.name)a=AUTO.find(r=>r[0].test(p.name));
+  return{shape:p.shape||c.shape||(a?a[1]:'circle'),icon:p.icon!=null?p.icon:(c.icon||(a?a[2]:'')),
+  size:+(p.size||c.size||(a?a[3]:22)),color:p.color||c.color||'#888'};}
+function svgOf(p,small){const s=sty(p);
+  if(hasFlag(p)&&!small){const n=esc(p.flag),w=32,h=42,fs=String(p.flag).length>1?11.5:14;
+    return{w,h,anchor:[w/2,h],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 32 42">'+
+      '<path d="M16 41C14.5 36 2 27 2 16a14 14 0 0 1 28 0c0 11-12.5 20-14 25z" fill="'+s.color+'" stroke="#7C2D12" stroke-width="2"/>'+
+      '<circle cx="16" cy="16" r="10.5" fill="#fff"/><text x="16" y="'+(16+fs*0.36)+'" font-size="'+fs+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#7C2D12">'+n+'</text></svg>'};}
+  const z=small?15:s.size,ic=small?'':s.icon,ty=s.shape==='triangle'?24:21.5;
+  const txt=ic?'<text x="16" y="'+ty+'" font-size="'+(ic.length>1&&/^[\x00-\x7F]+$/.test(ic)?11:15)+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#fff">'+esc(ic)+'</text>':'';
+  return{w:z,h:z,anchor:[z/2,z/2],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+z+'" height="'+z+'" viewBox="0 0 32 32"><g fill="'+s.color+'" stroke="#fff" stroke-width="2.5">'+(SH[s.shape]||SH.circle)+'</g>'+txt+'</svg>'};}
+const catSw=c=>svgOf({cat:c},true).svg;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  if(hasFlag(p))h+='<span class="tag" style="background:#C2410C">'+esc(FLAGLABEL)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  if(p.insta)h+='<a href="'+esc(instaUrl(p.insta))+'" target="_blank" rel="noopener">Instagram</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- 一覧（スマホは下のシート） ----
+const list=document.getElementById('list'), q=document.getElementById('q'), side=document.getElementById('side');
+PTS.forEach((p,i)=>p._i=i);
+const FL=PTS.filter(hasFlag).sort((a,b)=>(parseFloat(a.flag)||0)-(parseFloat(b.flag)||0));
+const sorted=PTS.filter(p=>!hasFlag(p)).sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const visible=p=>show[p.cat]&&(!courseOnly||hasFlag(p));
+let api=null, cur=null;
+function sheet(st){side.classList.remove('half','full');if(st)side.classList.add(st);
+  document.getElementById('arr').textContent=st==='full'?'▼':'▲';}
+document.getElementById('handle').onclick=e=>{if(e.target.closest('button'))return;
+  sheet(side.classList.contains('full')?'':side.classList.contains('half')?'full':'half');};
+document.getElementById('hd').onclick=()=>{if(isMobile())document.getElementById('hd').classList.toggle('open');};
+function itemEl(p){const d=document.createElement('div');d.className='item'+(hasFlag(p)?' fl':'')+(cur===p._i?' on':'');d.id='it'+p._i;
+  d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw">'+svgOf(p,true).svg+'</span> <b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+  d.onclick=()=>select(p._i,true);return d;}
+function renderList(){list.innerHTML='';const s=q.value.trim();let n=0;
+  const ok=p=>{if(!visible(p))return false;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');return !s||txt.includes(s);};
+  const a=FL.filter(ok),b=sorted.filter(ok);
+  if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='🚩 '+FLAGLABEL+'（'+a.length+'）';list.appendChild(g);a.forEach(p=>list.appendChild(itemEl(p)));}
+  if(b.length){if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='ほかの地点（'+b.length+'）';list.appendChild(g);}b.forEach(p=>list.appendChild(itemEl(p)));}
+  document.getElementById('cnt').textContent='一覧 '+(a.length+b.length)+'件';}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!isMobile())it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(fromList&&isMobile())sheet('');
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw">'+catSw(c)+'</span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+function setAll(v){ORDER.forEach(c=>show[c]=v);cw.querySelectorAll('input').forEach(i=>i.checked=v);renderList();api&&api.filter();}
+document.getElementById('catOff').onclick=()=>setAll(false);document.getElementById('catOn').onclick=()=>setAll(true);
+// 「🚩コースだけ」ボタン（コースの地点があるときだけ）
+const cbs=[];
+if(FL.length)['courseD','courseM'].forEach(id=>{const b=document.createElement('button');b.type='button';b.className='course';
+  b.textContent='🚩 '+FLAGLABEL+'だけ（'+FL.length+'）';b.onclick=e=>{e.stopPropagation();courseOnly=!courseOnly;
+    cbs.forEach(x=>{x.classList.toggle('on',courseOnly);x.textContent=(courseOnly?'すべて表示に戻す':'🚩 '+FLAGLABEL+'だけ（'+FL.length+'）');});
+    renderList();if(api){api.filter();api.fit(courseOnly?FL.filter(p=>show[p.cat]):null);}};
+  document.getElementById(id).appendChild(b);cbs.push(b);});
+q.oninput=renderList;renderList();
+const LINE=FL.filter(p=>p.line!==false);
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:!isMobile(),gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  if(LINE.length>1)new g.Polyline({map,path:LINE.map(p=>({lat:p.lat,lng:p.lon})),strokeOpacity:0,clickable:false,
+    icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:.85,strokeColor:'#C2410C',scale:3},offset:'0',repeat:'12px'}]});
+  const mk=PTS.map(p=>{const s=svgOf(p);const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,zIndex:hasFlag(p)?600:(sty(p).size>22?300:100),
+      icon:{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s.svg),scaledSize:new g.Size(s.w,s.h),anchor:new g.Point(s.anchor[0],s.anchor[1])}});
+    m.addListener('click',()=>select(p._i,false));return m;});
+  function fit(arr){const b=new g.LatLngBounds();if(!arr)b.extend({lat:HOME.lat,lng:HOME.lon});(arr||PTS).forEach(p=>b.extend({lat:p.lat,lng:p.lon}));
+    map.fitBounds(b,isMobile()?{top:30,left:20,right:20,bottom:30}:40);}
+  fit(null);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(visible(PTS[i])));},fit};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    let layers, tileName;
+    if(CFG.tiles==='osm'){ /* 日本の外（国土地理院タイルが無い）：OpenStreetMap＋Esri航空写真 */
+      const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'}).addTo(map);
+      const esri=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles &copy; Esri'});
+      layers={'地図（OpenStreetMap）':osm,'航空写真（Esri）':esri}; tileName='OpenStreetMap';
+    }else{
+      const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+      const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+      const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+      layers={'標準地図':std,'淡色地図':pale,'航空写真':photo}; tileName='国土地理院タイル';
+    }
+    L.control.layers(layers).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    if(LINE.length>1)L.polyline(LINE.map(p=>[p.lat,p.lon]),{color:'#C2410C',weight:3,opacity:.85,dashArray:'6 7',interactive:false}).addTo(map);
+    const mk=PTS.map(p=>{const s=svgOf(p);return L.marker([p.lat,p.lon],{title:p.name,zIndexOffset:hasFlag(p)?1000:(sty(p).size>22?300:0),
+        icon:L.divIcon({html:s.svg,className:'',iconSize:[s.w,s.h],iconAnchor:s.anchor,popupAnchor:[0,hasFlag(p)?-s.h+4:-s.h/2]})})
+      .bindPopup(card(p,false),{maxWidth:320,autoPanPaddingBottomRight:[10,70]}).on('click',()=>select(p._i,false)).addTo(map);});
+    function fit(arr){const pts=(arr||PTS).map(p=>[p.lat,p.lon]);if(!arr)pts.push([HOME.lat,HOME.lon]);map.fitBounds(L.latLngBounds(pts),{padding:[30,30]});}
+    fit(null);
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>visible(PTS[i])?m.addTo(map):m.remove());},fit};
+    document.getElementById('engine').textContent='地図：'+tileName+'＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

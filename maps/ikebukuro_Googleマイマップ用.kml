@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>池袋マップ</name>
+<Style id="s-course"><IconStyle><color>ff0C41C2</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-rest"><IconStyle><color>ff7727DB</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-dinner"><IconStyle><color>ff0953B4</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-sweet"><IconStyle><color>ffED3A7C</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-wagashi"><IconStyle><color>ff3D8015</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-cafe"><IconStyle><color>ff90740E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-park"><IconStyle><color>ff4AA316</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>今日の要所</name>
+<Placemark><name>🚩1 東池袋駅（スタート）</name><styleUrl>#s-course</styleUrl><description>11/2（月）：16:00／メモ：有楽町線。ここから地下通路でサンシャインシティへ（ベビーカーはエレベーター）／東京都豊島区東池袋4丁目／東池袋駅から直線0.0km／https://www.tokyometro.jp/station/higashi-ikebukuro/</description><Point><coordinates>139.719,35.72602,0</coordinates></Point></Placemark>
+<Placemark><name>🚩2 東京都パスポートセンター 池袋</name><styleUrl>#s-course</styleUrl><description>11/2（月）：9:00〜19:00／メモ：ワールドインポートマート5F。月曜は申請・受領とも9:00〜19:00（東京都生活文化局 2026/11/2確認）。受領は受理票と手数料。子どものパスポートは本人（赤ちゃん）も一緒に／東京都豊島区東池袋3-1-3 ワールドインポートマート5F／東池袋駅から直線0.33km／https://www.seikatubunka.metro.tokyo.lg.jp/passport/access/0000000427</description><Point><coordinates>139.72008,35.72881,0</coordinates></Point></Placemark>
+<Placemark><name>🚩3 サンシャイン水族館</name><styleUrl>#s-course</styleUrl><description>11/2（月）：10:00〜18:00（最終17:30）／メモ：今日（11/2）は10:00〜18:00・最終入場17:30（公式の営業時間データ 2026/11/2取得）。大人2,600〜3,200円（日により変動）、料金表は4才以上から（3才以下は無料扱いと読める・未確認）。18:15〜21:00は夜間特別営業「性いっぱい展」（11/3まで、最終入場20:30）。チケットは公式→asoviewで事前購入可／東京都豊島区東池袋3-1-3 ワールドインポートマートビル屋上／東池袋駅から直線0.34km／https://sunshinecity.jp/aquarium/ticket/</description><Point><coordinates>139.72016,35.72893,0</coordinates></Point></Placemark>
+<Placemark><name>🚩6 池袋駅（ゴール・西武池袋線）</name><styleUrl>#s-course</styleUrl><description>メモ：西武池袋線 各停で中村橋へ乗換なし（中村橋は各停のみ停車）。副都心線の地下鉄は別改札／東京都豊島区南池袋1-28／東池袋駅から直線0.76km／https://www.seiburailway.jp/railwayinfo/station/ikebukuro/</description><Point><coordinates>139.7115,35.7292,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>授乳室・休憩</name>
+<Placemark><name>サンシャインシティ アルパ 授乳室</name><styleUrl>#s-rest</styleUrl><description>11/2（月）：10:00〜20:00／3Fは〜22:30／メモ：ベビールーム。アルパB1（コクミン近く）・2F（木村コーヒー店前）10:00〜20:00、3F（広小路南側）10:00〜22:30。ベビーカー貸出は10:00〜20:00（1か月〜2歳・無料）／東京都豊島区東池袋3-1-2 アルパ B1・2F・3F／東池袋駅から直線0.34km／https://sunshinecity.jp/information/guide_baby.html</description><Point><coordinates>139.7189,35.72905,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>夕食</name>
+<Placemark><name>🚩4 竈門ご飯一穀サンシャインシティ</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：11時00分～22時00分／メモ：水族館から同じ建物で移動なし。隣に授乳室（アルパ3F、〜22:30）。羽釜ごはんの定食　Google ★4.6（1020件）／東京都豊島区東池袋３丁目１−２ サンシャインシティ専門店街アルパ 3階／東池袋駅から直線0.33km／https://www.instagram.com/ikkoku.sunshinecity</description><Point><coordinates>139.7195415,35.7289709,0</coordinates></Point></Placemark>
+<Placemark><name>餃子の王将 池袋東口店</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：10時00分～22時30分／メモ：夫の好物。駅へ向かう途中　Google ★3.6（1860件）／東京都豊島区南池袋２丁目２７−５／東池袋駅から直線0.55km／http://map.ohsho.co.jp/b/ohsho/info/2133/?utm_source=google&amp;utm_medium=map&amp;utm_campaign=profile</description><Point><coordinates>139.7136473,35.7283324,0</coordinates></Point></Placemark>
+<Placemark><name>TOMBOY 池袋駅東口店</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：11時00分～23時00分／メモ：南インドのタンドリー。子連れ可・テラス　Google ★4.7（3590件）／東京都豊島区南池袋３丁目１３−１７ MASHITA5 2F／東池袋駅から直線0.59km／http://www.tomboy106.com/ike-indian/#1</description><Point><coordinates>139.71251909999998,35.726166000000006,0</coordinates></Point></Placemark>
+<Placemark><name>ダッキーダック 池袋アルパ店</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：11時00分～22時00分／メモ：アルパ3F。生パスタ・オムライス。子連れ可　Google ★3.6（292件）／東京都豊島区東池袋３丁目１−２ サンシャインアルパ 3F／東池袋駅から直線0.33km／https://www.towafood-net.co.jp/shops/1000-2/</description><Point><coordinates>139.71934679999998,35.728944,0</coordinates></Point></Placemark>
+<Placemark><name>サクラカフェ＆レストラン池袋</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：3時30分～2時00分／メモ：多国籍・テラス。犬可　Google ★4（1240件）／東京都豊島区池袋２丁目３９−１０ サクラホテル池袋 別館 1F／東池袋駅から直線1.25km／https://www.sakura-cafe.asia/ikebukuro/</description><Point><coordinates>139.7086077,35.733505099999995,0</coordinates></Point></Placemark>
+<Placemark><name>エルトリート 池袋西口店</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：11時00分～23時00分／メモ：メキシコ料理（西口・駅を越えた先）。子連れ可　Google ★3.9（940件）／東京都豊島区西池袋１丁目１０−１０ 東武アネックススパイスビル 3F／東池袋駅から直線0.98km／https://maps.zensho.co.jp/jp/detail/3907.html</description><Point><coordinates>139.7090231,35.7296055,0</coordinates></Point></Placemark>
+<Placemark><name>Halal MAD CHEFs 池袋サンシャイン通り店</name><styleUrl>#s-dinner</styleUrl><description>11/2（月）：11時00分～23時00分／メモ：ケバブ。テイクアウト向き　Google ★4.2（273件）／東京都豊島区東池袋１丁目１４−１２ フォーマーアレンジ 1階／東池袋駅から直線0.6km／https://www.hotpepper.jp/strJ003498519/</description><Point><coordinates>139.7152547,35.7305311,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>洋菓子・パン（テイクアウト）</name>
+<Placemark><name>🚩5 タカセ 池袋本店</name><styleUrl>#s-sweet</styleUrl><description>11/2（月）：9時00分～21時00分／メモ：駅へ向かう途中（東口）。昭和の洋菓子店、2Fは喫茶。21時まで → 妻用のケーキを持ち帰り　Google ★4（2410件）／東京都豊島区東池袋１丁目１−４ タカセセントラルビル／東池袋駅から直線0.69km／http://www.takase-yogashi.com/</description><Point><coordinates>139.7131301,35.7299688,0</coordinates></Point></Placemark>
+<Placemark><name>Princess Tart 池袋</name><styleUrl>#s-sweet</styleUrl><description>11/2（月）：10時00分～19時00分／メモ：タルト。19時まで → 水族館の後なら急ぐ　Google ★4.6（723件）／東京都豊島区東池袋１丁目２６−１ スコレサイト池袋 1階／東池袋駅から直線0.41km／https://princess-tart.com/</description><Point><coordinates>139.71623470000003,35.7289175,0</coordinates></Point></Placemark>
+<Placemark><name>ミフネ洋菓子店</name><styleUrl>#s-sweet</styleUrl><description>11/2（月）：7時00分～19時00分／メモ：パン・洋菓子。東池袋駅の北側　Google ★4.5（73件）／東京都豊島区東池袋５丁目２９−１／東池袋駅から直線0.42km／https://boulanger-mifune.com/</description><Point><coordinates>139.7236517,35.7265538,0</coordinates></Point></Placemark>
+<Placemark><name>ア・ラ・カンパーニュ東武池袋店</name><styleUrl>#s-sweet</styleUrl><description>11/2（月）：10時00分～20時00分／メモ：駅の東武B1。帰りの改札そば　Google ★3.9（313件）／東京都豊島区西池袋１丁目１−２５ 東武百貨店池袋店 Ｂ１Ｆ／東池袋駅から直線0.92km／http://www.alacampagne.jp/?utm_source=google&amp;utm_medium=map</description><Point><coordinates>139.7102329,35.7302986,0</coordinates></Point></Placemark>
+<Placemark><name>エシレ・パティスリー オ ブール 西武池袋店</name><styleUrl>#s-sweet</styleUrl><description>11/2（月）：10時00分～20時00分／メモ：西武B1。西武線の改札そば　Google ★4.2（129件）／東京都豊島区南池袋１丁目２８−１ 西武池袋本店 B1F スイーツ&amp;ギフトフロア／東池袋駅から直線0.75km／https://www.kataoka.com/echire/patisserieaubeurre/ikebukuro/</description><Point><coordinates>139.711515,35.7288782,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>和菓子（夫用）</name>
+<Placemark><name>紅谷</name><styleUrl>#s-wagashi</styleUrl><description>11/2（月）：8時30分～18時00分／メモ：南池袋の和菓子店（18時まで）。決済未確認　Google ★4.3（114件）／東京都豊島区南池袋２丁目１１−４ 紅谷菓子舗 ‎／東池袋駅から直線0.46km／https://maps.google.com/?cid=7335851804278097011</description><Point><coordinates>139.71387900000002,35.7256493,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>カフェ</name>
+<Placemark><name>Espresso D Works 池袋</name><styleUrl>#s-cafe</styleUrl><description>11/2（月）：11時00分～23時00分／メモ：パンケーキで映え。キュープラザ2F　Google ★4.4（2318件）／東京都豊島区東池袋１丁目３０−３ キュープラザ池袋 2F／東池袋駅から直線0.59km／https://dream-on-company.com/</description><Point><coordinates>139.7164291,35.7309455,0</coordinates></Point></Placemark>
+<Placemark><name>珈琲茶館 集 池袋店</name><styleUrl>#s-cafe</styleUrl><description>11/2（月）：10時00分～22時00分／メモ：サイフォンコーヒー。地下　Google ★4（714件）／東京都豊島区東池袋１丁目２−２ 東池ビル 東池ビルディングB1F／東池袋駅から直線0.63km／https://shu-group.studio.site/</description><Point><coordinates>139.7137297,35.7297933,0</coordinates></Point></Placemark>
+<Placemark><name>FABRIC（ファブリック）</name><styleUrl>#s-cafe</styleUrl><description>11/2（月）：8時00分～19時00分／メモ：こぢんまり。19時まで　Google ★4（199件）／東京都豊島区南池袋２丁目４３−１６／東池袋駅から直線0.09km／http://www.fabric-coffee-sandwich.com/</description><Point><coordinates>139.7181019,35.726442999999996,0</coordinates></Point></Placemark>
+<Placemark><name>EAT GOOD PLACE</name><styleUrl>#s-cafe</styleUrl><description>11/2（月）：8時00分～18時00分／メモ：公園の中のカフェ。18時まで。子連れ・犬・テラス　Google ★4（532件）／東京都豊島区東池袋４丁目４２−１ IKE•SUNPARK イケ・サンパーク／東池袋駅から直線0.29km／https://www.epietriz.com/restaurants/eat-good-place</description><Point><coordinates>139.721754,35.727311,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>公園</name>
+<Placemark><name>東池袋中央公園</name><styleUrl>#s-park</styleUrl><description>メモ：東池袋駅とサンシャインの間。時間調整に／東京都豊島区東池袋3-1-6／東池袋駅から直線0.46km／https://www.city.toshima.lg.jp/</description><Point><coordinates>139.71869,35.73016,0</coordinates></Point></Placemark>
+<Placemark><name>IKE·SUNPARK (としまみどりの防災公園)</name><styleUrl>#s-park</styleUrl><description>11/2（月）：5時00分～22時00分／メモ：芝生の広い公園。日没後は暗い　Google ★4.3（680件）／東京都豊島区東池袋４丁目４２／東池袋駅から直線0.35km／https://ikesunpark.jp/</description><Point><coordinates>139.7223732,35.7276209,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

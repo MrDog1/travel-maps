@@ -1,0 +1,207 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<script>/* LINEのアプリ内ブラウザで開いたら、いつものブラウザ（Safari/Chrome）で開き直す */
+(function(){try{if(/ Line\//i.test(navigator.userAgent)&&location.protocol.indexOf("http")===0&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split("#")[0]+(location.search?"&":"?")+"openExternalBrowser=1"+location.hash);}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>池袋マップ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#F4F2EE;--paper:#fff;--ink:#1D2328;--ink2:#4C565E;--mute:#87909A;--line:#DDD8CF;--hi:#FFF6DA;--flag:#C2410C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}}
+:root[data-theme="dark"]{--bg:#12171B;--paper:#1A2228;--ink:#E7EBEE;--ink2:#B5BFC7;--mute:#7F8A94;--line:#2C3740;--hi:#2E2A1C;--flag:#F97316}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;display:flex;flex-direction:column}
+header{padding:12px 16px 8px;border-bottom:1px solid var(--line);background:var(--paper)}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{font-size:13px;color:var(--ink2);margin:2px 0 0}
+.engine{font-size:11.5px;color:var(--mute)}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-height:300px}
+aside{width:380px;max-width:42vw;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.handle{display:none}
+.tools{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.tools input[type=search]{font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;user-select:none;white-space:nowrap}
+.cats input{margin:0}
+.catbtns{display:flex;gap:6px;flex-wrap:wrap}.catbtns button{font:inherit;font-size:12px;padding:2px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+button.course{font:inherit;font-size:13px;font-weight:700;padding:3px 12px;border:1.5px solid var(--flag);color:var(--flag);background:transparent;border-radius:999px;cursor:pointer;white-space:nowrap}
+button.course.on{background:var(--flag);color:#fff}
+.sw{display:inline-flex;vertical-align:middle}
+.sw svg{display:block}
+#list{overflow-y:auto;flex:1}
+.grp{padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1}
+.item{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.5}
+.item:hover{background:var(--bg)}
+.item.on{background:var(--hi)}
+.item.fl{border-left:4px solid var(--flag);padding-left:8px}
+.item b{font-size:14px}
+.item .meta{color:var(--ink2)}
+.item .km{float:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.iw{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;line-height:1.55;max-width:300px;color:#1D2328}
+.iw b{font-size:15px}
+.iw .tag{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;margin:2px 4px 4px 0}
+.iw .row{margin:1px 0}.iw .lab{color:#6b7680}
+.iw .links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.iw a,.iw button.sv{color:#1a5fb4;font:inherit;font-size:12.5px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+/* スマホ：地図を画面いっぱいに、一覧は下から引き出すシート */
+@media (max-width:760px){
+  html,body{height:100%;overflow:hidden}
+  body{height:100dvh}
+  header{padding:6px 12px 5px;cursor:pointer}
+  h1{font-size:15px}
+  .sub{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header.open .sub{white-space:normal}
+  .engine{display:none}header.open .engine{display:block}
+  main{position:relative;flex:1}
+  #map{position:absolute;left:0;right:0;top:0;bottom:58px;min-height:0}
+  aside{position:absolute;left:0;right:0;bottom:0;width:auto;max-width:none;height:calc(58px + env(safe-area-inset-bottom));border-left:0;border-radius:14px 14px 0 0;box-shadow:0 -3px 14px rgba(0,0,0,.18);z-index:1000;transition:height .22s ease}
+  aside.half{height:52%}aside.full{height:90%}
+  .handle{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;cursor:pointer;flex:none;position:relative;user-select:none}
+  .handle .bar{position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--line)}
+  .handle .cnt{flex:1;font-size:13.5px;font-weight:700;text-align:right}
+  .handle .arr{font-size:13px;color:var(--ink2);width:16px;text-align:center}
+  aside:not(.half):not(.full) .tools,aside:not(.half):not(.full) #list{display:none}
+  .tools{padding:4px 12px 8px;gap:6px}
+  .tools .course{display:none}
+  .cats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .cats label{flex:none}
+}
+</style></head><body>
+<header id="hd"><h1>池袋マップ</h1><p class="sub">営業時間は月曜・2026/11/2取得</p><div class="engine" id="engine"></div></header>
+<main><div id="map"></div>
+<aside id="side"><div class="handle" id="handle"><span class="bar"></span><span id="courseM"></span><span class="cnt" id="cnt"></span><span class="arr" id="arr">▲</span></div>
+<div class="tools"><input type="search" id="q" placeholder="名前・メモで絞り込み"><div class="cats" id="cats"></div><div class="catbtns"><span id="courseD"></span><button type="button" id="catOff">全部外す</button><button type="button" id="catOn">全部表示</button></div></div><div id="list"></div></aside></main>
+<script>
+const CFG={"title": "池袋マップ", "subtitle": "営業時間は月曜・2026/11/2取得", "home": {"name": "東池袋駅", "lat": 35.72602, "lon": 139.719, "match": "手入力"}, "rings_km": [0.5, 1], "categories": {"course": {"label": "今日の要所", "color": "#C2410C", "shape": "diamond", "icon": "★"}, "rest": {"label": "授乳室・休憩", "color": "#DB2777", "icon": "🍼"}, "dinner": {"label": "夕食", "color": "#B45309", "icon": "🍴"}, "sweet": {"label": "洋菓子・パン（テイクアウト）", "color": "#7C3AED", "icon": "🍰"}, "wagashi": {"label": "和菓子（夫用）", "color": "#15803D", "icon": "🍡"}, "cafe": {"label": "カフェ", "color": "#0E7490", "icon": "☕"}, "park": {"label": "公園", "color": "#16A34A", "icon": "🌳"}}, "fields": [["time", "11/2（月）"], ["memo", "メモ"]], "flag_label": "今日のコース", "points": [{"name": "東池袋駅（スタート）", "addr": "東京都豊島区東池袋4丁目", "cat": "course", "lat": 35.72602, "lon": 139.719, "time": "16:00", "memo": "有楽町線。ここから地下通路でサンシャインシティへ（ベビーカーはエレベーター）", "url": "https://www.tokyometro.jp/station/higashi-ikebukuro/", "flag": 1, "match": "手入力", "km": 0.0}, {"name": "東京都パスポートセンター 池袋", "addr": "東京都豊島区東池袋3-1-3 ワールドインポートマート5F", "cat": "course", "lat": 35.72881, "lon": 139.72008, "time": "9:00〜19:00", "memo": "ワールドインポートマート5F。月曜は申請・受領とも9:00〜19:00（東京都生活文化局 2026/11/2確認）。受領は受理票と手数料。子どものパスポートは本人（赤ちゃん）も一緒に", "url": "https://www.seikatubunka.metro.tokyo.lg.jp/passport/access/0000000427", "flag": 2, "match": "手入力", "km": 0.33}, {"name": "サンシャイン水族館", "addr": "東京都豊島区東池袋3-1-3 ワールドインポートマートビル屋上", "cat": "course", "lat": 35.72893, "lon": 139.72016, "time": "10:00〜18:00（最終17:30）", "memo": "今日（11/2）は10:00〜18:00・最終入場17:30（公式の営業時間データ 2026/11/2取得）。大人2,600〜3,200円（日により変動）、料金表は4才以上から（3才以下は無料扱いと読める・未確認）。18:15〜21:00は夜間特別営業「性いっぱい展」（11/3まで、最終入場20:30）。チケットは公式→asoviewで事前購入可", "url": "https://sunshinecity.jp/aquarium/ticket/", "flag": 3, "match": "手入力", "km": 0.34}, {"name": "竈門ご飯一穀サンシャインシティ", "addr": "東京都豊島区東池袋３丁目１−２ サンシャインシティ専門店街アルパ 3階", "cat": "dinner", "lat": 35.7289709, "lon": 139.7195415, "time": "11時00分～22時00分", "memo": "水族館から同じ建物で移動なし。隣に授乳室（アルパ3F、〜22:30）。羽釜ごはんの定食　Google ★4.6（1020件）", "url": "https://www.instagram.com/ikkoku.sunshinecity", "flag": 4, "match": "手入力", "km": 0.33}, {"name": "タカセ 池袋本店", "addr": "東京都豊島区東池袋１丁目１−４ タカセセントラルビル", "cat": "sweet", "lat": 35.7299688, "lon": 139.7131301, "time": "9時00分～21時00分", "memo": "駅へ向かう途中（東口）。昭和の洋菓子店、2Fは喫茶。21時まで → 妻用のケーキを持ち帰り　Google ★4（2410件）", "url": "http://www.takase-yogashi.com/", "flag": 5, "match": "手入力", "km": 0.69}, {"name": "池袋駅（ゴール・西武池袋線）", "addr": "東京都豊島区南池袋1-28", "cat": "course", "lat": 35.7292, "lon": 139.7115, "time": "", "memo": "西武池袋線 各停で中村橋へ乗換なし（中村橋は各停のみ停車）。副都心線の地下鉄は別改札", "url": "https://www.seiburailway.jp/railwayinfo/station/ikebukuro/", "flag": 6, "match": "手入力", "km": 0.76}, {"name": "サンシャインシティ アルパ 授乳室", "addr": "東京都豊島区東池袋3-1-2 アルパ B1・2F・3F", "cat": "rest", "lat": 35.72905, "lon": 139.7189, "time": "10:00〜20:00／3Fは〜22:30", "memo": "ベビールーム。アルパB1（コクミン近く）・2F（木村コーヒー店前）10:00〜20:00、3F（広小路南側）10:00〜22:30。ベビーカー貸出は10:00〜20:00（1か月〜2歳・無料）", "url": "https://sunshinecity.jp/information/guide_baby.html", "match": "手入力", "km": 0.34}, {"name": "餃子の王将 池袋東口店", "addr": "東京都豊島区南池袋２丁目２７−５", "cat": "dinner", "lat": 35.7283324, "lon": 139.7136473, "time": "10時00分～22時30分", "memo": "夫の好物。駅へ向かう途中　Google ★3.6（1860件）", "url": "http://map.ohsho.co.jp/b/ohsho/info/2133/?utm_source=google&utm_medium=map&utm_campaign=profile", "match": "手入力", "km": 0.55}, {"name": "TOMBOY 池袋駅東口店", "addr": "東京都豊島区南池袋３丁目１３−１７ MASHITA5 2F", "cat": "dinner", "lat": 35.726166000000006, "lon": 139.71251909999998, "time": "11時00分～23時00分", "memo": "南インドのタンドリー。子連れ可・テラス　Google ★4.7（3590件）", "url": "http://www.tomboy106.com/ike-indian/#1", "match": "手入力", "km": 0.59}, {"name": "ダッキーダック 池袋アルパ店", "addr": "東京都豊島区東池袋３丁目１−２ サンシャインアルパ 3F", "cat": "dinner", "lat": 35.728944, "lon": 139.71934679999998, "time": "11時00分～22時00分", "memo": "アルパ3F。生パスタ・オムライス。子連れ可　Google ★3.6（292件）", "url": "https://www.towafood-net.co.jp/shops/1000-2/", "match": "手入力", "km": 0.33}, {"name": "サクラカフェ＆レストラン池袋", "addr": "東京都豊島区池袋２丁目３９−１０ サクラホテル池袋 別館 1F", "cat": "dinner", "lat": 35.733505099999995, "lon": 139.7086077, "time": "3時30分～2時00分", "memo": "多国籍・テラス。犬可　Google ★4（1240件）", "url": "https://www.sakura-cafe.asia/ikebukuro/", "match": "手入力", "km": 1.25}, {"name": "エルトリート 池袋西口店", "addr": "東京都豊島区西池袋１丁目１０−１０ 東武アネックススパイスビル 3F", "cat": "dinner", "lat": 35.7296055, "lon": 139.7090231, "time": "11時00分～23時00分", "memo": "メキシコ料理（西口・駅を越えた先）。子連れ可　Google ★3.9（940件）", "url": "https://maps.zensho.co.jp/jp/detail/3907.html", "match": "手入力", "km": 0.98}, {"name": "Halal MAD CHEFs 池袋サンシャイン通り店", "addr": "東京都豊島区東池袋１丁目１４−１２ フォーマーアレンジ 1階", "cat": "dinner", "lat": 35.7305311, "lon": 139.7152547, "time": "11時00分～23時00分", "memo": "ケバブ。テイクアウト向き　Google ★4.2（273件）", "url": "https://www.hotpepper.jp/strJ003498519/", "match": "手入力", "km": 0.6}, {"name": "Princess Tart 池袋", "addr": "東京都豊島区東池袋１丁目２６−１ スコレサイト池袋 1階", "cat": "sweet", "lat": 35.7289175, "lon": 139.71623470000003, "time": "10時00分～19時00分", "memo": "タルト。19時まで → 水族館の後なら急ぐ　Google ★4.6（723件）", "url": "https://princess-tart.com/", "match": "手入力", "km": 0.41}, {"name": "ミフネ洋菓子店", "addr": "東京都豊島区東池袋５丁目２９−１", "cat": "sweet", "lat": 35.7265538, "lon": 139.7236517, "time": "7時00分～19時00分", "memo": "パン・洋菓子。東池袋駅の北側　Google ★4.5（73件）", "url": "https://boulanger-mifune.com/", "match": "手入力", "km": 0.42}, {"name": "ア・ラ・カンパーニュ東武池袋店", "addr": "東京都豊島区西池袋１丁目１−２５ 東武百貨店池袋店 Ｂ１Ｆ", "cat": "sweet", "lat": 35.7302986, "lon": 139.7102329, "time": "10時00分～20時00分", "memo": "駅の東武B1。帰りの改札そば　Google ★3.9（313件）", "url": "http://www.alacampagne.jp/?utm_source=google&utm_medium=map", "match": "手入力", "km": 0.92}, {"name": "エシレ・パティスリー オ ブール 西武池袋店", "addr": "東京都豊島区南池袋１丁目２８−１ 西武池袋本店 B1F スイーツ&ギフトフロア", "cat": "sweet", "lat": 35.7288782, "lon": 139.711515, "time": "10時00分～20時00分", "memo": "西武B1。西武線の改札そば　Google ★4.2（129件）", "url": "https://www.kataoka.com/echire/patisserieaubeurre/ikebukuro/", "match": "手入力", "km": 0.75}, {"name": "紅谷", "addr": "東京都豊島区南池袋２丁目１１−４ 紅谷菓子舗 ‎", "cat": "wagashi", "lat": 35.7256493, "lon": 139.71387900000002, "time": "8時30分～18時00分", "memo": "南池袋の和菓子店（18時まで）。決済未確認　Google ★4.3（114件）", "url": "https://maps.google.com/?cid=7335851804278097011", "match": "手入力", "km": 0.46}, {"name": "Espresso D Works 池袋", "addr": "東京都豊島区東池袋１丁目３０−３ キュープラザ池袋 2F", "cat": "cafe", "lat": 35.7309455, "lon": 139.7164291, "time": "11時00分～23時00分", "memo": "パンケーキで映え。キュープラザ2F　Google ★4.4（2318件）", "url": "https://dream-on-company.com/", "match": "手入力", "km": 0.59}, {"name": "珈琲茶館 集 池袋店", "addr": "東京都豊島区東池袋１丁目２−２ 東池ビル 東池ビルディングB1F", "cat": "cafe", "lat": 35.7297933, "lon": 139.7137297, "time": "10時00分～22時00分", "memo": "サイフォンコーヒー。地下　Google ★4（714件）", "url": "https://shu-group.studio.site/", "match": "手入力", "km": 0.63}, {"name": "FABRIC（ファブリック）", "addr": "東京都豊島区南池袋２丁目４３−１６", "cat": "cafe", "lat": 35.726442999999996, "lon": 139.7181019, "time": "8時00分～19時00分", "memo": "こぢんまり。19時まで　Google ★4（199件）", "url": "http://www.fabric-coffee-sandwich.com/", "match": "手入力", "km": 0.09}, {"name": "EAT GOOD PLACE", "addr": "東京都豊島区東池袋４丁目４２−１ IKE•SUNPARK イケ・サンパーク", "cat": "cafe", "lat": 35.727311, "lon": 139.721754, "time": "8時00分～18時00分", "memo": "公園の中のカフェ。18時まで。子連れ・犬・テラス　Google ★4（532件）", "url": "https://www.epietriz.com/restaurants/eat-good-place", "match": "手入力", "km": 0.29}, {"name": "東池袋中央公園", "addr": "東京都豊島区東池袋3-1-6", "cat": "park", "lat": 35.73016, "lon": 139.71869, "time": "", "memo": "東池袋駅とサンシャインの間。時間調整に", "url": "https://www.city.toshima.lg.jp/", "match": "手入力", "km": 0.46}, {"name": "IKE·SUNPARK (としまみどりの防災公園)", "addr": "東京都豊島区東池袋４丁目４２", "cat": "park", "lat": 35.7276209, "lon": 139.7223732, "time": "5時00分～22時00分", "memo": "芝生の広い公園。日没後は暗い　Google ★4.3（680件）", "url": "https://ikesunpark.jp/", "match": "手入力", "km": 0.35}]}, KEY="";
+const CATS=CFG.categories, ORDER=Object.keys(CATS), F=CFG.fields||[], HOME=CFG.home, PTS=CFG.points;
+const FLAGLABEL=CFG.flag_label||'コース';
+const show={};ORDER.forEach(c=>{show[c]=true;});
+let courseOnly=false;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const instaUrl=v=>/^https?:/.test(v)?v:'https://www.instagram.com/'+String(v).replace(/^@/,'')+'/';
+const gmaps=p=>'https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+const gsv=p=>'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lon;
+const isMobile=()=>window.matchMedia('(max-width:760px)').matches;
+const hasFlag=p=>p.flag!=null&&p.flag!=='';
+// ---- ピンの形：区分の shape / icon / size、地点ごとの上書き、コースは番号付きのピン ----
+const SH={circle:'<circle cx="16" cy="16" r="13"/>',square:'<rect x="3.5" y="3.5" width="25" height="25" rx="5"/>',
+  diamond:'<path d="M16 1.8 30.2 16 16 30.2 1.8 16z"/>',triangle:'<path d="M16 2.5 30.5 28.5H1.5z"/>',
+  hex:'<path d="M16 1.8 28.6 9v14L16 30.2 3.4 23V9z"/>',
+  star:'<path d="m16 1.6 4.3 9 9.9 1.3-7.3 6.9 1.9 9.8L16 23.8l-8.8 4.8 1.9-9.8-7.3-6.9 9.9-1.3z"/>'};
+// 名前から自動で付けるアイコン（地点にも区分にも指定が無いとき）
+const AUTO=[[/駅(（.*）)?$|駅前$/,'square','🚉',26],[/公園|緑地|庭園|植物園/,'circle','🌳',24],[/神社|八幡|稲荷|神明宮|大社/,'diamond','⛩',24],
+  [/寺(（.*）)?$|大仏/,'diamond','卍',22],[/授乳|ベビー休憩|赤ちゃん休憩/,'square','🍼',22],[/駐車場|パーキング|タイムズ/,'square','P',24]];
+function sty(p){const c=CATS[p.cat]||{};let a=null;
+  if(p.icon==null&&p.shape==null&&!c.icon&&!c.shape&&p.name)a=AUTO.find(r=>r[0].test(p.name));
+  return{shape:p.shape||c.shape||(a?a[1]:'circle'),icon:p.icon!=null?p.icon:(c.icon||(a?a[2]:'')),
+  size:+(p.size||c.size||(a?a[3]:22)),color:p.color||c.color||'#888'};}
+function svgOf(p,small){const s=sty(p);
+  if(hasFlag(p)&&!small){const n=esc(p.flag),w=32,h=42,fs=String(p.flag).length>1?11.5:14;
+    return{w,h,anchor:[w/2,h],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 32 42">'+
+      '<path d="M16 41C14.5 36 2 27 2 16a14 14 0 0 1 28 0c0 11-12.5 20-14 25z" fill="'+s.color+'" stroke="#7C2D12" stroke-width="2"/>'+
+      '<circle cx="16" cy="16" r="10.5" fill="#fff"/><text x="16" y="'+(16+fs*0.36)+'" font-size="'+fs+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#7C2D12">'+n+'</text></svg>'};}
+  const z=small?15:s.size,ic=small?'':s.icon,ty=s.shape==='triangle'?24:21.5;
+  const txt=ic?'<text x="16" y="'+ty+'" font-size="'+(ic.length>1&&/^[\x00-\x7F]+$/.test(ic)?11:15)+'" font-weight="700" text-anchor="middle" font-family="sans-serif" fill="#fff">'+esc(ic)+'</text>':'';
+  return{w:z,h:z,anchor:[z/2,z/2],svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+z+'" height="'+z+'" viewBox="0 0 32 32"><g fill="'+s.color+'" stroke="#fff" stroke-width="2.5">'+(SH[s.shape]||SH.circle)+'</g>'+txt+'</svg>'};}
+const catSw=c=>svgOf({cat:c},true).svg;
+function card(p,inMap){const c=CATS[p.cat]||{label:p.cat,color:'#888'};
+  let h='<div class="iw"><b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><br><span class="tag" style="background:'+c.color+'">'+esc(c.label)+'</span>';
+  if(hasFlag(p))h+='<span class="tag" style="background:#C2410C">'+esc(FLAGLABEL)+'</span>';
+  F.forEach(([k,l])=>{if(p[k])h+='<div class="row"><span class="lab">'+esc(l)+'：</span>'+esc(p[k])+'</div>';});
+  if(p.note)h+='<div class="row">'+esc(p.note)+'</div>';
+  h+='<div class="row lab">'+esc(p.addr||'')+(p.km!=null?'　'+esc(HOME.name)+'から直線'+p.km+'km':'')+'</div><div class="links">';
+  if(p.url)h+='<a href="'+esc(p.url)+'" target="_blank" rel="noopener">詳細ページ</a>';
+  if(p.insta)h+='<a href="'+esc(instaUrl(p.insta))+'" target="_blank" rel="noopener">Instagram</a>';
+  h+='<a href="'+gmaps(p)+'" target="_blank" rel="noopener">Googleマップで開く</a>';
+  h+=inMap?'<button class="sv" data-sv="'+p._i+'">ストリートビュー</button>':'<a href="'+gsv(p)+'" target="_blank" rel="noopener">ストリートビュー</a>';
+  return h+'</div></div>';}
+// ---- 一覧（スマホは下のシート） ----
+const list=document.getElementById('list'), q=document.getElementById('q'), side=document.getElementById('side');
+PTS.forEach((p,i)=>p._i=i);
+const FL=PTS.filter(hasFlag).sort((a,b)=>(parseFloat(a.flag)||0)-(parseFloat(b.flag)||0));
+const sorted=PTS.filter(p=>!hasFlag(p)).sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat)||((a.km==null?0:a.km)-(b.km==null?0:b.km)));
+const visible=p=>show[p.cat]&&(!courseOnly||hasFlag(p));
+let api=null, cur=null;
+function sheet(st){side.classList.remove('half','full');if(st)side.classList.add(st);
+  document.getElementById('arr').textContent=st==='full'?'▼':'▲';}
+document.getElementById('handle').onclick=e=>{if(e.target.closest('button'))return;
+  sheet(side.classList.contains('full')?'':side.classList.contains('half')?'full':'half');};
+document.getElementById('hd').onclick=()=>{if(isMobile())document.getElementById('hd').classList.toggle('open');};
+function itemEl(p){const d=document.createElement('div');d.className='item'+(hasFlag(p)?' fl':'')+(cur===p._i?' on':'');d.id='it'+p._i;
+  d.innerHTML='<span class="km">'+(p.km!=null?p.km+'km':'')+'</span><span class="sw">'+svgOf(p,true).svg+'</span> <b>'+(hasFlag(p)?'🚩'+esc(p.flag)+' ':'')+esc(p.name)+'</b><div class="meta">'+F.slice(0,2).map(([k])=>esc(p[k]||'')).filter(Boolean).join('｜')+'</div>';
+  d.onclick=()=>select(p._i,true);return d;}
+function renderList(){list.innerHTML='';const s=q.value.trim();let n=0;
+  const ok=p=>{if(!visible(p))return false;const txt=[p.name,p.note,...F.map(([k])=>p[k])].join(' ');return !s||txt.includes(s);};
+  const a=FL.filter(ok),b=sorted.filter(ok);
+  if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='🚩 '+FLAGLABEL+'（'+a.length+'）';list.appendChild(g);a.forEach(p=>list.appendChild(itemEl(p)));}
+  if(b.length){if(a.length){const g=document.createElement('div');g.className='grp';g.textContent='ほかの地点（'+b.length+'）';list.appendChild(g);}b.forEach(p=>list.appendChild(itemEl(p)));}
+  document.getElementById('cnt').textContent='一覧 '+(a.length+b.length)+'件';}
+function select(i,fromList){cur=i;document.querySelectorAll('.item.on').forEach(e=>e.classList.remove('on'));
+  const it=document.getElementById('it'+i);if(it){it.classList.add('on');if(!fromList&&!isMobile())it.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(fromList&&isMobile())sheet('');
+  api&&api.open(i,fromList);}
+const cw=document.getElementById('cats');
+ORDER.forEach(c=>{const n=PTS.filter(p=>p.cat===c).length;if(!n)return;const l=document.createElement('label');
+  l.innerHTML='<input type="checkbox" checked><span class="sw">'+catSw(c)+'</span>'+esc(CATS[c].label)+'（'+n+'）';
+  l.querySelector('input').onchange=e=>{show[c]=e.target.checked;renderList();api&&api.filter();};cw.appendChild(l);});
+function setAll(v){ORDER.forEach(c=>show[c]=v);cw.querySelectorAll('input').forEach(i=>i.checked=v);renderList();api&&api.filter();}
+document.getElementById('catOff').onclick=()=>setAll(false);document.getElementById('catOn').onclick=()=>setAll(true);
+// 「🚩コースだけ」ボタン（コースの地点があるときだけ）
+const cbs=[];
+if(FL.length)['courseD','courseM'].forEach(id=>{const b=document.createElement('button');b.type='button';b.className='course';
+  b.textContent='🚩 '+FLAGLABEL+'だけ（'+FL.length+'）';b.onclick=e=>{e.stopPropagation();courseOnly=!courseOnly;
+    cbs.forEach(x=>{x.classList.toggle('on',courseOnly);x.textContent=(courseOnly?'すべて表示に戻す':'🚩 '+FLAGLABEL+'だけ（'+FL.length+'）');});
+    renderList();if(api){api.filter();api.fit(courseOnly?FL.filter(p=>show[p.cat]):null);}};
+  document.getElementById(id).appendChild(b);cbs.push(b);});
+q.oninput=renderList;renderList();
+const LINE=FL.filter(p=>p.line!==false);
+// ---- Google Maps ----
+function initGoogle(){const g=google.maps;
+  const map=new g.Map(document.getElementById('map'),{center:{lat:HOME.lat,lng:HOME.lon},zoom:11,mapTypeControl:true,
+    mapTypeControlOptions:{mapTypeIds:['roadmap','satellite','hybrid','terrain']},streetViewControl:true,fullscreenControl:!isMobile(),gestureHandling:'greedy'});
+  const iw=new g.InfoWindow(), sv=map.getStreetView(), svs=new g.StreetViewService();
+  new g.Marker({map,position:{lat:HOME.lat,lng:HOME.lon},title:HOME.name,zIndex:999,
+    icon:{path:'M0,-10 L2.9,-3.1 L10,-3.1 L4.3,1.3 L6.5,8.4 L0,4.2 L-6.5,8.4 L-4.3,1.3 L-10,-3.1 L-2.9,-3.1 Z',fillColor:'#111',fillOpacity:1,strokeColor:'#fff',strokeWeight:1.5,scale:1.3}});
+  (CFG.rings_km||[]).forEach(km=>new g.Circle({map,center:{lat:HOME.lat,lng:HOME.lon},radius:km*1000,strokeColor:'#666',strokeOpacity:.5,strokeWeight:1,fillOpacity:0,clickable:false}));
+  if(LINE.length>1)new g.Polyline({map,path:LINE.map(p=>({lat:p.lat,lng:p.lon})),strokeOpacity:0,clickable:false,
+    icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:.85,strokeColor:'#C2410C',scale:3},offset:'0',repeat:'12px'}]});
+  const mk=PTS.map(p=>{const s=svgOf(p);const m=new g.Marker({map,position:{lat:p.lat,lng:p.lon},title:p.name,zIndex:hasFlag(p)?600:(sty(p).size>22?300:100),
+      icon:{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s.svg),scaledSize:new g.Size(s.w,s.h),anchor:new g.Point(s.anchor[0],s.anchor[1])}});
+    m.addListener('click',()=>select(p._i,false));return m;});
+  function fit(arr){const b=new g.LatLngBounds();if(!arr)b.extend({lat:HOME.lat,lng:HOME.lon});(arr||PTS).forEach(p=>b.extend({lat:p.lat,lng:p.lon}));
+    map.fitBounds(b,isMobile()?{top:30,left:20,right:20,bottom:30}:40);}
+  fit(null);
+  g.event.addListener(iw,'domready',()=>{const bt=document.querySelector('button.sv');if(!bt)return;bt.onclick=()=>{const p=PTS[+bt.dataset.sv];
+    svs.getPanorama({location:{lat:p.lat,lng:p.lon},radius:200},(d,st)=>{if(st==='OK'){sv.setPosition(d.location.latLng);sv.setPov({heading:0,pitch:0});sv.setVisible(true);}else alert_('この地点の近く200m以内にストリートビューがありません');});};});
+  api={open(i,pan){const p=PTS[i];iw.setContent(card(p,true));iw.open({map,anchor:mk[i]});if(pan){map.panTo(mk[i].getPosition());if(map.getZoom()<14)map.setZoom(15);}},
+       filter(){mk.forEach((m,i)=>m.setVisible(visible(PTS[i])));},fit};
+  document.getElementById('engine').textContent='地図：Google Maps（左上で地図/航空写真を切替、人型アイコンや「ストリートビュー」でストリートビュー）';}
+function alert_(m){document.getElementById('engine').textContent=m;}
+// ---- Leaflet + 国土地理院タイル（フォールバック） ----
+function initLeaflet(reason){document.getElementById('map').innerHTML='';
+  const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
+  const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>{
+    const L=window.L, map=L.map('map');
+    const std=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院</a>'}).addTo(map);
+    const pale=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'国土地理院'});
+    const photo=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{maxZoom:18,attribution:'国土地理院'});
+    L.control.layers({'標準地図':std,'淡色地図':pale,'航空写真':photo}).addTo(map);
+    L.marker([HOME.lat,HOME.lon],{title:HOME.name,icon:L.divIcon({html:'★',className:'',iconSize:[20,20],iconAnchor:[10,10]})}).addTo(map);
+    (CFG.rings_km||[]).forEach(km=>L.circle([HOME.lat,HOME.lon],{radius:km*1000,color:'#666',weight:1,fill:false,dashArray:'4 4',interactive:false}).addTo(map));
+    if(LINE.length>1)L.polyline(LINE.map(p=>[p.lat,p.lon]),{color:'#C2410C',weight:3,opacity:.85,dashArray:'6 7',interactive:false}).addTo(map);
+    const mk=PTS.map(p=>{const s=svgOf(p);return L.marker([p.lat,p.lon],{title:p.name,zIndexOffset:hasFlag(p)?1000:(sty(p).size>22?300:0),
+        icon:L.divIcon({html:s.svg,className:'',iconSize:[s.w,s.h],iconAnchor:s.anchor,popupAnchor:[0,hasFlag(p)?-s.h+4:-s.h/2]})})
+      .bindPopup(card(p,false),{maxWidth:320,autoPanPaddingBottomRight:[10,70]}).on('click',()=>select(p._i,false)).addTo(map);});
+    function fit(arr){const pts=(arr||PTS).map(p=>[p.lat,p.lon]);if(!arr)pts.push([HOME.lat,HOME.lon]);map.fitBounds(L.latLngBounds(pts),{padding:[30,30]});}
+    fit(null);
+    api={open(i,pan){mk[i].openPopup();if(pan)map.setView(mk[i].getLatLng(),Math.max(map.getZoom(),15));},
+         filter(){mk.forEach((m,i)=>visible(PTS[i])?m.addTo(map):m.remove());},fit};
+    document.getElementById('engine').textContent='地図：国土地理院タイル＋Leaflet'+(reason?'（'+reason+'）':'')+'。右上で標準/航空写真を切替。ストリートビューはポップアップのリンクからGoogleマップで開く。';};
+  document.head.appendChild(s);}
+window.gm_authFailure=()=>initLeaflet('Google Maps のAPIキー認証に失敗したため切替');
+if(KEY){window.initGoogle=initGoogle;const s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(KEY)+'&callback=initGoogle&loading=async&v=weekly&language=ja&region=JP';
+  s.async=true;s.onerror=()=>initLeaflet('Google Maps を読み込めなかったため切替');document.head.appendChild(s);}
+else initLeaflet('APIキー未設定');
+</script></body></html>

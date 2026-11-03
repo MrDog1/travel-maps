@@ -7,6 +7,7 @@
 <Style id="s-food"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
 <Style id="s-ng"><IconStyle><color>ff9B938A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
 <Folder><name>ホテル候補</name>
+<Placemark><name>デュシット・ビーチ・リゾート・グアム（基準★）</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：0 m（ここが基準）／メモ：旧アウトリガー。ロビーがデュシット・プレイス直結、坂ゼロ。スーペリア（クイーン2台）朝食込み 98,718円、ベビーベッド無料／デュシット・ビーチ・リゾート・グアムから直線0.0km</description><Point><coordinates>144.80573,13.515233,0</coordinates></Point></Placemark>
 <Placemark><name>ホテル・ニッコー・グアム</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：753 m／メモ：授乳室・ベビーラウンジ（2F）。中心まで坂。ツイン＋朝食 110,407円／デュシット・ビーチ・リゾート・グアムから直線0.75km</description><Point><coordinates>144.804885,13.521954,0</coordinates></Point></Placemark>
 <Placemark><name>ザ・ツバキ・タワー</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：710 m／メモ：1Fベビールーム。ニッコーの隣で坂は同じ。朝食付き 196,218円〜／デュシット・ビーチ・リゾート・グアムから直線0.71km</description><Point><coordinates>144.805833,13.521617,0</coordinates></Point></Placemark>
 <Placemark><name>デュシタニ グアム リゾート</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：180 m／メモ：デュシット・ビーチの隣。5つ星。朝食込み 152,097円／デュシット・ビーチ・リゾート・グアムから直線0.18km</description><Point><coordinates>144.805257,13.51368,0</coordinates></Point></Placemark>

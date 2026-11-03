@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>タモン中心 距離感マップ</name>
+<Style id="s-hotel"><IconStyle><color>ff7A46D9</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-shop"><IconStyle><color>ffC94F7A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-walk"><IconStyle><color>ff5A8A1E</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-food"><IconStyle><color>ff128AD0</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="s-ng"><IconStyle><color>ff9B938A</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Folder><name>ホテル候補</name>
+<Placemark><name>ホテル・ニッコー・グアム</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：753 m／メモ：授乳室・ベビーラウンジ（2F）。中心まで坂。ツイン＋朝食 110,407円／デュシット・ビーチ・リゾート・グアムから直線0.75km</description><Point><coordinates>144.804885,13.521954,0</coordinates></Point></Placemark>
+<Placemark><name>ザ・ツバキ・タワー</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：710 m／メモ：1Fベビールーム。ニッコーの隣で坂は同じ。朝食付き 196,218円〜／デュシット・ビーチ・リゾート・グアムから直線0.71km</description><Point><coordinates>144.805833,13.521617,0</coordinates></Point></Placemark>
+<Placemark><name>デュシタニ グアム リゾート</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：180 m／メモ：デュシット・ビーチの隣。5つ星。朝食込み 152,097円／デュシット・ビーチ・リゾート・グアムから直線0.18km</description><Point><coordinates>144.805257,13.51368,0</coordinates></Point></Placemark>
+<Placemark><name>ウェスティンリゾート・グアム</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：311 m／メモ：朝食付き 138,010円／デュシット・ビーチ・リゾート・グアムから直線0.31km</description><Point><coordinates>144.806663,13.517883,0</coordinates></Point></Placemark>
+<Placemark><name>グアム リーフ ホテル</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：183 m／メモ：和室あり。朝食付き 94,272円／デュシット・ビーチ・リゾート・グアムから直線0.18km</description><Point><coordinates>144.806098,13.516843,0</coordinates></Point></Placemark>
+<Placemark><name>グアムプラザリゾート</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：226 m／メモ：JPスーパーストア直結。古い。朝食付き 71,261円／デュシット・ビーチ・リゾート・グアムから直線0.23km</description><Point><coordinates>144.8078054,13.5154797,0</coordinates></Point></Placemark>
+<Placemark><name>ハイアット リージェンシー グアム</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：314 m／メモ：庭園。坂がきつい。朝食付き 157,055円／デュシット・ビーチ・リゾート・グアムから直線0.31km</description><Point><coordinates>144.804668,13.5126,0</coordinates></Point></Placemark>
+<Placemark><name>ロッテホテルグアム</name><styleUrl>#s-hotel</styleUrl><description>デュシット・ビーチから：482 m／メモ：朝食付き 108,200円／デュシット・ビーチ・リゾート・グアムから直線0.58km</description><Point><coordinates>144.8072708,13.5201894,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>買い物・モール・ABC</name>
+<Placemark><name>デュシット・プレイス（モール）</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：37 m／メモ：デュシット・ビーチのロビー直結。レストラン・ABC・雨の日の避難先／デュシット・ビーチ・リゾート・グアムから直線0.04km</description><Point><coordinates>144.805835,13.514917,0</coordinates></Point></Placemark>
+<Placemark><name>JPスーパーストア</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：182 m／メモ：雑貨・食品・カフェ。グアムプラザ直結／デュシット・ビーチ・リゾート・グアムから直線0.18km</description><Point><coordinates>144.807387,13.515511,0</coordinates></Point></Placemark>
+<Placemark><name>ABCストア（タモン・サンズ・プラザ）</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：624 m／メモ：おむつ・水・軽食／デュシット・ビーチ・リゾート・グアムから直線0.62km</description><Point><coordinates>144.805677,13.509618,0</coordinates></Point></Placemark>
+<Placemark><name>ABCストア（タモン北・ニッコー寄り）</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：365 m／メモ：ニッコーから最寄りのABC／デュシット・ビーチ・リゾート・グアムから直線0.36km</description><Point><coordinates>144.807999,13.517661,0</coordinates></Point></Placemark>
+<Placemark><name>ペイレス・スーパー（マイクロネシアモール前）</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：1325 m／メモ：24時間。おむつ・粉ミルク。徒歩圏外→車か赤いシャトル／デュシット・ビーチ・リゾート・グアムから直線1.33km</description><Point><coordinates>144.817237,13.519336,0</coordinates></Point></Placemark>
+<Placemark><name>Kマート</name><styleUrl>#s-shop</styleUrl><description>デュシット・ビーチから：1784 m／メモ：24時間。乳児用品。徒歩圏外→車か赤いシャトル／デュシット・ビーチ・リゾート・グアムから直線1.78km</description><Point><coordinates>144.800094,13.500153,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>浜・散歩</name>
+<Placemark><name>タモンビーチ</name><styleUrl>#s-walk</styleUrl><description>デュシット・ビーチから：95 m／メモ：ホテル街の前の浜。抱っこ紐で／デュシット・ビーチ・リゾート・グアムから直線0.1km</description><Point><coordinates>144.804869,13.515417,0</coordinates></Point></Placemark>
+<Placemark><name>ガン・ビーチ</name><styleUrl>#s-walk</styleUrl><description>デュシット・ビーチから：1041 m／メモ：ニッコーの北隣／デュシット・ビーチ・リゾート・グアムから直線1.04km</description><Point><coordinates>144.803358,13.524305,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>カフェ</name>
+<Placemark><name>Frances Bakehouse</name><styleUrl>#s-food</styleUrl><description>デュシット・ビーチから：400 m／メモ：ベーカリー 4.8／デュシット・ビーチ・リゾート・グアムから直線0.4km</description><Point><coordinates>144.807419,13.518438,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>閉店</name>
+<Placemark><name>Tギャラリア（閉店）</name><styleUrl>#s-ng</styleUrl><description>デュシット・ビーチから：207 m／メモ：2026/3/31 閉店。授乳室もなくなった／デュシット・ビーチ・リゾート・グアムから直線0.21km</description><Point><coordinates>144.806285,13.513456,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>
